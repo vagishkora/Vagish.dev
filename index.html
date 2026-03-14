@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagish N Kora | Cybersecurity Engineer</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'rgb(var(--background) / <alpha-value>)',
+                        surface: 'rgb(var(--surface) / <alpha-value>)',
+                        primary: '#6366f1', // Indigo 500
+                        secondary: '#14b8a6', // Teal 500
+                        accent: {
+                            pink: '#D16BA5',
+                            purple: '#86A8E7',
+                            cyan: '#5FFBF1',
+                            black: '#000000',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        brutalist: ['Space Grotesk', 'Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Spline Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.59/build/spline-viewer.js"></script>
+
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+
+    <style>
+        /* THEME VARIABLES */
+        :root {
+            /* Light Mode (Default in variables, but we default app to dark via JS) */
+            --background: 255 255 255;
+            /* White */
+            --surface: 243 244 246;
+            /* Gray-100 */
+            --text-main: 17 24 39;
+            /* Gray-900 */
+        }
+
+        .dark {
+            /* Dark Mode */
+            --background: 10 10 10;
+            /* Black #0a0a0a */
+            --surface: 23 23 23;
+            /* Gray-900 #171717 */
+            --text-main: 243 244 246;
+            /* Gray-100 */
+        }
+
+        /* Floating Label Logic */
+        .peer:placeholder-shown~.peer-placeholder-shown\:top-1\/2 {
+            top: 50%;
+        }
+
+        .peer:focus~.peer-focus\:-top-4,
+        .peer:not(:placeholder-shown)~.peer-focus\:-top-4 {
+            top: -1rem;
+            font-size: 0.875rem;
+            color: #6366f1;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hide scrollbar for gallery */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* TECH BACKGROUND PATTERNS */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(99, 102, 241, 0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+            z-index: 99;
+            /* Below HUD elements but above content */
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .bg-scanline {
+            width: 100%;
+            height: 25vh;
+            background: linear-gradient(0deg,
+                    transparent 0%,
+                    rgba(99, 102, 241, 0.15) 50%,
+                    transparent 100%);
+            position: fixed;
+            top: -25vh;
+            left: 0;
+            z-index: 100;
+            pointer-events: none;
+            animation: scanning 8s linear infinite;
+        }
+
+        @keyframes scanning {
+            0% {
+                top: -15vh;
+            }
+
+            100% {
+                top: 100vh;
+            }
+        }
+
+        .tech-decor {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            z-index: 102;
+            /* Top of HUD */
+            opacity: 0.8;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6366f1;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* DATA STREAMS */
+        .data-stream {
+            position: absolute;
+            top: 0;
+            color: rgba(99, 102, 241, 0.4);
+            font-family: monospace;
+            font-size: 11px;
+            line-height: 1;
+            white-space: nowrap;
+            writing-mode: vertical-rl;
+            pointer-events: none;
+            user-select: none;
+            animation: fall linear infinite;
+            z-index: 5;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(120vh);
+            }
+        }
+
+        /* HOLOGRAPHIC ORBITS */
+        .holo-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%) rotateX(70deg);
+            animation: orbit-rotate linear infinite;
+        }
+
+        @keyframes orbit-rotate {
+            from {
+                transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg);
+            }
+        }
+
+        .orbit-dot {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #6366f1;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #6366f1;
+        }
+
+        /* STATUS BOXES */
+        .status-box {
+            position: absolute;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            font-family: monospace;
+            font-size: 9px;
+            color: #aaa;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .status-box .label {
+            color: #6366f1;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .status-box .value {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* SKILL GRID STYLES */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .skill-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .skill-card {
+            position: relative;
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-card:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .skill-card .corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .skill-card:hover .corner {
+            opacity: 1;
+        }
+
+        .skill-card .top-l {
+            top: 5px;
+            left: 5px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .skill-card .top-r {
+            top: 5px;
+            right: 5px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+
+        .skill-card .bot-l {
+            bottom: 5px;
+            left: 5px;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .skill-card .bot-r {
+            bottom: 5px;
+            right: 5px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .skill-card .schematic-id {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-family: monospace;
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .skill-icon-container {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon-container {
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .skill-icon-container img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            filter: grayscale(1);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon-container img {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        .skill-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        .skill-card:hover .skill-name {
+            color: #fff;
+        }
+
+        /* AI TERMINAL STYLES */
+        #ai-chat-window {
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        #ai-chat-window.active {
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .terminal-text {
+            font-family: 'Space Grotesk', monospace;
+            text-shadow: 0 0 5px rgba(209, 107, 165, 0.5);
+        }
+
+        .scanning-line {
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(209, 107, 165, 0.1) 50%, 
+                transparent 100%);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        .chat-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(209, 107, 165, 0.5);
+            border-radius: 2px;
+        }
+
+        /* Message Animations */
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .message-anim {
+            animation: typeIn 0.3s ease-out forwards;
+        }
+
+        /* --- Hobbies Section (Icon Grid) --- */
+        .hobby-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .hobby-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .hobby-card {
+            position: relative;
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hobby-card:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        /* BMW M-Stripe Accents on Hover */
+        .hobby-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0;
+            background: linear-gradient(to bottom, #009ada, #003087, #da291c);
+            transition: height 0.5s ease;
+        }
+
+        .hobby-card:hover::after {
+            height: 100%;
+        }
+
+        .hobby-card .corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hobby-card:hover .corner {
+            opacity: 1;
+        }
+
+        .hobby-card .top-l { top: 5px; left: 5px; border-right: 0; border-bottom: 0; }
+        .hobby-card .top-r { top: 5px; right: 5px; border-left: 0; border-bottom: 0; }
+        .hobby-card .bot-l { bottom: 5px; left: 5px; border-right: 0; border-top: 0; }
+        .hobby-card .bot-r { bottom: 5px; right: 5px; border-left: 0; border-top: 0; }
+
+        .hobby-card .hobby-id {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-family: monospace;
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .hobby-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: grayscale(1) invert(1);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .hobby-card:hover .hobby-icon {
+            filter: grayscale(0) invert(0) brightness(1.5);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .hobby-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        .hobby-card:hover .hobby-title {
+            color: #fff;
+        }
+
+        /* DRONE CLOCK STYLES */
+        /* MINI DRONE CLOCK STYLES (NAVBAR INTEGRATED) */
+        .drone-hud {
+            display: inline-flex;
+            vertical-align: middle;
+            margin-right: 35px; /* Increased safe zone */
+            position: relative;
+            filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
+            animation: flight-bob 4s ease-in-out infinite;
+        }
+
+        .drone-core {
+            width: 45px;
+            height: 45px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .drone-arm {
+            position: absolute;
+            width: 25px;
+            height: 1.5px;
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.8), transparent);
+            transform-origin: left center;
+        }
+
+        .arm-tl { top: 8px; left: -15px; transform: rotate(150deg); }
+        .arm-tr { top: 8px; right: -12px; transform: rotate(-150deg); transform-origin: right center; background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent); }
+        .arm-bl { bottom: 8px; left: -15px; transform: rotate(210deg); }
+        .arm-br { bottom: 8px; right: -12px; transform: rotate(-210deg); transform-origin: right center; background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent); }
+
+        .propeller {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            animation: spin 0.15s linear infinite;
+        }
+
+        .prop-tl { top: -10px; left: -25px; }
+        .prop-tr { top: -10px; right: -22px; }
+        .prop-bl { bottom: -10px; left: -25px; }
+        .prop-br { bottom: -10px; right: -22px; }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes flight-bob {
+            0%, 100% { transform: translateY(0) rotate(1deg); }
+            50% { transform: translateY(-5px) rotate(-1deg); }
+        }
+
+        .drone-time {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 8px;
+            font-weight: bold;
+            color: #6366f1;
+            text-shadow: 0 0 5px rgba(99, 102, 241, 0.5);
+        }
+
+        .drone-label {
+            font-size: 5px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+    <style>
+        /* Holographic Deck Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .holo-card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            /* Smooth follow with slight delay */
+            background: rgba(23, 23, 23, 0.6);
+            /* surface/60 */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .holo-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(100, 100, 255, 0.05) 50%,
+                    rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0.5;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        /* Holographic Border Gradient */
+        .holo-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            background: linear-gradient(var(--rotate, 0deg),
+                    transparent 40%,
+                    rgba(99, 102, 241, 0.5) 50%,
+                    /* Primary */
+                    transparent 60%);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask-composite: xor;
+            pointer-events: none;
+        }
+
+        /* Tech Glare Effect */
+        .holo-glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                    rgba(255, 255, 255, 0.15) 0%,
+                    transparent 50%);
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .holo-card:hover .holo-glare {
+            opacity: 1;
+        }
+
+        /* Cyberpunk Decor Lines */
+        .cyber-line {
+            position: absolute;
+            background: rgba(99, 102, 241, 0.3);
+            pointer-events: none;
+        }
+
+        /* --- FUSION UPDATE (Interceptor) --- */
+
+        /* 1. HUD Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            /* Primary */
+            border-radius: 4px;
+            border: 1px solid #000;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8;
+        }
+
+        /* 2. Biometric Ignition Button */
+        .bio-btn {
+            position: relative;
+            padding: 1rem 3rem;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+            /* Pill */
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+
+        .bio-btn:hover {
+            border-color: #6366f1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+            transform: scale(1.02);
+        }
+
+        .scan-line {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.8), transparent);
+            transition: top 0.5s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .bio-btn:hover .scan-line {
+            top: 150%;
+            opacity: 1;
+            transition: top 0.6s linear;
+        }
+
+
+
+        /* 4. Schematic Overlay */
+        .schematic-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 20;
+            opacity: 0.6;
+        }
+
+        .sche-id {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: monospace;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .sche-cross {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .sche-cross::before,
+        .sche-cross::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sche-cross::before {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+        }
+
+        .sche-cross::after {
+            height: 100%;
+            width: 1px;
+            left: 50%;
+        }
+
+        /* 5. BMW M-Style Cursor */
+        /* Disable custom cursor on touch devices */
+        @media (hover: hover) and (pointer: fine) {
+
+            body,
+            a,
+            button,
+            .project-card,
+            input,
+            textarea,
+            [role="button"] {
+                cursor: none !important;
+                /* Hide default pointer everywhere */
+            }
+
+            #bmw-cursor,
+            .m-trail {
+                display: block;
+            }
+        }
+
+        @media (hover: none) {
+
+            #bmw-cursor,
+            .m-trail {
+                display: none !important;
+            }
+        }
+
+        #bmw-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 48px;
+            height: 48px;
+            pointer-events: none;
+            z-index: 10005;
+            /* Must be top-most (above splash: 10001) */
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+            display: none;
+            /* Hidden by default until JS confirms mouse */
+        }
+
+        .cursor-arrow {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid rgba(255, 255, 255, 0.9);
+            transform: rotate(-45deg);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+        }
+
+        .m-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10004;
+            /* Below cursor, above splash */
+            opacity: 0.8;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+        }
+
+
+        /* 6. Gear Shift Nav (PRNDS) */
+        #gear-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8), rgba(10, 10, 10, 0.9));
+            padding: 15px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            #gear-nav {
+                display: none;
+            }
+
+            /* Hide on mobile */
+        }
+
+        .gear-item {
+            color: #555;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            /* Monospace font would be cool too */
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            padding: 5px;
+        }
+
+        .gear-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background: #555;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Active Gear State */
+        .gear-item.active {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+            /* Primary Glow */
+            transform: scale(1.2);
+        }
+
+        .gear-item.active::before {
+            opacity: 1;
+            background: #6366f1;
+            /* Primary */
+            box-shadow: 0 0 5px #6366f1;
+        }
+
+        /* 7. Headlights Flash Overlay */
+        #high-beams {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 10002;
+            /* boost z-index just in case */
+            pointer-events: none;
+            opacity: 0;
+            mix-blend-mode: overlay;
+            /* Adds a "bloom" effect even on white */
+        }
+
+        #high-beams.flash {
+            animation: flashBeam 0.6s ease-out forwards;
+            /* Slightly slower */
+        }
+
+        @keyframes flashBeam {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            10% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            /* Full opacity */
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        /* 8. Rearview Mirror (Back to Top) */
+        footer button {
+            /* Overriding default button styles for Rearview look */
+            background: linear-gradient(to bottom, #333, #111);
+            color: #aaa;
+            padding: 8px 20px;
+            border-radius: 4px 4px 15px 15px;
+            /* Trapezoid-ish */
+            border: 1px solid #444;
+            border-top: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            width: fit-content;
+            margin: 0 auto;
+            display: block;
+        }
+
+        footer button:hover {
+            color: white;
+            border-color: #666;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* 9. Push Start Splash Screen */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background-color: #000;
+            z-index: 10001;
+            /* Above everything */
+            display: flex;
+            flex-direction: column;
+            /* Align vertically */
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+        #splash-screen.hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #engine-start-btn {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            /* Forged Carbon Face */
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.95), rgba(5, 5, 5, 1)),
+                repeating-conic-gradient(from 0deg, rgba(60, 60, 60, 0.2) 0% 5%, transparent 5% 10%);
+            background-blend-mode: overlay;
+            
+            /* Precision Bezel */
+            border: 4px solid #1a1a1a;
+            outline: 1px solid rgba(255, 255, 255, 0.1);
+            
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, 0.9),
+                0 0 0 1px #333,
+                0 0 0 8px #111,
+                0 15px 40px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.1);
+
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            letter-spacing: 2px;
+            overflow: hidden;
+        }
+
+        /* Red Translucent Ring Overlay */
+        #engine-start-btn .ignition-ring {
+            position: absolute;
+            inset: 8px;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+        }
+
+        #engine-start-btn:hover .ignition-ring {
+            border-color: rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        /* BMW M Stripes */
+        .m-stripes {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+        }
+        .m-stripe { width: 12px; height: 3px; border-radius: 1px; }
+        .ms-light { background: #009ada; }
+        .ms-dark { background: #003087; }
+        .ms-red { background: #da291c; }
+
+        /* Engine Rev Vibration */
+        @keyframes engine-rev {
+            0% { transform: translate(0, 0) scale(1.05); }
+            25% { transform: translate(0.5px, -0.5px) scale(1.05); }
+            50% { transform: translate(-0.5px, 0.5px) scale(1.05); }
+            75% { transform: translate(0.5px, 0.5px) scale(1.05); }
+            100% { transform: translate(0, 0) scale(1.05); }
+        }
+
+        #engine-start-btn:hover {
+            animation: engine-rev 0.05s infinite;
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, 0.9),
+                0 0 0 1px #444,
+                0 0 0 8px #111,
+                0 15px 50px rgba(255, 0, 0, 0.2);
+        }
+
+        /* Click State */
+        #engine-start-btn:active {
+            transform: scale(0.95) !important;
+            animation: none;
+            box-shadow:
+                inset 0 0 50px rgba(0, 0, 0, 1),
+                0 0 0 1px #222,
+                0 0 0 8px #000;
+        }
+
+        .btn-text-small {
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        .btn-text-large {
+            font-size: 16px;
+            color: #fff;
+            font-weight: 800;
+            margin: 2px 0;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        #engine-start-btn.pulsing {
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, 0.9),
+                0 0 0 1px #333,
+                0 0 0 8px #111,
+                0 0 30px rgba(255, 0, 0, 0.3);
+        }
+    </style>
+
+</head>
+
+<body class="bg-background text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div class="bg-scanline"></div>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Tactical Drone HUD Clock (Integrated) -->
+                    <div id="drone-clock" class="drone-hud">
+                        <div class="drone-arm arm-tl"><div class="propeller prop-tl"></div></div>
+                        <div class="drone-arm arm-tr"><div class="propeller prop-tr"></div></div>
+                        <div class="drone-arm arm-bl"><div class="propeller prop-bl"></div></div>
+                        <div class="drone-arm arm-br"><div class="propeller prop-br"></div></div>
+                        <div class="drone-core">
+                            <span class="drone-label">ALPHA</span>
+                            <span id="live-time" class="drone-time">00:00</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#"
+                        class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Vagish
+                        N Kora </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8"><a href="#work"
+                            class="hover:text-primary transition-colors">#Work</a><a href="education.html"
+                            class="hover:text-primary transition-colors">#Education</a><a href="#skills"
+                            class="hover:text-primary transition-colors">#Skills</a><a href="#certifications"
+                            class="hover:text-primary transition-colors">#Certifications</a><a href="#hobbies"
+                            class="hover:text-primary transition-colors">#Hobbies</a><a href="#contact"
+                            class="hover:text-primary transition-colors">#Contact</a>
+                        <!-- Custom Theme Toggle (Desktop) -->
+                        <div id="theme-toggle"
+                            class="relative w-16 h-8 rounded-full p-1 cursor-pointer transition-all duration-300 border border-zinc-800 bg-zinc-950"
+                            role="button" aria-label="Toggle Theme">
+
+                            <div class="relative w-full h-full">
+                                <!-- Background Icons -->
+                                <div class="absolute right-1 top-0.5 pointer-events-none text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-4 h-4">
+                                        <circle cx="12" cy="12" r="4" />
+                                        <path d="M12 2v2" />
+                                        <path d="M12 20v2" />
+                                        <path d="m4.93 4.93 1.41 1.41" />
+                                        <path d="m17.66 17.66 1.41 1.41" />
+                                        <path d="M2 12h2" />
+                                        <path d="M20 12h2" />
+                                        <path d="m6.34 17.66-1.41 1.41" />
+                                        <path d="m19.07 4.93-1.41 1.41" />
+                                    </svg>
+                                </div>
+                                <div class="absolute left-1 top-0.5 pointer-events-none text-black dark:text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-4 h-4">
+                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                    </svg>
+                                </div>
+
+                                <!-- Sliding Thumb -->
+                                <div id="toggle-thumb"
+                                    class="absolute top-0 left-0 w-6 h-6 rounded-full bg-zinc-800 transition-all duration-300 transform translate-x-0 flex items-center justify-center shadow-md z-10">
+                                    <!-- Moon Icon (Active Dark) -->
+                                    <svg id="thumb-moon" class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                    </svg>
+                                    <!-- Sun Icon (Active Light) -->
+                                    <svg id="thumb-sun" class="w-4 h-4 text-gray-700 hidden"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="4" />
+                                        <path d="M12 2v2" />
+                                        <path d="M12 20v2" />
+                                        <path d="m4.93 4.93 1.41 1.41" />
+                                        <path d="m17.66 17.66 1.41 1.41" />
+                                        <path d="M2 12h2" />
+                                        <path d="M20 12h2" />
+                                        <path d="m6.34 17.66-1.41 1.41" />
+                                        <path d="m19.07 4.93-1.41 1.41" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-accent-black">
+        <!-- Social Sidebar (Unique Design) -->
+        <div class="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-8">
+            <div class="w-px h-24 bg-gradient-to-b from-transparent via-gray-700 to-gray-700"></div>
+            <a href="https://github.com/vagishkora" target="_blank"
+                class="text-gray-500 hover:text-accent-pink transition-all transform hover:scale-125">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/vagish-n-kora-459149212/" target="_blank"
+                class="text-gray-500 hover:text-accent-pink transition-all transform hover:scale-125">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+            </a>
+            <a href="https://www.instagram.com/vagish__k?igsh=NWgzamtwMWx3cGtr&utm_source=qr" target="_blank"
+                class="text-gray-500 hover:text-accent-pink transition-all transform hover:scale-125">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+            </a>
+            <div class="w-px h-24 bg-gradient-to-t from-transparent via-gray-700 to-gray-700"></div>
+        </div>
+
+        <!-- Geometric Decor -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 border border-accent-pink/10 rounded-full animate-float">
+            </div>
+            <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] border border-accent-cyan/10 rounded-full animate-float"
+                style="animation-delay: -2s;"></div>
+
+            <!-- Tech Pattern Accents -->
+            <div class="tech-decor top-20 left-10">[ HUD_STATUS: ACTIVE ]</div>
+            <div class="tech-decor top-40 left-1/4">04 // SYSTEM_CORE</div>
+            <div class="tech-decor bottom-40 left-20">LAT: 12.9716° N / LONG: 77.5946° E</div>
+            <div class="tech-decor top-1/3 right-10 rotate-90">ENGINEERING_v2.4</div>
+            <div class="tech-decor top-[15%] right-[15%]">0x2F91A // BOOT_LOADER</div>
+            <div class="tech-decor bottom-20 right-20">ENCRYPTION: AES_256_GCM</div>
+            <div class="tech-decor top-1/2 left-5 -rotate-90 origin-left">DECRYPTING_FLUX_CAPACITOR...</div>
+            <div class="tech-decor top-10 left-1/2 opacity-20 text-[8px]">PKI_PROTOCOL_HANDSHAKE_INITIATED...</div>
+            <div class="tech-decor bottom-10 left-1/3 opacity-10 text-[8px]">01011001 01001111 01010101 00100000
+                01000001 01010010 01000101 00100000 01010111 01001001 01010100 01001110 01000101 01010011 01010011
+                01001001 01001110 01000111 00100000 01000111 01000101 01001110 01001001 01010101 01010011</div>
+
+            <!-- Data Streams Left -->
+            <div class="data-stream left-10 top-0 opacity-10" style="animation-duration: 18s; animation-delay: -5s;">
+                USER_ID:VAGISH_N_KORA_SEC_LEVEL:CLEARANCE_GRANTED_PROCEED_WITH_CAUTION
+            </div>
+            <div class="data-stream left-40 top-0 opacity-5" style="animation-duration: 14s; animation-delay: -2s;">
+                0x7B29A4F1_INTERNAL_ERROR_RESOLVED_SYSTEM_READY_FOR_GUEST_INTERACTION
+            </div>
+
+            <!-- Crosshairs -->
+            <div class="absolute top-20 right-20 w-8 h-8 opacity-20">
+                <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white"></div>
+                <div class="absolute top-0 left-1/2 w-[1px] h-full bg-white"></div>
+            </div>
+            <div class="absolute bottom-40 left-1/3 w-8 h-8 opacity-20">
+                <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white"></div>
+                <div class="absolute top-0 left-1/2 w-[1px] h-full bg-white"></div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Corner Brackets for Hero -->
+            <div class="absolute -inset-4 pointer-events-none opacity-20 hidden md:block">
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent-pink"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-accent-purple"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-accent-cyan"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white"></div>
+            </div>
+
+            <div class="space-y-8 relative">
+                <h1
+                    class="text-6xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll opacity-0 translate-y-8 delay-100 flex flex-wrap items-center gap-4">
+                    Hi, I'm <div class="relative group">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-accent-pink to-accent-purple">Vagish</span>
+                        <!-- Memoji Aura -->
+                        <div class="absolute -top-4 -right-24 md:-top-6 md:-right-32 w-24 h-24 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
+                            <div class="absolute inset-0 bg-accent-pink/20 rounded-full blur-2xl animate-pulse"></div>
+                            <img src="assets/memoji.png" alt="Memoji" class="relative z-10 w-full h-full object-contain animate-float" style="animation-duration: 4s;">
+                        </div>
+                    </div>
+                </h1>
+
+                <p
+                    class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll opacity-0 translate-y-8 delay-200">
+                    A <span class="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex, real-world problems through high-performance intelligent systems and secure product experiences.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-6 animate-on-scroll opacity-0 translate-y-8 delay-300">
+                    <a href="#work"
+                        class="px-8 py-4 bg-white text-black font-brutalist font-bold rounded-sm hover:bg-accent-pink hover:text-white transition-all transform hover:-translate-y-1">
+                        EXPLORE WORK &rarr;
+                    </a>
+                    <a href="Vagish_Resume.pdf" download
+                        class="text-gray-400 hover:text-white font-medium underline underline-offset-8 transition-colors">
+                        Download CV
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Image Area -->
+            <div class="relative flex justify-center lg:justify-end">
+                <div class="relative w-72 h-72 md:w-96 md:h-96">
+                    <!-- Holographic Orbits -->
+                    <div class="holo-orbit w-[350px] h-[350px]" style="animation-duration: 15s;">
+                        <div class="orbit-dot"></div>
+                    </div>
+                    <div class="holo-orbit w-[450px] h-[450px]"
+                        style="animation-duration: 25s; animation-direction: reverse;">
+                        <div class="orbit-dot"
+                            style="top: auto; bottom: 0; background: #ec4899; box-shadow: 0 0 10px #ec4899;"></div>
+                    </div>
+
+                    <!-- Geometric Frame Decor -->
+                    <div class="absolute -inset-4 border border-white/10 rounded-lg transform rotate-6 scale-105"></div>
+                    <div class="absolute -inset-4 border border-accent-pink/50 rounded-lg transform -rotate-3"></div>
+
+                    <!-- User Photo -->
+                    <div id="user-photo-container"
+                        class="w-full h-full bg-surface rounded-lg overflow-hidden relative group">
+                        <img id="user-profile-img" src="assets/profile.JPG" alt="Vagish Kora"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+
+                    <!-- Cyberpunk Decorations -->
+                    <div
+                        class="absolute -top-10 -right-10 text-accent-cyan/20 font-mono text-xs rotate-90 tracking-widest pointer-events-none">
+                        AUTH_SYSTEM_v2.0
+                    </div>
+
+                    <!-- Data Stream Right -->
+                    <div class="data-stream right-[-80px] top-0 opacity-10" style="animation-duration: 12s;">
+                        1101011001011010100111101011010101101110101011010
+                    </div>
+                </div>
+
+                <!-- Status Boxes scattered -->
+                <div class="status-box top-[-40px] right-20 hidden md:block">
+                    <span class="label">ENCRYPTION</span>
+                    <span class="value">RSA_4096_SHA256</span>
+                </div>
+                <div class="status-box bottom-[-60px] right-0 hidden md:block">
+                    <span class="label">CORE_TEMP</span>
+                    <span class="value">34°C // STABLE</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Projects Grid -->
+    <section id="work" class="py-20 bg-surface/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-12 text-center animate-on-scroll opacity-0">Featured Projects
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1: Wealth Nest (Primary) -->
+                <article
+                    class="bg-surface rounded-xl overflow-hidden border border-white/5 hover:border-accent-pink/50 transition-all duration-300 hover:-translate-y-2 group animate-on-scroll opacity-0 relative">
+                    <!-- Schematic Overlay -->
+                    <div class="schematic-overlay">
+                        <div class="sche-id">PROJ-FIN-000</div>
+                        <div class="sche-cross" style="top:10px; right:10px; left:auto;"></div>
+                    </div>
+
+                    <div class="h-48 bg-gray-800 relative overflow-hidden group">
+                        <a href="https://wealth-nest.vercel.app/" target="_blank"
+                            class="block w-full h-full relative z-10">
+                            <img id="wealth-nest-img" src="assets/Wealthnest.jpg" alt="Wealth Nest Dashboard"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
+                                <span class="text-white font-bold text-lg mb-2 text-center">Visit Wealth Nest
+                                    &nearr;</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="p-6 relative z-30">
+                        <div class="flex items-center justify-between mb-3">
+                            <a href="https://wealth-nest.vercel.app/" target="_blank"
+                                class="hover:text-accent-pink transition-colors">
+                                <h3 class="text-xl font-bold text-white">Wealth Nest — AI Finance</h3>
+                            </a>
+                            <a href="https://wealth-nest.vercel.app/" target="_blank"
+                                class="text-accent-pink hover:text-white transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <p class="text-gray-400 text-sm">
+                                <strong class="text-gray-200">System:</strong> AI-powered PWA for tracking stocks,
+                                mutual funds, and smart expenses.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="px-2 py-1 text-xs rounded-md bg-accent-pink/10 text-accent-pink border border-accent-pink/20">Next.js</span>
+                            <span
+                                class="px-2 py-1 text-xs rounded-md bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20">LIVE
+                                PWA</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project Card 2: AI Cybersecurity -->
+                <article
+                    class="bg-surface rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-300 hover:-translate-y-2 group animate-on-scroll opacity-0 relative delay-100">
+                    <div class="schematic-overlay">
+                        <div class="sche-id">PROJ-SEC-001</div>
+                        <div class="sche-cross"></div>
+                    </div>
+                    <div class="h-48 bg-gray-800 relative overflow-hidden group">
+                        <img src="assets/cybersecurity.png" alt="Cybersecurity"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6 relative z-30">
+                        <h3 class="text-xl font-bold mb-3 text-white">AI Cybersecurity</h3>
+                        <p class="text-gray-400 text-xs mb-4 leading-relaxed">ANN model achieving 90%+ accuracy on
+                            network intrusion detection.</p>
+                        <div class="flex gap-2">
+                            <span
+                                class="px-2 py-1 text-[10px] text-primary bg-primary/10 border border-primary/20 rounded">Python</span>
+                            <span
+                                class="px-2 py-1 text-[10px] text-primary bg-primary/10 border border-primary/20 rounded">ANN</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project Card 3: Face Recognition -->
+                <article
+                    class="bg-surface rounded-xl overflow-hidden border border-white/5 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-2 group animate-on-scroll opacity-0 relative delay-200">
+                    <div class="schematic-overlay">
+                        <div class="sche-id">PROJ-BIO-002</div>
+                        <div class="sche-cross" style="right:10px; left:auto;"></div>
+                    </div>
+                    <div class="h-48 bg-gray-800 relative overflow-hidden group">
+                        <img src="assets/face-recognition.png" alt="Face Recognition"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6 relative z-30">
+                        <h3 class="text-xl font-bold mb-3 text-white">Face Recognition</h3>
+                        <p class="text-gray-400 text-xs mb-4 leading-relaxed">Real-time contactless authentication
+                            system built with OpenCV & LBPH.</p>
+                        <div class="flex gap-2">
+                            <span
+                                class="px-2 py-1 text-[10px] text-secondary bg-secondary/10 border border-secondary/20 rounded">OpenCV</span>
+                            <span
+                                class="px-2 py-1 text-[10px] text-secondary bg-secondary/10 border border-secondary/20 rounded">LBPH</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- View All Button -->
+            <div class="mt-16 flex justify-center">
+                <a href="javascript:void(0)" id="toggle-archive"
+                    class="px-10 py-4 border border-white/10 rounded-full text-xs font-mono tracking-widest text-gray-400 hover:text-white hover:border-white/30 transition-all group overflow-hidden relative">
+                    <span class="relative z-10">VIEW PROJECT ARCHIVE &darr;</span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-accent-pink/0 via-accent-pink/5 to-accent-pink/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Archive Section -->
+    <section id="projects-archive" class="py-20 bg-black/50 border-t border-white/5 hidden">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-xs font-mono text-gray-500 uppercase tracking-[0.3em] mb-12 text-center text-accent-cyan">
+                System Archive</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 4: Object Detection -->
+                <article
+                    class="bg-surface rounded-xl overflow-hidden border border-white/5 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 group animate-on-scroll opacity-0 relative">
+                    <div class="schematic-overlay">
+                        <div class="sche-id">PROJ-VIS-003</div>
+                        <div class="sche-cross"></div>
+                    </div>
+                    <div class="h-48 bg-gray-800 relative overflow-hidden group">
+                        <img src="assets/object-detection.png" alt="Object Detection"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6 relative z-30">
+                        <h3 class="text-xl font-bold mb-3 text-white">Object Detection</h3>
+                        <p class="text-gray-400 text-xs mb-4 leading-relaxed">Tracking system using background
+                            subtraction for dynamic environments.</p>
+                        <div class="flex gap-2">
+                            <span
+                                class="px-2 py-1 text-[10px] text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded">Python</span>
+                            <span
+                                class="px-2 py-1 text-[10px] text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded">CV</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 relative overflow-hidden bg-surface/30">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-accent-pink/20 rounded-full animate-ping"
+                style="animation-duration: 4s;"></div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-accent-cyan/10 rounded-full">
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Technical Telemetry</h2>
+            <p class="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] animate-on-scroll opacity-0">
+                SKILL_SET_ARRAY // CORE_CAPABILITIES</p>
+
+            <div class="skill-grid animate-on-scroll opacity-0">
+                <!-- Row 1 -->
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-01</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
+                            alt="HTML5"></div>
+                    <span class="skill-name">HTML5</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-02</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+                    </div>
+                    <span class="skill-name">CSS3</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-03</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+                            alt="JS"></div>
+                    <span class="skill-name">JavaScript</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-04</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+                            alt="React"></div>
+                    <span class="skill-name">ReactJS</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-05</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+                            alt="Node.js"></div>
+                    <span class="skill-name">Node.js</span>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-06</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/canva/canva-original.svg"
+                            alt="Canva"></div>
+                    <span class="skill-name">Canva</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-07</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+                            alt="Python"></div>
+                    <span class="skill-name">Python</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-08</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
+                            alt="MySQL"></div>
+                    <span class="skill-name">MySQL</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-09</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C"></div>
+                    <span class="skill-name">C Programming</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-10</div>
+                    <div class="skill-icon-container"><img
+                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                    </div>
+                    <span class="skill-name">JAVA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Certifications Section (Static Image Gallery) -->
+    <section id="certifications"
+        class="py-20 relative overflow-hidden min-h-[800px] flex items-center justify-center bg-background">
+        <!-- Background Decor -->
+        <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/10 via-background to-background pointer-events-none">
+        </div>
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col items-center">
+            <h2 class="text-4xl font-extrabold mb-12 text-center animate-on-scroll opacity-0">
+                <span
+                    class="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Certifications</span>
+            </h2>
+            <!-- 3D Carousel Container -->
+            <div id="cert-carousel"
+                class="relative w-full max-w-5xl h-[500px] flex items-center justify-center perspective-1000">
+                <div id="carousel-track"
+                    class="relative w-full h-full flex items-center justify-center transform-style-3d transition-transform duration-500">
+                    <!-- Cards injected by JS -->
+                </div>
+
+                <!-- Navigation Controls -->
+                <button id="prev-cert"
+                    class="absolute left-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+                <button id="next-cert"
+                    class="absolute right-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Volunteering Section (Stacked Carousel) -->
+    <section id="volunteering" class="py-20 relative overflow-hidden bg-surface/30 min-h-[700px] flex items-center justify-center">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-secondary/10 rounded-full"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10 w-full flex flex-col items-center">
+            <h2 class="text-3xl font-bold mb-12 text-center animate-on-scroll opacity-0">Community Outreach</h2>
+
+            <!-- Outreach Carousel Container -->
+            <div id="outreach-carousel" class="relative w-full max-w-5xl h-[400px] flex items-center justify-center perspective-1000">
+                <div id="outreach-track" class="relative w-full h-full flex items-center justify-center transform-style-3d transition-transform duration-500">
+                    <!-- Cards injected by JS -->
+                </div>
+
+                <!-- Navigation Controls -->
+                <button id="prev-outreach"
+                    class="absolute left-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="next-outreach"
+                    class="absolute right-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies Section (Off-Duty Telemetry) -->
+    <section id="hobbies" class="py-24 bg-surface/30 relative overflow-hidden">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-10">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary/20 rounded-full"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Off-Duty Telemetry</h2>
+            <p class="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] animate-on-scroll opacity-0 uppercase">
+                PERSONAL_INTERESTS // MISSION_PROFILE</p>
+            
+            <div class="hobby-grid animate-on-scroll opacity-0">
+                <!-- Automobiles & Driving -->
+                <div class="hobby-card">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="hobby-id">HB-001</div>
+                    <div class="hobby-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
+                    </div>
+                    <span class="hobby-title">Automobiles</span>
+                </div>
+
+                <!-- Music -->
+                <div class="hobby-card">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="hobby-id">HB-002</div>
+                    <div class="hobby-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                    </div>
+                    <span class="hobby-title">Music</span>
+                </div>
+
+                <!-- Travelling -->
+                <div class="hobby-card">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="hobby-id">HB-003</div>
+                    <div class="hobby-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </div>
+                    <span class="hobby-title">Travelling</span>
+                </div>
+
+                <!-- Inner Circle -->
+                <div class="hobby-card">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="hobby-id">HB-004</div>
+                    <div class="hobby-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                    </div>
+                    <span class="hobby-title">Inner Circle</span>
+                </div>
+
+                <!-- Nature & Pets -->
+                <div class="hobby-card">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="hobby-id">HB-005</div>
+                    <div class="hobby-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C10 14.5 10.5 16 12 16c1.25 0 1.34-1 2.5-1 4.5 0 4.5 6 4.5 6"></path></svg>
+                    </div>
+                    <span class="hobby-title">Nature & Pets</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="max-w-xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Let's
+                Connect</h2>
+            <p class="text-center text-gray-400 mb-10 animate-on-scroll opacity-0">Reach out for
+                collaborations or opportunities.<br><a href="mailto:vagishkora2003@gmail.com"
+                    class="text-primary hover:underline">vagishkora2003@gmail.com</a></p>
+            <form id="contact-form" class="space-y-6 animate-on-scroll opacity-0">
+                <div class="relative"><input type="text" id="name" name="name"
+                        class="peer w-full h-12 bg-background/50 border-b-2 border-gray-700 text-gray-100 focus:outline-none focus:border-primary placeholder-transparent transition-colors"
+                        placeholder="Name" required /><label for="name"
+                        class="absolute left-0 -top-4 text-xs text-primary transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary">Name</label>
+                </div>
+                <div class="relative"><input type="email" id="email" name="email"
+                        class="peer w-full h-12 bg-background/50 border-b-2 border-gray-700 text-gray-100 focus:outline-none focus:border-primary placeholder-transparent transition-colors"
+                        placeholder="Email" required /><label for="email"
+                        class="absolute left-0 -top-4 text-xs text-primary transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary">Email</label>
+                </div>
+                <div class="relative"><textarea id="message" name="message" rows="4"
+                        class="peer w-full bg-background/50 border-b-2 border-gray-700 text-gray-100 focus:outline-none focus:border-primary placeholder-transparent transition-colors resize-none py-2"
+                        placeholder="Message" required></textarea><label for="message"
+                        class="absolute left-0 -top-4 text-xs text-primary transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary">Message</label>
+                </div><button type="submit"
+                    class="w-full py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2 group"><span>Send
+                        Message</span><svg id="loading-icon" class="w-5 h-5 animate-spin hidden" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg><svg id="send-icon" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg></button>
+            </form>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 text-center">
+        <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+            class="group relative text-xs text-gray-500 hover:text-white transition-all overflow-hidden"
+            style="width: 200px; padding: 10px; border-radius: 10px 10px 30px 30px; border: 2px solid #333; background: linear-gradient(to bottom, #222, #000);">
+            <span class="block text-lg mb-1">&uarr;</span>
+            <span
+                class="text-[10px] tracking-widest opacity-50 group-hover:opacity-100 transition-opacity font-mono">OBJECTS
+                IN MIRROR ARE CLOSER THAN THEY APPEAR</span>
+        </button>
+        <div class="mt-8 flex flex-col items-center gap-2">
+            <span class="text-[10px] font-mono tracking-[0.2em] text-accent-cyan flex items-center gap-2">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                BASED IN BANGALORE
+            </span>
+            <p class="text-xs text-gray-600">© Copyright 2026. Made by Vagish N Kora.</p>
+        </div>
+    </footer>
+    <!-- Phase 3: Splash Screen Removed for Better UX -->
+
+    <!-- INJECT CERTIFICATE DATA BEFORE SCRIPT -->
+    <script src="cert_data.js"></script>
+    <!-- Use the compiled script -->
+    <script src="script.js?v=2.2"></script>
+
+    <!-- BMW Cursor Elements -->
+    <div id="bmw-cursor">
+        <div class="cursor-arrow"></div>
+    </div>
+    <!-- Trails generated by JS -->
+
+    <!-- Phase 3: High Beams Overlay -->
+    <div id="high-beams"></div>
+
+    <!-- Phase 3: Gear Shift Nav -->
+    <div id="gear-nav">
+        <div class="gear-item active" data-target="#home">P</div> <!-- Start/Home -->
+        <div class="gear-item" data-target="#work">R</div> <!-- Work (Reverse/Review) -->
+        <div class="gear-item" data-target="#skills">N</div> <!-- Skills (Neutral/Knowledge) -->
+        <div class="gear-item" data-target="#certifications">D</div> <!-- Certs (Drive/Forward) -->
+        <div class="gear-item" data-target="#contact">S</div> <!-- Contact (Sport/Action) -->
+    </div>
+    <!-- Tactical AI Intel Assistant -->
+    <div class="fixed bottom-8 right-8 z-[200]">
+        <!-- AI Toggle Button -->
+        <button id="ai-chat-toggle" 
+            class="group relative w-16 h-16 bg-black/80 border border-accent-pink/50 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:border-accent-pink shadow-[0_0_20px_rgba(209,107,165,0.3)]">
+            <div class="absolute inset-0 rounded-full bg-accent-pink/10 animate-pulse"></div>
+            <svg class="w-8 h-8 text-accent-pink group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span class="absolute -top-12 right-0 bg-surface border border-white/10 px-3 py-1 rounded text-[10px] font-mono text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">TACTICAL_INTEL_AI</span>
+        </button>
+
+        <!-- AI Chat Window -->
+        <div id="ai-chat-window" class="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[500px] bg-black/90 border border-white/10 rounded-xl overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col">
+            <!-- Scanning Line -->
+            <div class="absolute inset-0 pointer-events-none scanning-line z-0"></div>
+            
+            <!-- Terminal Header -->
+            <div class="relative z-10 p-4 border-b border-white/10 flex justify-between items-center bg-accent-pink/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 bg-accent-pink rounded-full animate-pulse"></div>
+                    <span class="text-xs font-mono font-bold tracking-widest text-white uppercase">NEURAL_LINK :: VAGISH_OS</span>
+                </div>
+                <button id="close-chat" class="text-gray-500 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll relative z-10">
+                <div class="bg-white/5 border border-white/10 p-3 rounded-lg text-xs font-mono text-gray-400 message-anim">
+                    <span class="text-accent-pink font-bold">[SYSTEM]</span> Initializing tactical link...<br>
+                    <span class="text-accent-pink font-bold">[SYSTEM]</span> Vagish Dossier loaded.<br>
+                    <span class="text-accent-pink font-bold">[SYSTEM]</span> I am your Intel Assistant. Ask me anything about Vagish Kora's projects, skills, or certifications.
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="relative z-10 p-4 border-t border-white/10 bg-black/50">
+                <div class="relative">
+                    <input type="text" id="ai-chat-input" 
+                        placeholder="TYPE_COMMAND_HERE..." 
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:border-accent-pink/50 transition-colors">
+                    <button id="send-ai-message" class="absolute right-3 top-1/2 -translate-y-1/2 text-accent-pink hover:scale-110 transition-transform disabled:opacity-30">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mt-2 text-[8px] font-mono text-gray-600 flex justify-between">
+                    <span>SEC_LEVEL: ALPHA</span>
+                    <span>ENCRYPTION: ACTIVE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Intel | Vagish N Kora</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'rgb(var(--background) / <alpha-value>)',
+                        surface: 'rgb(var(--surface) / <alpha-value>)',
+                        primary: '#6366f1', // Indigo 500
+                        secondary: '#14b8a6', // Teal 500
+                        accent: {
+                            pink: '#D16BA5',
+                            purple: '#86A8E7',
+                            cyan: '#5FFBF1',
+                            black: '#000000',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        brutalist: ['Space Grotesk', 'Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* THEME VARIABLES */
+        :root {
+            --background: 255 255 255;
+            --surface: 243 244 246;
+            --text-main: 17 24 39;
+        }
+
+        .dark {
+            --background: 10 10 10;
+            --surface: 23 23 23;
+            --text-main: 243 244 246;
+        }
+
+        body {
+            background-color: rgb(var(--background));
+            color: rgb(var(--text-main));
+        }
+
+        /* TECH BACKGROUND PATTERNS */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* CUSTOM CURSOR OVERRIDE */
+        * { cursor: none !important; }
+
+        #bmw-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10005;
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform;
+        }
+
+        /* TIMELINE STYLES */
+        .timeline-container {
+            position: relative;
+            max-width: 4xl;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 40px 0;
+        }
+
+        .timeline-trace {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #6366f1, #14b8a6, transparent);
+            transform: translateX(-50%);
+            opacity: 0.5;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        .timeline-node {
+            position: relative;
+            width: 100%;
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: flex-end; /* Default Right side */
+            align-items: center;
+            opacity: 1; /* Make visible by default in case animation fails */
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .timeline-node:nth-child(even) {
+            justify-content: flex-start; /* Left side */
+        }
+
+        .node-content {
+            width: 45%;
+            background: rgba(15, 15, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .node-content:hover {
+            border-color: #6366f1;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* glowing orbit point */
+        .node-point {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: #0a0a0a;
+            border: 2px solid #6366f1;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+            z-index: 10;
+        }
+
+        .node-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 5%; /* Line connecting to center */
+            height: 1px;
+            background: rgba(99, 102, 241, 0.5);
+        }
+
+        .timeline-node:nth-child(odd) .node-content::before {
+            left: -5%;
+        }
+
+        .timeline-node:nth-child(even) .node-content::before {
+            right: -5%;
+        }
+
+        /* Corner accents */
+        .node-content .corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+        }
+        .node-content .top-l { top: 4px; left: 4px; border-right: 0; border-bottom: 0; }
+        .node-content .top-r { top: 4px; right: 4px; border-left: 0; border-bottom: 0; }
+        .node-content .bot-l { bottom: 4px; left: 4px; border-right: 0; border-top: 0; }
+        .node-content .bot-r { bottom: 4px; right: 4px; border-left: 0; border-top: 0; }
+
+        /* Return button */
+        .btn-return {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 12px;
+            letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .btn-return:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text-main font-sans antialiased overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="bmw-cursor" class="bg-white"></div>
+
+    <!-- Return to Base -->
+    <a href="index.html#home" class="btn-return group">
+        <span class="mr-2 group-hover:-translate-x-1 inline-block transition-transform">&larr;</span> 
+        RETURN_TO_BASE
+    </a>
+
+    <!-- Header -->
+    <header class="pt-32 pb-16 text-center relative z-10">
+        <h1 class="text-5xl md:text-6xl font-bold font-brutalist uppercase tracking-tighter mb-4">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Academic</span> Intel
+        </h1>
+        <p class="text-gray-400 font-mono tracking-widest text-xs uppercase">MISSION_PROFILE // EDUCATION_TIMELINE</p>
+    </header>
+
+    <!-- Timeline Layout -->
+    <main class="max-w-6xl mx-auto px-4 relative z-10 pb-32">
+        <div class="timeline-container">
+            <div class="timeline-trace"></div>
+
+            <!-- 1. B.Tech Ongoing -->
+            <div class="timeline-node group">
+                <div class="node-point transition-transform group-hover:scale-125"></div>
+                <div class="node-content bg-zinc-900 border border-zinc-800">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <span class="text-secondary font-mono text-xs mb-2 block">AUG 2025 - 2028 <span class="text-accent-cyan ml-2">[ONGOING]</span></span>
+                    <h3 class="text-2xl font-bold text-white mb-1">B.Tech in CSE (Cybersecurity)</h3>
+                    <h4 class="text-gray-400 font-brutalist text-sm mb-4">NMAMIT, Udupi</h4>
+                    <div class="flex items-center gap-4 mt-4">
+                        <div class="bg-primary/20 border border-primary/50 px-3 py-1 rounded-sm">
+                            <span class="font-mono text-xs text-primary">CGPA: </span>
+                            <span class="font-mono text-sm font-bold text-white">6.81</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Diploma -->
+            <div class="timeline-node group">
+                <div class="node-point transition-transform group-hover:scale-125"></div>
+                <div class="node-content bg-zinc-900 border border-zinc-800">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <span class="text-primary font-mono text-xs mb-2 block">2022 - 2025</span>
+                    <h3 class="text-2xl font-bold text-white mb-1">Diploma in CSE</h3>
+                    <h4 class="text-gray-400 font-brutalist text-sm mb-4">NMIT Polytechnic, Yelahanka, Bengaluru</h4>
+                    <div class="flex items-center gap-4 mt-4">
+                        <div class="bg-primary/20 border border-primary/50 px-3 py-1 rounded-sm">
+                            <span class="font-mono text-xs text-primary">CGPA: </span>
+                            <span class="font-mono text-sm font-bold text-white">8.42</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. High School -->
+            <div class="timeline-node group">
+                <div class="node-point transition-transform group-hover:scale-125"></div>
+                <div class="node-content bg-zinc-900 border border-zinc-800">
+                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <span class="text-primary font-mono text-xs mb-2 block">2020 - 2021</span>
+                    <h3 class="text-2xl font-bold text-white mb-1">Class X</h3>
+                    <h4 class="text-gray-400 font-brutalist text-sm mb-4">Vasavi Educational Trust VV Puram, Bengaluru</h4>
+                    <div class="flex items-center gap-4 mt-4">
+                        <div class="bg-primary/20 border border-primary/50 px-3 py-1 rounded-sm">
+                            <span class="font-mono text-xs text-primary">Score: </span>
+                            <span class="font-mono text-sm font-bold text-white">68%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Simple cursor logic for this page
+        const cursor = document.getElementById('bmw-cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        });
+
+        document.querySelectorAll('a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(2)');
+            el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(2)', ''));
+        });
+    </script>
+</body>
+</html>
