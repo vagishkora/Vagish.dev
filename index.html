@@ -261,14 +261,27 @@
         /* SKILL GRID STYLES */
         .skill-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1rem;
             width: 100%;
         }
 
-        @media (min-width: 768px) {
+        @media (max-width: 480px) {
+            .skill-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 640px) {
+            .skill-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
             .skill-grid {
                 grid-template-columns: repeat(5, 1fr);
+                gap: 1.5rem;
             }
         }
 
@@ -459,12 +472,19 @@
         /* --- Hobbies Section (Icon Grid) --- */
         .hobby-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1rem;
             width: 100%;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
+            .hobby-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
             .hobby-grid {
                 grid-template-columns: repeat(5, 1fr);
             }
@@ -1382,7 +1402,7 @@
         </div>
     </nav>
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-accent-black">
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-accent-black pt-32 md:pt-0">
         <!-- Social Sidebar (Unique Design) -->
         <div class="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-8">
             <div class="w-px h-24 bg-gradient-to-b from-transparent via-gray-700 to-gray-700"></div>
@@ -1461,13 +1481,14 @@
 
             <div class="space-y-8 relative">
                 <h1
-                    class="text-6xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll opacity-0 translate-y-8 delay-100 flex flex-wrap items-center gap-4">
-                    Hi, I'm <div class="relative group">
+                    class="text-5xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll opacity-0 translate-y-8 delay-100 flex flex-col md:flex-row md:flex-wrap items-center md:items-center gap-2 md:gap-4 text-center md:text-left relative">
+                    <span>Hi, I'm</span>
+                    <div class="relative group inline-block">
                         <span
                             class="bg-clip-text text-transparent bg-gradient-to-r from-accent-pink to-accent-purple">Vagish</span>
                         <!-- Memoji Aura -->
                         <div
-                            class="absolute -top-4 -right-24 md:-top-6 md:-right-32 w-24 h-24 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
+                            class="absolute top-1/2 -translate-y-1/2 left-full ml-16 md:-top-6 md:left-auto md:ml-0 md:-right-32 w-16 h-16 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
                             <div class="absolute inset-0 bg-accent-pink/20 rounded-full blur-2xl animate-pulse"></div>
                             <img src="assets/memoji.png" alt="Memoji"
                                 class="relative z-10 w-full h-full object-contain animate-float"
@@ -1477,18 +1498,18 @@
                 </h1>
 
                 <p
-                    class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll opacity-0 translate-y-8 delay-200">
+                    class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll opacity-0 translate-y-8 delay-200 mt-6 mix-blend-difference relative z-20 text-center md:text-left mx-auto md:mx-0">
                     A <span class="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex,
                     real-world problems through high-performance intelligent systems and secure product experiences.
                 </p>
 
-                <div class="flex flex-wrap items-center gap-6 animate-on-scroll opacity-0 translate-y-8 delay-300">
+                <div class="flex flex-col items-center md:items-start gap-8 animate-on-scroll opacity-0 translate-y-8 delay-300 mt-10 relative z-20">
                     <a href="#work"
-                        class="px-8 py-4 bg-white text-black font-brutalist font-bold rounded-sm hover:bg-accent-pink hover:text-white transition-all transform hover:-translate-y-1">
+                        class="px-10 py-5 bg-white text-black font-brutalist font-bold rounded-sm hover:bg-accent-pink hover:text-white transition-all transform hover:-translate-y-1 w-full md:w-auto text-center shadow-lg hover:shadow-accent-pink/50">
                         EXPLORE WORK &rarr;
                     </a>
                     <a href="Vagish_Resume.pdf" download
-                        class="text-gray-400 hover:text-white font-medium underline underline-offset-8 transition-colors">
+                        class="text-gray-400 hover:text-white font-medium underline underline-offset-8 transition-colors text-center md:text-left px-4 md:px-0 text-sm tracking-widest uppercase">
                         Download CV
                     </a>
                 </div>
@@ -1496,12 +1517,12 @@
 
             <!-- Profile Image Area -->
             <div class="relative flex justify-center lg:justify-end">
-                <div class="relative w-72 h-72 md:w-96 md:h-96">
+                <div class="relative w-48 h-48 md:w-96 md:h-96">
                     <!-- Holographic Orbits -->
-                    <div class="holo-orbit w-[350px] h-[350px]" style="animation-duration: 15s;">
+                    <div class="holo-orbit w-[250px] h-[250px] md:w-[350px] md:h-[350px]" style="animation-duration: 15s;">
                         <div class="orbit-dot"></div>
                     </div>
-                    <div class="holo-orbit w-[450px] h-[450px]"
+                    <div class="holo-orbit w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
                         style="animation-duration: 25s; animation-direction: reverse;">
                         <div class="orbit-dot"
                             style="top: auto; bottom: 0; background: #ec4899; box-shadow: 0 0 10px #ec4899;"></div>
@@ -1849,19 +1870,21 @@
                 </div>
 
                 <!-- Navigation Controls -->
-                <button id="prev-cert"
-                    class="absolute left-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                        </path>
-                    </svg>
-                </button>
-                <button id="next-cert"
-                    class="absolute right-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
+                <div class="absolute -bottom-16 left-0 right-0 flex justify-center gap-8 md:block md:static">
+                    <button id="prev-cert"
+                        class="md:absolute md:left-4 md:top-1/2 md:-translate-y-1/2 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <button id="next-cert"
+                        class="md:absolute md:right-4 md:top-1/2 md:-translate-y-1/2 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -1915,7 +1938,10 @@
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 xl:px-8 relative z-10 hidden">
+            <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Off-Duty Telemetry</h2>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10 w-full">
             <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Off-Duty Telemetry</h2>
             <p
                 class="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] animate-on-scroll opacity-0 uppercase">
