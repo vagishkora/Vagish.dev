@@ -47,6 +47,6 @@ Designed without heavy UI libraries, relying on custom CSS and DOM manipulation:
 ---
 
 ## 🔒 License
-This portfolio design and the custom components (Tactical AI, BMW Telemetry HUDs, 3D Carousels) are custom-engineered. 
+This portfolio design and the custom components are custom-engineered. 
 
 *© Copyright 2026. Made by Vagish N Kora.*
