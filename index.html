@@ -409,24 +409,31 @@
         }
 
         .scanning-line {
-            background: linear-gradient(to bottom, 
-                transparent 0%, 
-                rgba(209, 107, 165, 0.1) 50%, 
-                transparent 100%);
+            background: linear-gradient(to bottom,
+                    transparent 0%,
+                    rgba(209, 107, 165, 0.1) 50%,
+                    transparent 100%);
             animation: scan 3s linear infinite;
         }
 
         @keyframes scan {
-            0% { top: -100%; }
-            100% { top: 100%; }
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: 100%;
+            }
         }
 
         .chat-scroll::-webkit-scrollbar {
             width: 4px;
         }
+
         .chat-scroll::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
         }
+
         .chat-scroll::-webkit-scrollbar-thumb {
             background: rgba(209, 107, 165, 0.5);
             border-radius: 2px;
@@ -434,9 +441,17 @@
 
         /* Message Animations */
         @keyframes typeIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
+
         .message-anim {
             animation: typeIn 0.3s ease-out forwards;
         }
@@ -506,10 +521,33 @@
             opacity: 1;
         }
 
-        .hobby-card .top-l { top: 5px; left: 5px; border-right: 0; border-bottom: 0; }
-        .hobby-card .top-r { top: 5px; right: 5px; border-left: 0; border-bottom: 0; }
-        .hobby-card .bot-l { bottom: 5px; left: 5px; border-right: 0; border-top: 0; }
-        .hobby-card .bot-r { bottom: 5px; right: 5px; border-left: 0; border-top: 0; }
+        .hobby-card .top-l {
+            top: 5px;
+            left: 5px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .hobby-card .top-r {
+            top: 5px;
+            right: 5px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+
+        .hobby-card .bot-l {
+            bottom: 5px;
+            left: 5px;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .hobby-card .bot-r {
+            bottom: 5px;
+            right: 5px;
+            border-left: 0;
+            border-top: 0;
+        }
 
         .hobby-card .hobby-id {
             position: absolute;
@@ -558,7 +596,8 @@
         .drone-hud {
             display: inline-flex;
             vertical-align: middle;
-            margin-right: 35px; /* Increased safe zone */
+            margin-right: 35px;
+            /* Increased safe zone */
             position: relative;
             filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
             animation: flight-bob 4s ease-in-out infinite;
@@ -586,10 +625,33 @@
             transform-origin: left center;
         }
 
-        .arm-tl { top: 8px; left: -15px; transform: rotate(150deg); }
-        .arm-tr { top: 8px; right: -12px; transform: rotate(-150deg); transform-origin: right center; background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent); }
-        .arm-bl { bottom: 8px; left: -15px; transform: rotate(210deg); }
-        .arm-br { bottom: 8px; right: -12px; transform: rotate(-210deg); transform-origin: right center; background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent); }
+        .arm-tl {
+            top: 8px;
+            left: -15px;
+            transform: rotate(150deg);
+        }
+
+        .arm-tr {
+            top: 8px;
+            right: -12px;
+            transform: rotate(-150deg);
+            transform-origin: right center;
+            background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent);
+        }
+
+        .arm-bl {
+            bottom: 8px;
+            left: -15px;
+            transform: rotate(210deg);
+        }
+
+        .arm-br {
+            bottom: 8px;
+            right: -12px;
+            transform: rotate(-210deg);
+            transform-origin: right center;
+            background: linear-gradient(to left, rgba(99, 102, 241, 0.8), transparent);
+        }
 
         .propeller {
             position: absolute;
@@ -600,19 +662,46 @@
             animation: spin 0.15s linear infinite;
         }
 
-        .prop-tl { top: -10px; left: -25px; }
-        .prop-tr { top: -10px; right: -22px; }
-        .prop-bl { bottom: -10px; left: -25px; }
-        .prop-br { bottom: -10px; right: -22px; }
+        .prop-tl {
+            top: -10px;
+            left: -25px;
+        }
+
+        .prop-tr {
+            top: -10px;
+            right: -22px;
+        }
+
+        .prop-bl {
+            bottom: -10px;
+            left: -25px;
+        }
+
+        .prop-br {
+            bottom: -10px;
+            right: -22px;
+        }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes flight-bob {
-            0%, 100% { transform: translateY(0) rotate(1deg); }
-            50% { transform: translateY(-5px) rotate(-1deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(1deg);
+            }
+
+            50% {
+                transform: translateY(-5px) rotate(-1deg);
+            }
         }
 
         .drone-time {
@@ -1050,15 +1139,15 @@
             height: 160px;
             border-radius: 50%;
             /* Forged Carbon Face */
-            background: 
+            background:
                 radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.95), rgba(5, 5, 5, 1)),
                 repeating-conic-gradient(from 0deg, rgba(60, 60, 60, 0.2) 0% 5%, transparent 5% 10%);
             background-blend-mode: overlay;
-            
+
             /* Precision Bezel */
             border: 4px solid #1a1a1a;
             outline: 1px solid rgba(255, 255, 255, 0.1);
-            
+
             box-shadow:
                 inset 0 0 30px rgba(0, 0, 0, 0.9),
                 0 0 0 1px #333,
@@ -1103,18 +1192,46 @@
             margin-bottom: 12px;
             filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
         }
-        .m-stripe { width: 12px; height: 3px; border-radius: 1px; }
-        .ms-light { background: #009ada; }
-        .ms-dark { background: #003087; }
-        .ms-red { background: #da291c; }
+
+        .m-stripe {
+            width: 12px;
+            height: 3px;
+            border-radius: 1px;
+        }
+
+        .ms-light {
+            background: #009ada;
+        }
+
+        .ms-dark {
+            background: #003087;
+        }
+
+        .ms-red {
+            background: #da291c;
+        }
 
         /* Engine Rev Vibration */
         @keyframes engine-rev {
-            0% { transform: translate(0, 0) scale(1.05); }
-            25% { transform: translate(0.5px, -0.5px) scale(1.05); }
-            50% { transform: translate(-0.5px, 0.5px) scale(1.05); }
-            75% { transform: translate(0.5px, 0.5px) scale(1.05); }
-            100% { transform: translate(0, 0) scale(1.05); }
+            0% {
+                transform: translate(0, 0) scale(1.05);
+            }
+
+            25% {
+                transform: translate(0.5px, -0.5px) scale(1.05);
+            }
+
+            50% {
+                transform: translate(-0.5px, 0.5px) scale(1.05);
+            }
+
+            75% {
+                transform: translate(0.5px, 0.5px) scale(1.05);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1.05);
+            }
         }
 
         #engine-start-btn:hover {
@@ -1171,16 +1288,24 @@
                 <div class="flex-shrink-0 flex items-center">
                     <!-- Tactical Drone HUD Clock (Integrated) -->
                     <div id="drone-clock" class="drone-hud">
-                        <div class="drone-arm arm-tl"><div class="propeller prop-tl"></div></div>
-                        <div class="drone-arm arm-tr"><div class="propeller prop-tr"></div></div>
-                        <div class="drone-arm arm-bl"><div class="propeller prop-bl"></div></div>
-                        <div class="drone-arm arm-br"><div class="propeller prop-br"></div></div>
+                        <div class="drone-arm arm-tl">
+                            <div class="propeller prop-tl"></div>
+                        </div>
+                        <div class="drone-arm arm-tr">
+                            <div class="propeller prop-tr"></div>
+                        </div>
+                        <div class="drone-arm arm-bl">
+                            <div class="propeller prop-bl"></div>
+                        </div>
+                        <div class="drone-arm arm-br">
+                            <div class="propeller prop-br"></div>
+                        </div>
                         <div class="drone-core">
                             <span class="drone-label">ALPHA</span>
                             <span id="live-time" class="drone-time">00:00</span>
                         </div>
                     </div>
-                    
+
                     <a href="#"
                         class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Vagish
                         N Kora </a>
@@ -1338,18 +1463,23 @@
                 <h1
                     class="text-6xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll opacity-0 translate-y-8 delay-100 flex flex-wrap items-center gap-4">
                     Hi, I'm <div class="relative group">
-                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-accent-pink to-accent-purple">Vagish</span>
+                        <span
+                            class="bg-clip-text text-transparent bg-gradient-to-r from-accent-pink to-accent-purple">Vagish</span>
                         <!-- Memoji Aura -->
-                        <div class="absolute -top-4 -right-24 md:-top-6 md:-right-32 w-24 h-24 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
+                        <div
+                            class="absolute -top-4 -right-24 md:-top-6 md:-right-32 w-24 h-24 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
                             <div class="absolute inset-0 bg-accent-pink/20 rounded-full blur-2xl animate-pulse"></div>
-                            <img src="assets/memoji.png" alt="Memoji" class="relative z-10 w-full h-full object-contain animate-float" style="animation-duration: 4s;">
+                            <img src="assets/memoji.png" alt="Memoji"
+                                class="relative z-10 w-full h-full object-contain animate-float"
+                                style="animation-duration: 4s;">
                         </div>
                     </div>
                 </h1>
 
                 <p
                     class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll opacity-0 translate-y-8 delay-200">
-                    A <span class="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex, real-world problems through high-performance intelligent systems and secure product experiences.
+                    A <span class="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex,
+                    real-world problems through high-performance intelligent systems and secure product experiences.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-6 animate-on-scroll opacity-0 translate-y-8 delay-300">
@@ -1384,7 +1514,7 @@
                     <!-- User Photo -->
                     <div id="user-photo-container"
                         class="w-full h-full bg-surface rounded-lg overflow-hidden relative group">
-                        <img id="user-profile-img" src="assets/profile.JPG" alt="Vagish Kora"
+                        <img id="user-profile-img" src="assets/profile.jpg" alt="Vagish Kora"
                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     </div>
 
@@ -1738,18 +1868,23 @@
     </section>
 
     <!-- Volunteering Section (Stacked Carousel) -->
-    <section id="volunteering" class="py-20 relative overflow-hidden bg-surface/30 min-h-[700px] flex items-center justify-center">
+    <section id="volunteering"
+        class="py-20 relative overflow-hidden bg-surface/30 min-h-[700px] flex items-center justify-center">
         <!-- Background Decor -->
         <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-secondary/10 rounded-full"></div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-secondary/10 rounded-full">
+            </div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 relative z-10 w-full flex flex-col items-center">
             <h2 class="text-3xl font-bold mb-12 text-center animate-on-scroll opacity-0">Community Outreach</h2>
 
             <!-- Outreach Carousel Container -->
-            <div id="outreach-carousel" class="relative w-full max-w-5xl h-[400px] flex items-center justify-center perspective-1000">
-                <div id="outreach-track" class="relative w-full h-full flex items-center justify-center transform-style-3d transition-transform duration-500">
+            <div id="outreach-carousel"
+                class="relative w-full max-w-5xl h-[400px] flex items-center justify-center perspective-1000">
+                <div id="outreach-track"
+                    class="relative w-full h-full flex items-center justify-center transform-style-3d transition-transform duration-500">
                     <!-- Cards injected by JS -->
                 </div>
 
@@ -1757,7 +1892,8 @@
                 <button id="prev-outreach"
                     class="absolute left-4 z-50 p-4 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
                     </svg>
                 </button>
                 <button id="next-outreach"
@@ -1774,61 +1910,111 @@
     <section id="hobbies" class="py-24 bg-surface/30 relative overflow-hidden">
         <!-- Background Decor -->
         <div class="absolute inset-0 z-0 pointer-events-none opacity-10">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary/20 rounded-full"></div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary/20 rounded-full">
+            </div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <h2 class="text-3xl font-bold mb-4 text-center animate-on-scroll opacity-0">Off-Duty Telemetry</h2>
-            <p class="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] animate-on-scroll opacity-0 uppercase">
+            <p
+                class="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] animate-on-scroll opacity-0 uppercase">
                 PERSONAL_INTERESTS // MISSION_PROFILE</p>
-            
+
             <div class="hobby-grid animate-on-scroll opacity-0">
                 <!-- Automobiles & Driving -->
                 <div class="hobby-card">
-                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="hobby-id">HB-001</div>
                     <div class="hobby-icon">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7h2">
+                            </path>
+                            <circle cx="7" cy="17" r="2"></circle>
+                            <path d="M9 17h6"></path>
+                            <circle cx="17" cy="17" r="2"></circle>
+                        </svg>
                     </div>
                     <span class="hobby-title">Automobiles</span>
                 </div>
 
                 <!-- Music -->
                 <div class="hobby-card">
-                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="hobby-id">HB-002</div>
                     <div class="hobby-icon">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
                     </div>
                     <span class="hobby-title">Music</span>
                 </div>
 
                 <!-- Travelling -->
                 <div class="hobby-card">
-                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="hobby-id">HB-003</div>
                     <div class="hobby-icon">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
                     </div>
                     <span class="hobby-title">Travelling</span>
                 </div>
 
                 <!-- Inner Circle -->
                 <div class="hobby-card">
-                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="hobby-id">HB-004</div>
                     <div class="hobby-icon">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                            </path>
+                        </svg>
                     </div>
                     <span class="hobby-title">Inner Circle</span>
                 </div>
 
                 <!-- Nature & Pets -->
                 <div class="hobby-card">
-                    <div class="corner top-l"></div><div class="corner top-r"></div><div class="corner bot-l"></div><div class="corner bot-r"></div>
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="hobby-id">HB-005</div>
                     <div class="hobby-icon">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C10 14.5 10.5 16 12 16c1.25 0 1.34-1 2.5-1 4.5 0 4.5 6 4.5 6"></path></svg>
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#6366f1" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z">
+                            </path>
+                            <path
+                                d="M2 21c0-3 1.85-5.36 5.08-6C10 14.5 10.5 16 12 16c1.25 0 1.34-1 2.5-1 4.5 0 4.5 6 4.5 6">
+                            </path>
+                        </svg>
                     </div>
                     <span class="hobby-title">Nature & Pets</span>
                 </div>
@@ -1888,7 +2074,12 @@
         </button>
         <div class="mt-8 flex flex-col items-center gap-2">
             <span class="text-[10px] font-mono tracking-[0.2em] text-accent-cyan flex items-center gap-2">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
                 BASED IN BANGALORE
             </span>
             <p class="text-xs text-gray-600">© Copyright 2026. Made by Vagish N Kora.</p>
@@ -1921,51 +2112,60 @@
     <!-- Tactical AI Intel Assistant -->
     <div class="fixed bottom-8 right-8 z-[200]">
         <!-- AI Toggle Button -->
-        <button id="ai-chat-toggle" 
+        <button id="ai-chat-toggle"
             class="group relative w-16 h-16 bg-black/80 border border-accent-pink/50 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:border-accent-pink shadow-[0_0_20px_rgba(209,107,165,0.3)]">
             <div class="absolute inset-0 rounded-full bg-accent-pink/10 animate-pulse"></div>
-            <svg class="w-8 h-8 text-accent-pink group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <svg class="w-8 h-8 text-accent-pink group-hover:rotate-12 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z">
+                </path>
             </svg>
-            <span class="absolute -top-12 right-0 bg-surface border border-white/10 px-3 py-1 rounded text-[10px] font-mono text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">TACTICAL_INTEL_AI</span>
+            <span
+                class="absolute -top-12 right-0 bg-surface border border-white/10 px-3 py-1 rounded text-[10px] font-mono text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">TACTICAL_INTEL_AI</span>
         </button>
 
         <!-- AI Chat Window -->
-        <div id="ai-chat-window" class="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[500px] bg-black/90 border border-white/10 rounded-xl overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col">
+        <div id="ai-chat-window"
+            class="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[500px] bg-black/90 border border-white/10 rounded-xl overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col">
             <!-- Scanning Line -->
             <div class="absolute inset-0 pointer-events-none scanning-line z-0"></div>
-            
+
             <!-- Terminal Header -->
             <div class="relative z-10 p-4 border-b border-white/10 flex justify-between items-center bg-accent-pink/5">
                 <div class="flex items-center gap-3">
                     <div class="w-2 h-2 bg-accent-pink rounded-full animate-pulse"></div>
-                    <span class="text-xs font-mono font-bold tracking-widest text-white uppercase">NEURAL_LINK :: VAGISH_OS</span>
+                    <span class="text-xs font-mono font-bold tracking-widest text-white uppercase">NEURAL_LINK ::
+                        VAGISH_OS</span>
                 </div>
                 <button id="close-chat" class="text-gray-500 hover:text-white transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
 
             <!-- Chat Messages Area -->
             <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll relative z-10">
-                <div class="bg-white/5 border border-white/10 p-3 rounded-lg text-xs font-mono text-gray-400 message-anim">
+                <div
+                    class="bg-white/5 border border-white/10 p-3 rounded-lg text-xs font-mono text-gray-400 message-anim">
                     <span class="text-accent-pink font-bold">[SYSTEM]</span> Initializing tactical link...<br>
                     <span class="text-accent-pink font-bold">[SYSTEM]</span> Vagish Dossier loaded.<br>
-                    <span class="text-accent-pink font-bold">[SYSTEM]</span> I am your Intel Assistant. Ask me anything about Vagish Kora's projects, skills, or certifications.
+                    <span class="text-accent-pink font-bold">[SYSTEM]</span> I am your Intel Assistant. Ask me anything
+                    about Vagish Kora's projects, skills, or certifications.
                 </div>
             </div>
 
             <!-- Chat Input Area -->
             <div class="relative z-10 p-4 border-t border-white/10 bg-black/50">
                 <div class="relative">
-                    <input type="text" id="ai-chat-input" 
-                        placeholder="TYPE_COMMAND_HERE..." 
+                    <input type="text" id="ai-chat-input" placeholder="TYPE_COMMAND_HERE..."
                         class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:border-accent-pink/50 transition-colors">
-                    <button id="send-ai-message" class="absolute right-3 top-1/2 -translate-y-1/2 text-accent-pink hover:scale-110 transition-transform disabled:opacity-30">
+                    <button id="send-ai-message"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-accent-pink hover:scale-110 transition-transform disabled:opacity-30">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
                         </svg>
                     </button>
                 </div>
