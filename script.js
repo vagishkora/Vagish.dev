@@ -967,28 +967,7 @@ class TacticalAI {
     }
 }
 
-// --- Tactical Drone Clock Logic ---
-class DroneClock {
-    constructor() {
-        this.timeDisplay = document.getElementById('live-time');
-        this.init();
-    }
 
-    init() {
-        if (!this.timeDisplay) return;
-        this.updateTime();
-        setInterval(() => this.updateTime(), 1000);
-    }
-
-    updateTime() {
-        const now = new Date();
-        let hours = now.getHours() % 12 || 12;
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        hours = String(hours).padStart(2, '0');
-        this.timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-    }
-}
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
@@ -1001,6 +980,5 @@ document.addEventListener('DOMContentLoaded', () => {
     new HolographicDeck();
     new OutreachCarousel();
     new TacticalAI();
-    new DroneClock();
     new ArchiveManager();
 });
