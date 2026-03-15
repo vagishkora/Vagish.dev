@@ -705,9 +705,10 @@ class TacticalAI {
             6. If asked questions wholly unrelated to technology, cybersecurity, or Vagish, politely redirect the user back to his professional profile.
         `;
 
-        this.apiKey = localStorage.getItem('OPENROUTER_API_KEY') || ""; // Read from localStorage - NEVER commit keys to git
-        this.baseApiUrl = "https://openrouter.ai/api/v1";
-        this.selectedModel = "mistral/mistral-7b-instruct"; // Modern fast model
+        // API Configuration - Backend proxy handles OpenRouter API key securely
+        this.apiKey = ""; // No longer needed - backend proxy handles authentication
+        this.baseApiUrl = "/api"; // Backend proxy endpoint (change to your server URL if deployed separately)
+        this.selectedModel = "mistral/mistral-7b-instruct"; // Model to use
 
         this.history = [];
         this.isProcessing = false;
@@ -818,49 +819,39 @@ class TacticalAI {
         this.messagesContainer.appendChild(thinkingMsg);
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
 
-        // Call OpenRouter API
+        // Call Backend Proxy (Server keeps API key secret)
         try {
-            if (!this.apiKey) {
-                thinkingMsg.remove();
-                this.addMessageToUI('ai', "ERROR: [NEURAL_LINK_FAILED] - API_KEY_MISSING. To use ALPHA AI: Open browser console and run: localStorage.setItem('OPENROUTER_API_KEY', 'your-new-key-here'). Get a new key from https://openrouter.ai");
-                this.isProcessing = false;
-                this.sendBtn.disabled = false;
-                return;
-            }
-
             this.history.push({
                 role: "user",
                 parts: [{ text: text }]
             });
 
-            // Use OpenRouter's API format (OpenAI-compatible)
-            // Convert Gemini history format to OpenAI chat format
+            // Convert Gemini history format to OpenAI chat format for backend
             const messages = this.history.map(msg => ({
                 role: msg.role === 'model' ? 'assistant' : 'user',
                 content: msg.parts[0].text
             }));
 
-            // OpenRouter Payload (OpenAI-compatible format)
+            // OpenRouter Payload sent to YOUR backend proxy
             const payload = {
                 model: this.selectedModel || "mistral/mistral-7b-instruct",
-                messages: messages,
-                system: this.systemInstructions,
-                max_tokens: 1000
+                messages: messages
             };
 
-            const response = await fetch(`${this.baseApiUrl}/chat/completions`, {
+            // Call YOUR backend (backend has the secret API key)
+            const backendUrl = '/api/chat'; // Change this if your backend is on a different URL
+            const response = await fetch(backendUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.apiKey}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                const errorMessage = errorData.error?.message || `STATUS_${response.status}`;
-                throw new Error(`[API_REJECTED] - ${errorMessage}`);
+                const errorMessage = errorData.error?.message || errorData.error || `STATUS_${response.status}`;
+                throw new Error(`[BACKEND_ERROR] - ${errorMessage}. Make sure your backend server is running.`);
             }
 
             const data = await response.json();
@@ -890,8 +881,8 @@ class TacticalAI {
         } catch (error) {
             thinkingMsg?.remove();
             console.error("Tactical AI Error:", error);
-            const detailedError = error.message.includes('API_REJECTED')
-                ? `${error.message}. <br>Possible causes: <br>1. Invalid OpenRouter API key. <br>2. API key not configured properly. <br>3. Daily quota exceeded on OpenRouter.`
+            const detailedError = error.message.includes('BACKEND_ERROR')
+                ? `${error.message}. Check that: 1) Backend server is running. 2) .env has OPENROUTER_API_KEY set.`
                 : error.message;
             this.addMessageToUI('ai', `ERROR: [NEURAL_LINK_INTERRUPTED] - ${detailedError}`);
         } finally {
