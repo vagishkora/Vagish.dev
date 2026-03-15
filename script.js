@@ -4,109 +4,7 @@ const CONFIG = {
     scrollOffset: 100
 };
 
-// --- Theme Toggle Logic (Pro Sliding Pill) ---
-class ThemeManager {
-    constructor() {
-        this.toggleEl = document.getElementById('theme-toggle');
-        this.thumb = document.getElementById('toggle-thumb');
-        this.thumbMoon = document.getElementById('thumb-moon');
-        this.thumbSun = document.getElementById('thumb-sun');
 
-        // Mobile Toggle Elements
-        this.mobileToggle = document.getElementById('mobile-theme-toggle');
-        this.mobileMoon = document.getElementById('mobile-moon');
-        this.mobileSun = document.getElementById('mobile-sun');
-        this.highBeams = document.getElementById('high-beams');
-
-        this.html = document.documentElement;
-
-        this.init();
-    }
-
-    init() {
-        // Desktop Listener
-        if (this.toggleEl) {
-            this.toggleEl.addEventListener('click', () => {
-                const isDark = this.html.classList.contains('dark');
-                this.setTheme(!isDark);
-                this.flashHighBeams();
-            });
-        }
-
-        // Mobile Listener
-        if (this.mobileToggle) {
-            this.mobileToggle.addEventListener('click', () => {
-                const isDark = this.html.classList.contains('dark');
-                this.setTheme(!isDark);
-                this.flashHighBeams(); // Enable on mobile too
-            });
-        }
-
-        // Check for saved preference or default to DARK
-        const savedTheme = localStorage.getItem('theme');
-
-        // Default to DARK if nothing saved (ignore system pref for now to enforce "black only" default)
-        if (savedTheme === 'dark' || !savedTheme) {
-            this.setTheme(true);
-        } else {
-            this.setTheme(false);
-        }
-
-
-    }
-
-    flashHighBeams() {
-        if (!this.highBeams) return;
-
-        // Reset animation
-        this.highBeams.classList.remove('flash');
-        void this.highBeams.offsetWidth; // Trigger reflow
-        this.highBeams.classList.add('flash');
-    }
-
-    setTheme(isDark) {
-        if (isDark) {
-            this.html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-
-            // Desktop UI Update
-            if (this.toggleEl) {
-                this.toggleEl.classList.remove('bg-white', 'border-zinc-200');
-                this.toggleEl.classList.add('bg-zinc-950', 'border-zinc-800');
-                this.thumb.classList.remove('translate-x-8', 'bg-gray-200');
-                this.thumb.classList.add('translate-x-0', 'bg-zinc-800');
-                this.thumbMoon.classList.remove('hidden');
-                this.thumbSun.classList.add('hidden');
-            }
-
-            // Mobile UI Update
-            if (this.mobileMoon) {
-                this.mobileMoon.classList.remove('hidden');
-                this.mobileSun.classList.add('hidden');
-            }
-
-        } else {
-            this.html.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-
-            // Desktop UI Update
-            if (this.toggleEl) {
-                this.toggleEl.classList.remove('bg-zinc-950', 'border-zinc-800');
-                this.toggleEl.classList.add('bg-white', 'border-zinc-200');
-                this.thumb.classList.remove('translate-x-0', 'bg-zinc-800');
-                this.thumb.classList.add('translate-x-8', 'bg-gray-200');
-                this.thumbMoon.classList.add('hidden');
-                this.thumbSun.classList.remove('hidden');
-            }
-
-            // Mobile UI Update
-            if (this.mobileMoon) {
-                this.mobileMoon.classList.add('hidden');
-                this.mobileSun.classList.remove('hidden');
-            }
-        }
-    }
-}
 
 // --- Scroll Animations (Intersection Observer) ---
 class ScrollAnimator {
@@ -1094,7 +992,6 @@ class DroneClock {
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
-    new ThemeManager();
     new ScrollAnimator();
     new FormHandler();
     new BioIgnition();
