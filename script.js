@@ -705,9 +705,9 @@ class TacticalAI {
             6. If asked questions wholly unrelated to technology, cybersecurity, or Vagish, politely redirect the user back to his professional profile.
         `;
 
-        this.apiKey = "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"; // OpenRouter API Key
+        this.apiKey = localStorage.getItem('OPENROUTER_API_KEY') || ""; // Read from localStorage - NEVER commit keys to git
         this.baseApiUrl = "https://openrouter.ai/api/v1";
-        this.selectedModel = "mistral/mistral-7b-instruct"; // Modern fast model (can swap to gpt-3.5-turbo, claude-instant, etc.)
+        this.selectedModel = "mistral/mistral-7b-instruct"; // Modern fast model
 
         this.history = [];
         this.isProcessing = false;
@@ -822,7 +822,7 @@ class TacticalAI {
         try {
             if (!this.apiKey) {
                 thinkingMsg.remove();
-                this.addMessageToUI('ai', "ERROR: [NEURAL_LINK_FAILED] - API_KEY_MISSING. Please configure your OpenRouter API key in script.js (get one from https://openrouter.ai) to enable real-time intelligence.");
+                this.addMessageToUI('ai', "ERROR: [NEURAL_LINK_FAILED] - API_KEY_MISSING. To use ALPHA AI: Open browser console and run: localStorage.setItem('OPENROUTER_API_KEY', 'your-new-key-here'). Get a new key from https://openrouter.ai");
                 this.isProcessing = false;
                 this.sendBtn.disabled = false;
                 return;
