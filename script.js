@@ -705,7 +705,7 @@ class TacticalAI {
             6. If asked questions wholly unrelated to technology, cybersecurity, or Vagish, politely redirect the user back to his professional profile.
         `;
 
-        this.apiKey = ""; // USER_ACTION_REQUIRED: Plug in your OpenRouter API Key here (get from openrouter.ai)
+        this.apiKey = "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"; // OpenRouter API Key
         this.baseApiUrl = "https://openrouter.ai/api/v1";
         this.selectedModel = "mistral/mistral-7b-instruct"; // Modern fast model (can swap to gpt-3.5-turbo, claude-instant, etc.)
 
