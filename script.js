@@ -692,7 +692,7 @@ class TacticalAI {
             "Interests": ["BMW M-Performance (B58 Engine)", "Cybersecurity CTFs", "UI/UX Prototyping", "Music", "Travelling", "Nature & Pets"]
         };
 
-        // System Instructions (Absolute Directives for Gemini)
+        // System Instructions (Absolute Directives for AI Model)
         this.systemInstructions = `
             You are the "Tactical Intel AI," the personalized, highly integrated digital assistant for Vagish Kora's portfolio.
             
@@ -703,12 +703,11 @@ class TacticalAI {
             4. Be extremely concise in your answers. Do not output massive walls of text. Be snappy and precise, like tactical comms.
             5. If asked about his skills, projects, or background, extract the exact data from the JSON context.
             6. If asked questions wholly unrelated to technology, cybersecurity, or Vagish, politely redirect the user back to his professional profile.
-            7. Use GOOGLE SEARCH capabilities only to verify real-time data or find specific links (LinkedIn, GitHub) if not present in your core data.
         `;
 
-        this.apiKey = "AIzaSyCqvXdVp_Gsg__apnl2NPkYNcXDXXyN7mc"; // USER_ACTION_REQUIRED: Plug in your Gemini API Key here
-        this.baseApiUrl = "https://generativelanguage.googleapis.com/v1beta";
-        this.selectedModel = "gemini-1.5-flash"; // Hardcoded to avoid quota hits on 2.5
+        this.apiKey = ""; // USER_ACTION_REQUIRED: Plug in your OpenRouter API Key here (get from openrouter.ai)
+        this.baseApiUrl = "https://openrouter.ai/api/v1";
+        this.selectedModel = "mistral/mistral-7b-instruct"; // Modern fast model (can swap to gpt-3.5-turbo, claude-instant, etc.)
 
         this.history = [];
         this.isProcessing = false;
@@ -819,11 +818,11 @@ class TacticalAI {
         this.messagesContainer.appendChild(thinkingMsg);
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
 
-        // Call Gemini API
+        // Call OpenRouter API
         try {
             if (!this.apiKey) {
                 thinkingMsg.remove();
-                this.addMessageToUI('ai', "ERROR: [NEURAL_LINK_FAILED] - API_KEY_MISSING. Please configure your Google Gemini API key in script.js to enable real-time intelligence.");
+                this.addMessageToUI('ai', "ERROR: [NEURAL_LINK_FAILED] - API_KEY_MISSING. Please configure your OpenRouter API key in script.js (get one from https://openrouter.ai) to enable real-time intelligence.");
                 this.isProcessing = false;
                 this.sendBtn.disabled = false;
                 return;
@@ -834,25 +833,27 @@ class TacticalAI {
                 parts: [{ text: text }]
             });
 
-            // Use discovered model or fallback to standard flash
-            // Ensure we use a model that supports systemInstructions (like 1.5-flash)
-            let modelPath = this.selectedModel || "models/gemini-1.5-flash";
-            if (!modelPath.startsWith('models/')) {
-                modelPath = `models/${modelPath}`;
-            }
+            // Use OpenRouter's API format (OpenAI-compatible)
+            // Convert Gemini history format to OpenAI chat format
+            const messages = this.history.map(msg => ({
+                role: msg.role === 'model' ? 'assistant' : 'user',
+                content: msg.parts[0].text
+            }));
 
-            // Prepare Payload with System Instructions
+            // OpenRouter Payload (OpenAI-compatible format)
             const payload = {
-                contents: this.history,
-                system_instruction: {
-                    parts: [{ text: this.systemInstructions }]
-                },
-                tools: [{ google_search: {} }] // Enable Google Search Grounding
+                model: this.selectedModel || "mistral/mistral-7b-instruct",
+                messages: messages,
+                system: this.systemInstructions,
+                max_tokens: 1000
             };
 
-            const response = await fetch(`${this.baseApiUrl}/${modelPath}:generateContent?key=${this.apiKey}`, {
+            const response = await fetch(`${this.baseApiUrl}/chat/completions`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`
+                },
                 body: JSON.stringify(payload)
             });
 
@@ -868,20 +869,14 @@ class TacticalAI {
             // Log full response for tactical diagnostics
             console.log("Tactical AI Debug Data:", data);
 
-            if (!data.candidates || data.candidates.length === 0) {
+            if (!data.choices || data.choices.length === 0) {
                 throw new Error("[NULL_RESPONSE] - AI returned an empty response.");
             }
 
-            // Safe parsing of multi-layered AI response
-            const candidate = data.candidates[0];
-            const parts = candidate.content?.parts;
+            // Parse OpenRouter response (OpenAI format)
+            const aiText = data.choices[0].message?.content || "[INTEL_REDACTED] - AI returned non-textual data.";
 
-            if (!parts || parts.length === 0) {
-                throw new Error("[MALFORMED_RESPONSE] - Response parts missing.");
-            }
-
-            const aiText = parts[0].text || "[INTEL_REDACTED] - AI returned non-textual data.";
-
+            // Add to Gemini-compatible history format for localStorage
             this.history.push({
                 role: "model",
                 parts: [{ text: aiText }]
@@ -896,7 +891,7 @@ class TacticalAI {
             thinkingMsg?.remove();
             console.error("Tactical AI Error:", error);
             const detailedError = error.message.includes('API_REJECTED')
-                ? `${error.message}. <br>Possible causes: <br>1. API Key restricted region. <br>2. Model not enabled in Google AI Studio. <br>3. Daily quota exceeded.`
+                ? `${error.message}. <br>Possible causes: <br>1. Invalid OpenRouter API key. <br>2. API key not configured properly. <br>3. Daily quota exceeded on OpenRouter.`
                 : error.message;
             this.addMessageToUI('ai', `ERROR: [NEURAL_LINK_INTERRUPTED] - ${detailedError}`);
         } finally {
