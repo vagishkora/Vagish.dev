@@ -1201,7 +1201,25 @@
         </div>
     </nav>
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-accent-black pt-32 pb-32 md:pt-0 md:pb-0">
+    <section id="home" class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-32 pb-32 md:pt-0 md:pb-0">
+        <!-- Video Backgrounds -->
+        <div class="absolute inset-0 z-0 w-full h-full overflow-hidden">
+            <!-- Blurred Ambient Layer -->
+            <video src="assets/mp_.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover blur-3xl opacity-50 scale-110 pointer-events-none"></video>
+            
+            <!-- Main Video Layer -->
+            <video id="hero-video" src="assets/mp_.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"></video>
+            
+            <!-- Cinematic Dark Gradient Overlays -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-background"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80"></div>
+        </div>
+        
+        <!-- Tap for sound badge -->
+        <button id="unmute-btn" class="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-black/70 transition-all cursor-pointer animate-bounce opacity-0 transition-opacity duration-1000">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+            <span class="text-sm font-medium tracking-wide">Tap for sound</span>
+        </button>
         <!-- Social Sidebar (Unique Design) -->
         <div class="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-8">
             <div class="w-px h-24 bg-gradient-to-b from-transparent via-gray-700 to-gray-700"></div>
@@ -1269,7 +1287,7 @@
         </div>
 
         <!-- Content -->
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 flex items-center h-full">
             <!-- Corner Brackets for Hero -->
             <div class="absolute -inset-4 pointer-events-none opacity-20 hidden md:block">
                 <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent-pink"></div>
@@ -1278,91 +1296,37 @@
                 <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white"></div>
             </div>
 
-            <div class="space-y-8 relative">
+            <div class="space-y-8 relative w-full max-w-3xl flex flex-col items-start text-left">
                 <h1
-                    class="text-5xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll opacity-0 translate-y-8 delay-100 flex flex-col md:flex-row md:flex-wrap items-center md:items-center gap-2 md:gap-4 text-center md:text-left relative">
+                    class="text-5xl md:text-8xl font-brutalist font-extrabold tracking-tighter text-white animate-on-scroll translate-y-0 delay-100 flex flex-col md:flex-row md:flex-wrap items-start justify-start gap-2 md:gap-4 text-left relative">
                     <span>Hi, I'm</span>
                     <div class="relative group inline-block">
                         <span
                             class="bg-clip-text text-transparent bg-gradient-to-r from-accent-pink to-accent-purple">Vagish</span>
-                        <!-- Memoji Aura -->
-                        <div
-                            class="absolute top-1/2 -translate-y-1/2 left-full ml-16 md:-top-6 md:left-auto md:ml-0 md:-right-32 w-16 h-16 md:w-32 md:h-32 pointer-events-none transition-transform group-hover:scale-110 duration-500">
-                            <div class="absolute inset-0 bg-accent-pink/20 rounded-full blur-2xl animate-pulse"></div>
-                            <img src="assets/memoji.png" alt="Memoji"
-                                class="relative z-10 w-full h-full object-contain animate-float"
-                                style="animation-duration: 4s;">
-                        </div>
                     </div>
                 </h1>
 
                 <p
-                    class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll opacity-0 translate-y-8 delay-200 mt-6 mix-blend-difference relative z-20 text-center md:text-left mx-auto md:mx-0">
+                    class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed animate-on-scroll translate-y-0 delay-200 mt-6 mix-blend-difference relative z-20 text-left mx-0">
                     A <span class="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex,
                     real-world problems through high-performance intelligent systems and secure product experiences.
                 </p>
 
-                <div class="flex flex-col items-center md:items-start gap-8 animate-on-scroll opacity-0 translate-y-8 delay-300 mt-10 relative z-20">
+                <div class="flex flex-col md:flex-row items-start justify-start gap-8 animate-on-scroll translate-y-0 delay-300 mt-10 relative z-20">
                     <a href="#work"
                         class="px-10 py-5 bg-white text-black font-brutalist font-bold rounded-sm hover:bg-accent-pink hover:text-white transition-all transform hover:-translate-y-1 w-full md:w-auto text-center shadow-lg hover:shadow-accent-pink/50">
                         EXPLORE WORK &rarr;
                     </a>
                     <a href="Vagish_Resume.pdf" download
-                        class="text-gray-400 hover:text-white font-medium underline underline-offset-8 transition-colors text-center md:text-left px-4 md:px-0 text-sm tracking-widest uppercase">
+                        class="text-gray-400 hover:text-white font-medium underline underline-offset-8 transition-colors text-left px-0 text-sm tracking-widest uppercase mt-4 md:mt-0">
                         Download Resume
                     </a>
-                </div>
-            </div>
-
-            <!-- Profile Image Area -->
-            <div class="relative flex justify-center lg:justify-end">
-                <div class="relative w-48 h-48 md:w-96 md:h-96">
-                    <!-- Holographic Orbits -->
-                    <div class="holo-orbit w-[250px] h-[250px] md:w-[350px] md:h-[350px]" style="animation-duration: 15s;">
-                        <div class="orbit-dot"></div>
-                    </div>
-                    <div class="holo-orbit w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
-                        style="animation-duration: 25s; animation-direction: reverse;">
-                        <div class="orbit-dot"
-                            style="top: auto; bottom: 0; background: #ec4899; box-shadow: 0 0 10px #ec4899;"></div>
-                    </div>
-
-                    <!-- Geometric Frame Decor -->
-                    <div class="absolute -inset-4 border border-white/10 rounded-lg transform rotate-6 scale-105"></div>
-                    <div class="absolute -inset-4 border border-accent-pink/50 rounded-lg transform -rotate-3"></div>
-
-                    <!-- User Photo -->
-                    <div id="user-photo-container"
-                        class="w-full h-full bg-surface rounded-lg overflow-hidden relative group">
-                        <img id="user-profile-img" src="assets/profile.jpg" alt="Vagish Kora"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    </div>
-
-                    <!-- Cyberpunk Decorations -->
-                    <div
-                        class="absolute -top-10 -right-10 text-accent-cyan/20 font-mono text-xs rotate-90 tracking-widest pointer-events-none">
-                        AUTH_SYSTEM_v2.0
-                    </div>
-
-                    <!-- Data Stream Right -->
-                    <div class="data-stream right-[-80px] top-0 opacity-10" style="animation-duration: 12s;">
-                        1101011001011010100111101011010101101110101011010
-                    </div>
-                </div>
-
-                <!-- Status Boxes scattered -->
-                <div class="status-box top-[-40px] right-20 hidden md:block">
-                    <span class="label">ENCRYPTION</span>
-                    <span class="value">RSA_4096_SHA256</span>
-                </div>
-                <div class="status-box bottom-[-60px] right-0 hidden md:block">
-                    <span class="label">CORE_TEMP</span>
-                    <span class="value">34°C // STABLE</span>
                 </div>
             </div>
         </div>
     </section>
     <!-- Projects Grid -->
+    <div class="relative z-10 bg-background w-full">
     <section id="work" class="py-12 bg-surface/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold mb-12 text-center animate-on-scroll opacity-0">Featured Projects
@@ -1557,73 +1521,15 @@
                 SKILL_SET_ARRAY // CORE_CAPABILITIES</p>
 
             <div class="skill-grid animate-on-scroll opacity-0">
-                <!-- Row 1 -->
                 <div class="skill-card">
                     <div class="corner top-l"></div>
                     <div class="corner top-r"></div>
                     <div class="corner bot-l"></div>
                     <div class="corner bot-r"></div>
                     <div class="schematic-id">SK-01</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
-                            alt="HTML5"></div>
-                    <span class="skill-name">HTML5</span>
-                </div>
-                <div class="skill-card">
-                    <div class="corner top-l"></div>
-                    <div class="corner top-r"></div>
-                    <div class="corner bot-l"></div>
-                    <div class="corner bot-r"></div>
-                    <div class="schematic-id">SK-02</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
                     </div>
-                    <span class="skill-name">CSS3</span>
-                </div>
-                <div class="skill-card">
-                    <div class="corner top-l"></div>
-                    <div class="corner top-r"></div>
-                    <div class="corner bot-l"></div>
-                    <div class="corner bot-r"></div>
-                    <div class="schematic-id">SK-03</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
-                            alt="JS"></div>
-                    <span class="skill-name">JavaScript</span>
-                </div>
-                <div class="skill-card">
-                    <div class="corner top-l"></div>
-                    <div class="corner top-r"></div>
-                    <div class="corner bot-l"></div>
-                    <div class="corner bot-r"></div>
-                    <div class="schematic-id">SK-04</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-                            alt="React"></div>
-                    <span class="skill-name">ReactJS</span>
-                </div>
-                <div class="skill-card">
-                    <div class="corner top-l"></div>
-                    <div class="corner top-r"></div>
-                    <div class="corner bot-l"></div>
-                    <div class="corner bot-r"></div>
-                    <div class="schematic-id">SK-05</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
-                            alt="Node.js"></div>
-                    <span class="skill-name">Node.js</span>
-                </div>
-
-                <!-- Row 2 -->
-                <div class="skill-card">
-                    <div class="corner top-l"></div>
-                    <div class="corner top-r"></div>
-                    <div class="corner bot-l"></div>
-                    <div class="corner bot-r"></div>
-                    <div class="schematic-id">SK-06</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
-                            alt="Python"></div>
                     <span class="skill-name">Python</span>
                 </div>
                 <div class="skill-card">
@@ -1631,11 +1537,66 @@
                     <div class="corner top-r"></div>
                     <div class="corner bot-l"></div>
                     <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-02</div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C">
+                    </div>
+                    <span class="skill-name">C Programming</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-03</div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                    </div>
+                    <span class="skill-name">Java</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-04</div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                    </div>
+                    <span class="skill-name">JavaScript</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-05</div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                    </div>
+                    <span class="skill-name">ReactJS</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
+                    <div class="schematic-id">SK-06</div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js">
+                    </div>
+                    <span class="skill-name">Node.js</span>
+                </div>
+                <div class="skill-card">
+                    <div class="corner top-l"></div>
+                    <div class="corner top-r"></div>
+                    <div class="corner bot-l"></div>
+                    <div class="corner bot-r"></div>
                     <div class="schematic-id">SK-07</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg"
-                            alt="Linux"></div>
-                    <span class="skill-name">Linux</span>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                    </div>
+                    <span class="skill-name">HTML5 / CSS3</span>
                 </div>
                 <div class="skill-card">
                     <div class="corner top-l"></div>
@@ -1643,9 +1604,9 @@
                     <div class="corner bot-l"></div>
                     <div class="corner bot-r"></div>
                     <div class="schematic-id">SK-08</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
-                            alt="MySQL"></div>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+                    </div>
                     <span class="skill-name">MySQL</span>
                 </div>
                 <div class="skill-card">
@@ -1654,9 +1615,10 @@
                     <div class="corner bot-l"></div>
                     <div class="corner bot-r"></div>
                     <div class="schematic-id">SK-09</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C"></div>
-                    <span class="skill-name">C Programming</span>
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker">
+                    </div>
+                    <span class="skill-name">Docker</span>
                 </div>
                 <div class="skill-card">
                     <div class="corner top-l"></div>
@@ -1664,10 +1626,10 @@
                     <div class="corner bot-l"></div>
                     <div class="corner bot-r"></div>
                     <div class="schematic-id">SK-10</div>
-                    <div class="skill-icon-container"><img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                    <div class="skill-icon-container">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
                     </div>
-                    <span class="skill-name">JAVA</span>
+                    <span class="skill-name">Git</span>
                 </div>
             </div>
         </div>
@@ -1710,7 +1672,6 @@
                 </button>
             </div>
         </div>
-    </section>
     </section>
 
     <!-- Volunteering Section (Stacked Carousel) -->
@@ -1950,12 +1911,79 @@
             <p class="text-xs text-gray-600">© Copyright 2026. Made by Vagish N Kora.</p>
         </div>
     </footer>
+    </div>
     <!-- Phase 3: Splash Screen Removed for Better UX -->
 
     <!-- INJECT CERTIFICATE DATA BEFORE SCRIPT -->
     <script src="cert_data.js"></script>
     <!-- Use the compiled script -->
     <script src="script.js?v=2.2"></script>
+
+    <!-- Video Hero Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroVideo = document.getElementById('hero-video');
+            const unmuteBtn = document.getElementById('unmute-btn');
+            
+            if (heroVideo && unmuteBtn) {
+                // Attempt to play unmuted on load
+                heroVideo.muted = false;
+                let playPromise = heroVideo.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Autoplay started unmuted successfully
+                        unmuteBtn.innerHTML = `
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                            <span class="text-sm font-medium tracking-wide">Sound Off</span>
+                        `;
+                    }).catch(error => {
+                        // Browser blocked unmuted autoplay. Fall back to muted autoplay.
+                        heroVideo.muted = true;
+                        heroVideo.play();
+                    });
+                }
+
+                // Fade in video and badge after a short delay
+                setTimeout(() => {
+                    heroVideo.classList.remove('opacity-0');
+                    unmuteBtn.classList.remove('opacity-0');
+                }, 500);
+
+                // Mute/Unmute toggle
+                unmuteBtn.addEventListener('click', () => {
+                    if (heroVideo.muted) {
+                        heroVideo.currentTime = 0; // Start from first
+                        heroVideo.muted = false;
+                        heroVideo.play();
+                        unmuteBtn.innerHTML = `
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                            <span class="text-sm font-medium tracking-wide">Sound Off</span>
+                        `;
+                    } else {
+                        heroVideo.muted = true;
+                        unmuteBtn.innerHTML = `
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                            <span class="text-sm font-medium tracking-wide">Sound On</span>
+                        `;
+                    }
+                });
+                // Auto-mute on scroll
+                window.addEventListener('scroll', () => {
+                    // Mute if scrolled past half the hero section
+                    if (window.scrollY > window.innerHeight * 0.5) {
+                        if (!heroVideo.muted) {
+                            heroVideo.muted = true;
+                            unmuteBtn.innerHTML = `
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                                <span class="text-sm font-medium tracking-wide">Sound Off</span>
+                            `;
+                        }
+                    }
+                }, { passive: true });
+            }
+        });
+    </script>
 
     <!-- BMW Cursor Elements -->
     <div id="bmw-cursor">

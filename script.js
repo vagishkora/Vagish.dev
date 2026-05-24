@@ -1,6 +1,6 @@
 // Configuration
 const CONFIG = {
-    animationThreshold: 0.1,
+    animationThreshold: 0.01,
     scrollOffset: 100
 };
 
@@ -18,7 +18,8 @@ class ScrollAnimator {
                 }
             });
         }, {
-            threshold: CONFIG.animationThreshold
+            threshold: CONFIG.animationThreshold,
+            rootMargin: '50px'
         });
 
         this.init();
@@ -26,7 +27,15 @@ class ScrollAnimator {
 
     init() {
         const elements = document.querySelectorAll('.animate-on-scroll');
-        elements.forEach(el => this.observer.observe(el));
+        elements.forEach(el => {
+            this.observer.observe(el);
+            // Check if already in viewport
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                el.classList.add('animate-fade-in-up');
+                el.classList.remove('opacity-0', 'translate-y-8');
+            }
+        });
     }
 }
 
@@ -36,11 +45,10 @@ class FormHandler {
         this.form = document.getElementById('contact-form');
         if (this.form) {
             this.btn = this.form.querySelector('button[type="submit"]');
+            this.loadingIcon = document.getElementById('loading-icon');
+            this.sendIcon = document.getElementById('send-icon');
+            this.init();
         }
-        this.loadingIcon = document.getElementById('loading-icon');
-        this.sendIcon = document.getElementById('send-icon');
-
-        this.init();
     }
 
     init() {
