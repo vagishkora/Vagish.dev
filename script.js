@@ -641,9 +641,8 @@ class OutreachCarousel {
             card.style.visibility = visibility;
         });
     }
-});
-    }
 }
+
 
 
 
@@ -657,5 +656,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new GearNav();
     new HolographicDeck();
     new OutreachCarousel();
+    // new TacticalAI();
     new ArchiveManager();
 });
