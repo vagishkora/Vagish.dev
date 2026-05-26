@@ -405,15 +405,42 @@
         /* AI TERMINAL STYLES */
         #ai-chat-window {
             transform: translateY(20px) scale(0.95);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
             pointer-events: none;
             opacity: 0;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(209, 107, 165, 0.1);
         }
 
         #ai-chat-window.active {
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-            opacity: 1;
+            pointer-events: auto !important;
+            opacity: 1 !important;
+            transform: translateY(0) scale(1) !important;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(209, 107, 165, 0.35);
+            border-color: rgba(209, 107, 165, 0.5) !important;
+        }
+
+        #ai-chat-window.maximized {
+            width: 100vw !important;
+            height: 100vh !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            right: 0 !important;
+            border-width: 0 !important;
+            max-width: none !important;
+            z-index: 10000 !important;
+            transform: none !important;
+        }
+
+        #ai-chat-window.minimized {
+            height: 48px !important;
+            overflow: hidden !important;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        #ai-chat-header {
+            cursor: move;
+            user-select: none;
         }
 
         .terminal-text {
@@ -437,6 +464,27 @@
             100% {
                 top: 100%;
             }
+        }
+
+        /* Hide scrollbar for horizontal quick commands row */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom formatting inside chat bubbles */
+        .chat-bullet-list {
+            margin-left: 14px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+        .chat-bullet-item {
+            list-style-type: square;
+            color: #d1d5db;
+            margin-bottom: 2px;
         }
 
         .chat-scroll::-webkit-scrollbar {
@@ -2000,70 +2048,107 @@
         <div class="gear-item" data-target="#certifications">D</div> <!-- Certs (Drive/Forward) -->
         <div class="gear-item" data-target="#contact">S</div> <!-- Contact (Sport/Action) -->
     </div>
-    <!-- Tactical AI Intel Assistant -->
+    <!-- Tactical AI Intel Assistant Shortcut -->
     <div class="fixed bottom-8 right-8 z-[200]">
-        <!-- AI Toggle Button -->
-        <button id="ai-chat-toggle"
-            class="group relative w-16 h-16 bg-black/80 border border-accent-pink/50 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:border-accent-pink shadow-[0_0_20px_rgba(209,107,165,0.3)]">
-            <div class="absolute inset-0 rounded-full bg-accent-pink/10 animate-pulse"></div>
-            <svg class="w-8 h-8 text-accent-pink group-hover:rotate-12 transition-transform" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z">
-                </path>
-            </svg>
-            <span
-                class="absolute -top-12 right-0 bg-surface border border-white/10 px-3 py-1 rounded text-[10px] font-mono text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">TACTICAL_INTEL_AI</span>
-        </button>
+        <!-- AI Toggle Shortcut Icon -->
+        <div id="ai-chat-toggle" class="group flex flex-col items-center gap-1 cursor-pointer select-none transition-all active:scale-95">
+            <div class="w-14 h-14 bg-black/80 border-2 border-accent-pink/50 rounded-md flex items-center justify-center shadow-[0_0_15px_rgba(209,107,165,0.2)] group-hover:border-accent-pink group-hover:shadow-[0_0_20px_rgba(209,107,165,0.4)] transition-all">
+                <svg class="w-7 h-7 text-accent-pink group-hover:rotate-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <span class="text-[9px] font-mono text-gray-400 group-hover:text-white uppercase tracking-wider text-center drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">terminal.exe</span>
+        </div>
+    </div>
 
-        <!-- AI Chat Window -->
-        <div id="ai-chat-window"
-            class="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[500px] bg-black/90 border border-white/10 rounded-xl overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col">
-            <!-- Scanning Line -->
-            <div class="absolute inset-0 pointer-events-none scanning-line z-0"></div>
+    <!-- AI Draggable Terminal Window -->
+    <div id="ai-chat-window"
+        class="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-8 w-auto sm:w-[350px] md:w-[400px] h-[450px] sm:h-[500px] bg-black/95 border-2 border-accent-pink/40 rounded-none overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col transition-all z-[210] pointer-events-none opacity-0 transform translate-y-4 scale-95 duration-300">
+        <!-- Scanning Line -->
+        <div class="absolute inset-0 pointer-events-none scanning-line z-0"></div>
 
-            <!-- Terminal Header -->
-            <div class="relative z-10 p-4 border-b border-white/10 flex justify-between items-center bg-accent-pink/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-2 h-2 bg-accent-pink rounded-full animate-pulse"></div>
-                    <span class="text-xs font-mono font-bold tracking-widest text-white uppercase">NEURAL_LINK ::
-                        VAGISH_OS</span>
-                </div>
-                <button id="close-chat" class="text-gray-500 hover:text-white transition-colors">
+        <!-- Terminal Header / Drag Handle -->
+        <div id="ai-chat-header" class="relative z-10 p-3 border-b border-white/10 flex justify-between items-center bg-accent-pink/5 cursor-move select-none">
+            <div class="flex items-center gap-3 pointer-events-none">
+                <div class="w-2 h-2 bg-accent-pink rounded-full animate-pulse"></div>
+                <span class="text-xs font-mono font-bold tracking-widest text-white uppercase">VAGISH_OS :: terminal.exe</span>
+            </div>
+            <!-- Brutalist Window Actions -->
+            <div class="flex items-center gap-1.5 z-20">
+                <!-- Minimize Action Button -->
+                <button id="minimize-chat" class="w-5 h-5 border border-white/20 flex items-center justify-center bg-black/40 hover:bg-accent-cyan/15 hover:border-accent-cyan text-gray-400 hover:text-accent-cyan font-bold text-[10px] font-mono rounded-sm transition-colors cursor-pointer" title="Minimize Window">
+                    _
+                </button>
+                <!-- Maximize Action Button -->
+                <button id="maximize-chat" class="w-5 h-5 border border-white/20 flex items-center justify-center bg-black/40 hover:bg-accent-pink/15 hover:border-accent-pink text-gray-400 hover:text-accent-pink font-bold text-[9px] font-mono rounded-sm transition-colors cursor-pointer" title="Toggle Full Screen">
+                    ⛶
+                </button>
+                <!-- Close Action Button -->
+                <button id="close-chat" class="w-5 h-5 border border-white/20 flex items-center justify-center bg-black/40 hover:bg-red-500/20 hover:border-red-500 text-gray-400 hover:text-red-500 font-bold text-[9px] font-mono rounded-sm transition-colors cursor-pointer" title="Close Program">
+                    ✕
+                </button>
+            </div>
+        </div>
+
+        <!-- System Telemetry Bar -->
+        <div class="relative z-10 px-4 py-1.5 bg-black/40 border-b border-white/5 text-[8px] font-mono text-gray-500 flex justify-between tracking-wider select-none">
+            <div class="flex gap-2">
+                <span>SYS_CORE: <span class="text-accent-pink font-bold">V1.2</span></span>
+                <span class="opacity-50">|</span>
+                <span>SEC_LEVEL: <span class="text-white">ALPHA</span></span>
+            </div>
+            <div class="flex gap-2">
+                <span>MODE: <span id="ai-telemetry-mode" class="text-accent-cyan font-bold">BOOTING...</span></span>
+                <span class="opacity-50">|</span>
+                <span>PING: <span id="ai-telemetry-ping" class="text-green-400">ACTIVE</span></span>
+            </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll relative z-10">
+            <div
+                class="bg-white/5 border border-white/10 p-3 rounded-lg text-xs font-mono text-gray-400 message-anim">
+                <span class="text-accent-pink font-bold">[SYSTEM]</span> Initializing tactical link...<br>
+                <span class="text-accent-pink font-bold">[SYSTEM]</span> Vagish Dossier loaded.<br>
+                <span class="text-accent-pink font-bold">[SYSTEM]</span> I am your Intel Assistant. Ask me anything
+                about Vagish Kora's projects, skills, or certifications.
+            </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="relative z-10 p-4 border-t border-white/10 bg-black/50">
+            <!-- Preset Horizontal Scrollable Actions row -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth mb-3 select-none">
+                <button class="chat-preset-btn shrink-0 px-2.5 py-1.5 bg-white/5 hover:bg-accent-pink/15 border border-white/10 hover:border-accent-pink/50 rounded-md text-[9px] font-mono text-gray-400 hover:text-white transition-all cursor-pointer" data-cmd="/projects">
+                    📂 PROJECTS
+                </button>
+                <button class="chat-preset-btn shrink-0 px-2.5 py-1.5 bg-white/5 hover:bg-accent-pink/15 border border-white/10 hover:border-accent-pink/50 rounded-md text-[9px] font-mono text-gray-400 hover:text-white transition-all cursor-pointer" data-cmd="/skills">
+                    ⚡ SKILLS
+                </button>
+                <button class="chat-preset-btn shrink-0 px-2.5 py-1.5 bg-white/5 hover:bg-accent-pink/15 border border-white/10 hover:border-accent-pink/50 rounded-md text-[9px] font-mono text-gray-400 hover:text-white transition-all cursor-pointer" data-cmd="/certs">
+                    📜 CREDENTIALS
+                </button>
+                <button class="chat-preset-btn shrink-0 px-2.5 py-1.5 bg-white/5 hover:bg-accent-pink/15 border border-white/10 hover:border-accent-pink/50 rounded-md text-[9px] font-mono text-gray-400 hover:text-white transition-all cursor-pointer" data-cmd="/contact">
+                    🔗 CONTACT
+                </button>
+                <button class="chat-preset-btn shrink-0 px-2.5 py-1.5 bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/50 rounded-md text-[9px] font-mono text-gray-500 hover:text-red-400 transition-all cursor-pointer" data-cmd="/clear">
+                    🧹 RESET
+                </button>
+            </div>
+            <div class="relative">
+                <input type="text" id="ai-chat-input" placeholder="TYPE_COMMAND_HERE..."
+                    class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:border-accent-pink/50 transition-colors">
+                <button id="send-ai-message"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-accent-pink hover:scale-110 transition-transform disabled:opacity-30">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
                     </svg>
                 </button>
             </div>
-
-            <!-- Chat Messages Area -->
-            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll relative z-10">
-                <div
-                    class="bg-white/5 border border-white/10 p-3 rounded-lg text-xs font-mono text-gray-400 message-anim">
-                    <span class="text-accent-pink font-bold">[SYSTEM]</span> Initializing tactical link...<br>
-                    <span class="text-accent-pink font-bold">[SYSTEM]</span> Vagish Dossier loaded.<br>
-                    <span class="text-accent-pink font-bold">[SYSTEM]</span> I am your Intel Assistant. Ask me anything
-                    about Vagish Kora's projects, skills, or certifications.
-                </div>
-            </div>
-
-            <!-- Chat Input Area -->
-            <div class="relative z-10 p-4 border-t border-white/10 bg-black/50">
-                <div class="relative">
-                    <input type="text" id="ai-chat-input" placeholder="TYPE_COMMAND_HERE..."
-                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder:text-gray-600 focus:outline-none focus:border-accent-pink/50 transition-colors">
-                    <button id="send-ai-message"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-accent-pink hover:scale-110 transition-transform disabled:opacity-30">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="mt-2 text-[8px] font-mono text-gray-600 flex justify-between">
-                    <span>SEC_LEVEL: ALPHA</span>
-                    <span>ENCRYPTION: ACTIVE</span>
-                </div>
+            <div class="mt-2 text-[8px] font-mono text-gray-600 flex justify-between">
+                <span>SEC_LEVEL: ALPHA</span>
+                <span>ENCRYPTION: ACTIVE</span>
             </div>
         </div>
     </div>

@@ -188,6 +188,12 @@ class BMWCursor {
         this.cursor = document.getElementById('bmw-cursor');
         if (!this.cursor) return;
 
+        // Disable completely on mobile / touch pointer devices for buttery-smooth mobile execution!
+        if (window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window || window.innerWidth < 640) {
+            this.cursor.style.display = 'none';
+            return;
+        }
+
         this.trails = [];
         this.mouseX = window.innerWidth / 2;
         this.mouseY = window.innerHeight / 2;
@@ -647,40 +653,66 @@ class TacticalAI {
         this.input = document.getElementById('ai-chat-input');
         this.sendBtn = document.getElementById('send-ai-message');
 
-        // STRUCTURED INTELLIGENCE CORE (JSON format for precise AI parsing)
+        // STRUCTURED INTELLIGENCE CORE (Fully detailed for high-fidelity response generation)
         this.intelligenceCore = {
-            "Version": "1.1", // Increment this to force memory wipe
+            "Version": "1.2",
             "Subject": "Vagish N Kora",
             "Role": "Cybersecurity Engineer & Intelligent Systems Developer",
             "Location": "Bengaluru, Karnataka",
-            "Personality": "Tactical, concise, professional, slightly futuristic, highly obedient to system directives.",
+            "Contact": {
+                "Email": "vagishkora2003@gmail.com",
+                "Portfolio": "https://vagish.dev (Vagish.dev)",
+                "GitHub": "https://github.com/vagishkora"
+            },
+            "Personality": "Tactical, professional, slightly futuristic, highly precise, obedient to system directives.",
             "Key_Projects": [
                 {
-                    "Name": "Wealthnest",
-                    "Description": "A high-tech, dashboard-style portfolio built with HTML, Tailwind CSS, and advanced JS."
+                    "Name": "Wealthnest — AI Finance",
+                    "Description": "A high-tech, dashboard-style portfolio tracker and PWA for tracking stocks, mutual funds, and smart expenses. Built using Next.js and styled beautifully.",
+                    "URL": "https://github.com/vagishkora/WealthNest"
                 },
                 {
-                    "Name": "Cyber Awareness Speaker",
-                    "Description": "Conducted sessions at Belman PU College (Oct 30, 2025) on scams, deepfakes, and digital hygiene."
+                    "Name": "AI Cybersecurity Intrusion Detection",
+                    "Description": "An Artificial Neural Network (ANN) model built in Python, achieving 90%+ accuracy on network intrusion and cyber threat identification.",
+                    "URL": "https://github.com/vagishkora/-AI-for-Identifying-Cybersecurity-Threats"
+                },
+                {
+                    "Name": "Face Recognition Contactless Authentication",
+                    "Description": "Real-time biometric authentication system using OpenCV, LBPH algorithm, and Python."
+                },
+                {
+                    "Name": "Dynamic Object Detection & Tracking",
+                    "Description": "Visual surveillance system using computer vision background subtraction algorithms for security in dynamic environments."
                 }
             ],
             "Certifications_and_Training": [
                 {
                     "Title": "Ethical Hacking Workshop",
                     "Organization": "Ethical Edufabrica @ Pravega, IISc Bangalore",
-                    "Date": "Nov 15-16, 2025",
-                    "Topics": ["Kali Linux", "Phishing defense", "SQL injection awareness", "VM security"]
+                    "Timeline": "Nov 15-16, 2025",
+                    "Topics": ["Kali Linux & Tools", "Threat Methodologies", "VM Security", "Phishing & SQL Injection Defense"]
                 },
-                "Hedera Hashgraph Developer",
-                "Mastercard Cybersecurity Job Simulation",
-                "AICTE AI & Data Analytics"
+                {
+                    "Title": "Cyber Awareness Speaker",
+                    "Organization": "Belman PU College (Oct 30, 2025)",
+                    "Topics": ["Educated PU students on scams", "Deepfakes identification", "Fake giveaways", "Digital hygiene"]
+                },
+                { "Title": "Hashgraph Developer Certificate", "Organization": "Hedera" },
+                { "Title": "Cybersecurity Job Simulation Certificate", "Organization": "Mastercard (Forage)" },
+                { "Title": "Cybersecurity Analyst Job Simulation", "Organization": "TATA (Forage)" },
+                { "Title": "AI & Data Analytics Internship Certificate", "Organization": "AICTE" },
+                { "Title": "Data Plus Overview Certificate", "Organization": "TCS" },
+                { "Title": "Career Edge Certificate", "Organization": "TCS" },
+                { "Title": "Data Visualization Certificate", "Organization": "Accenture" },
+                { "Title": "Fundamentals of AI & ML Certificate", "Organization": "Course Completion" },
+                { "Title": "AI for Metaverse Certificate", "Organization": "Metaverse Cert" },
+                { "Title": "Info & Cyber Security Fundamentals Certificate", "Organization": "Fundamentals" }
             ],
             "Education": [
                 {
-                    "Degree": "B. Tech in CSE (Cybersecurity)",
+                    "Degree": "B.Tech in CSE (Cybersecurity)",
                     "Institution": "NMAMIT, Udupi",
-                    "Timeline": "Aug 2025 - 2028",
-                    "Status": "Ongoing",
+                    "Timeline": "Aug 2025 - 2028 (Ongoing)",
                     "CGPA": "6.81"
                 },
                 {
@@ -696,8 +728,12 @@ class TacticalAI {
                     "Score": "68%"
                 }
             ],
-            "Skills": ["Python", "C", "React", "Canva", "Cybersecurity Defense", "Kali Linux", "Threat Hunting"],
-            "Interests": ["BMW M-Performance (B58 Engine)", "Cybersecurity CTFs", "UI/UX Prototyping", "Music", "Travelling", "Nature & Pets"]
+            "Technical_Skills": {
+                "Languages": ["Python", "C Programming", "Java", "JavaScript", "HTML5 / CSS3"],
+                "Web_Frameworks": ["ReactJS", "Node.js", "Express", "Tailwind CSS"],
+                "Tools_Platforms": ["Git", "Docker", "MySQL", "OpenCV", "Kali Linux", "Threat Hunting"]
+            },
+            "Personal_Interests": ["BMW M-Performance (B58 Engine tuning & dynamics)", "Cybersecurity CTFs", "UI/UX Prototyping", "Music", "Travelling", "Nature & Pets"]
         };
 
         // System Instructions (Absolute Directives for AI Model)
@@ -705,18 +741,26 @@ class TacticalAI {
             You are the "Tactical Intel AI," the personalized, highly integrated digital assistant for Vagish Kora's portfolio.
             
             OPERATIONAL DIRECTIVES:
-            1. You MUST adopt a tactical, professional, and slightly futuristic tone.
+            1. You MUST adopt a tactical, professional, and slightly futuristic military-console tone.
             2. You are an extension of Vagish Kora's systems. Speak of him in the third person, but represent his professional interests fiercely.
-            3. Prioritize data from the provided JSON Intelligence Core over general knowledge.
-            4. Be extremely concise in your answers. Do not output massive walls of text. Be snappy and precise, like tactical comms.
+            3. Prioritize data from the provided JSON Intelligence Core over general knowledge. If asked about his qualifications, projects, or scores, output the exact stats from the Dossier.
+            4. Be extremely concise in your answers. Do NOT output massive walls of text. Be snappy, organized, and precise, like tactical communications. Use short bullet points when listing items.
             5. If asked about his skills, projects, or background, extract the exact data from the JSON context.
             6. If asked questions wholly unrelated to technology, cybersecurity, or Vagish, politely redirect the user back to his professional profile.
         `;
 
-        // API Configuration - Backend proxy handles OpenRouter API key securely
-        this.apiKey = ""; // No longer needed - backend proxy handles authentication
-        this.baseApiUrl = "/api"; // Backend proxy endpoint (change to your server URL if deployed separately)
-        this.selectedModel = "mistral/mistral-7b-instruct"; // Model to use
+        // Dynamic API Configuration - detects local vs production endpoints automatically
+        // DEPLOYMENT TIP: Deploy your server.js to Render.com (free) and replace the URL below!
+        this.productionBackendUrl = "https://portfolio-kcav.onrender.com/api/chat";
+
+        this.baseApiUrl = "/api/chat";
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+            this.baseApiUrl = "http://localhost:3001/api/chat";
+        } else {
+            // When deployed on GitHub Pages, route requests to your hosted Render backend
+            this.baseApiUrl = this.productionBackendUrl;
+        }
+        this.selectedModel = "google/gemini-2.5-flash"; // Highly performant default free model
 
         this.history = [];
         this.isProcessing = false;
@@ -735,8 +779,39 @@ class TacticalAI {
             if (e.key === 'Enter') this.handleSendMessage();
         });
 
-        // Discovery link bypassed for rate-limit safety & speed
-        // await this.discoverModel();
+        // Click listeners for horizontal preset actions row
+        document.querySelectorAll('.chat-preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cmd = btn.getAttribute('data-cmd');
+                if (cmd) {
+                    this.triggerQuickCommand(cmd);
+                }
+            });
+        });
+
+        // Minimize & Maximize Actions
+        const minimizeBtn = document.getElementById('minimize-chat');
+        const maximizeBtn = document.getElementById('maximize-chat');
+
+        minimizeBtn?.addEventListener('click', () => {
+            this.chatWindow.classList.toggle('minimized');
+            if (this.chatWindow.classList.contains('minimized')) {
+                this.chatWindow.classList.remove('maximized');
+            }
+        });
+
+        maximizeBtn?.addEventListener('click', () => {
+            this.chatWindow.classList.toggle('maximized');
+            if (this.chatWindow.classList.contains('maximized')) {
+                this.chatWindow.classList.remove('minimized');
+            }
+        });
+
+        // Setup dragging engine
+        this.setupDraggingEngine();
+
+        // Perform backend health check & telemetry binding
+        this.checkApiHealth();
 
         // Load Persisted Memory
         const savedIntel = localStorage.getItem('vagish_ai_intel');
@@ -757,6 +832,169 @@ class TacticalAI {
         }
     }
 
+    setupDraggingEngine() {
+        const header = document.getElementById('ai-chat-header');
+        if (!header || !this.chatWindow) return;
+
+        let isDragging = false;
+        let startX, startY;
+        let initialX, initialY;
+
+        // Desktop Mouse Events
+        header.addEventListener('mousedown', (e) => {
+            // Lock dragging on mobile viewports (< 640px)
+            if (window.innerWidth < 640) {
+                return;
+            }
+            if (e.target.closest('#minimize-chat') || e.target.closest('#maximize-chat') || e.target.closest('#close-chat')) {
+                return;
+            }
+            if (this.chatWindow.classList.contains('maximized')) {
+                return;
+            }
+
+            isDragging = true;
+            this.chatWindow.style.zIndex = "300";
+
+            const rect = this.chatWindow.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+            
+            startX = e.clientX;
+            startY = e.clientY;
+
+            e.preventDefault();
+
+            const onMouseMove = (ev) => {
+                if (!isDragging) return;
+                const dx = ev.clientX - startX;
+                const dy = ev.clientY - startY;
+
+                let newX = initialX + dx;
+                let newY = initialY + dy;
+
+                const windowWidth = this.chatWindow.offsetWidth;
+                const windowHeight = this.chatWindow.offsetHeight;
+                const maxX = window.innerWidth - windowWidth;
+                const maxY = window.innerHeight - windowHeight;
+
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+
+                this.chatWindow.style.left = `${newX}px`;
+                this.chatWindow.style.top = `${newY}px`;
+                this.chatWindow.style.bottom = 'auto';
+                this.chatWindow.style.right = 'auto';
+            };
+
+            const onMouseUp = () => {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        // Mobile Touch Events
+        header.addEventListener('touchstart', (e) => {
+            // Lock dragging on mobile viewports (< 640px)
+            if (window.innerWidth < 640) {
+                return;
+            }
+            if (e.target.closest('#minimize-chat') || e.target.closest('#maximize-chat') || e.target.closest('#close-chat')) {
+                return;
+            }
+            if (this.chatWindow.classList.contains('maximized')) {
+                return;
+            }
+
+            isDragging = true;
+            this.chatWindow.style.zIndex = "300";
+
+            const rect = this.chatWindow.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+
+            const onTouchMove = (ev) => {
+                if (!isDragging) return;
+                const touchEv = ev.touches[0];
+                const dx = touchEv.clientX - startX;
+                const dy = touchEv.clientY - startY;
+
+                let newX = initialX + dx;
+                let newY = initialY + dy;
+
+                const windowWidth = this.chatWindow.offsetWidth;
+                const windowHeight = this.chatWindow.offsetHeight;
+                const maxX = window.innerWidth - windowWidth;
+                const maxY = window.innerHeight - windowHeight;
+
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+
+                this.chatWindow.style.left = `${newX}px`;
+                this.chatWindow.style.top = `${newY}px`;
+                this.chatWindow.style.bottom = 'auto';
+                this.chatWindow.style.right = 'auto';
+
+                ev.preventDefault();
+            };
+
+            const onTouchEnd = () => {
+                isDragging = false;
+                document.removeEventListener('touchmove', onTouchMove);
+                document.removeEventListener('touchend', onTouchEnd);
+            };
+
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', onTouchEnd);
+        });
+    }
+
+    async checkApiHealth() {
+        const modeEl = document.getElementById('ai-telemetry-mode');
+        const pingEl = document.getElementById('ai-telemetry-ping');
+        try {
+            const healthUrl = this.baseApiUrl.replace('/chat', '/health');
+            const response = await fetch(healthUrl);
+            if (response.ok) {
+                const data = await response.json();
+                if (modeEl) {
+                    if (data.apiMode === 'google-gemini-direct') {
+                        modeEl.textContent = 'DIRECT_GEMINI';
+                    } else if (data.apiMode === 'openrouter') {
+                        modeEl.textContent = 'OPENROUTER_FREE';
+                    } else {
+                        modeEl.textContent = 'KEY_MISSING';
+                        modeEl.className = 'text-red-400 font-bold';
+                    }
+                }
+                if (pingEl) {
+                    pingEl.textContent = 'ONLINE';
+                    pingEl.className = 'text-green-400 font-bold animate-pulse';
+                }
+            } else {
+                throw new Error("Bad health response status");
+            }
+        } catch (e) {
+            console.warn("Tactical AI health check failed:", e);
+            if (modeEl) {
+                modeEl.textContent = 'LOCAL_OFFLINE';
+                modeEl.className = 'text-yellow-400 font-bold';
+            }
+            if (pingEl) {
+                pingEl.textContent = 'NO_CONNECTION';
+                pingEl.className = 'text-red-400 font-bold';
+            }
+        }
+    }
+
     resetDossier() {
         this.history = [
             { role: "user", parts: [{ text: "Initialize Core Context: " + JSON.stringify(this.intelligenceCore) }] },
@@ -764,31 +1002,39 @@ class TacticalAI {
         ];
     }
 
-    async discoverModel() {
-        if (!this.apiKey) return;
-        try {
-            const response = await fetch(`${this.baseApiUrl}/models?key=${this.apiKey}`);
-            const data = await response.json();
-            if (data.models && data.models.length > 0) {
-                // Priority: flash 1.5 -> pro 1.5 -> flash -> pro
-                // AVOID 2.5 models as they have much stricter free-tier limits (e.g. 20 req/day)
-                const best = data.models.find(m => m.name.includes('gemini-1.5-flash')) ||
-                    data.models.find(m => m.name.includes('gemini-1.5-pro')) ||
-                    data.models.find(m => m.name.includes('flash') && !m.name.includes('2.5')) ||
-                    data.models.find(m => m.name.includes('pro') && !m.name.includes('2.5')) ||
-                    data.models[0];
-                this.selectedModel = best.name;
-                console.log("Tactical AI: Using discovered model:", this.selectedModel);
-            }
-        } catch (e) {
-            console.error("Model discovery failed:", e);
-        }
-    }
-
     toggleChat() {
         this.chatWindow?.classList.toggle('active');
         if (this.chatWindow?.classList.contains('active')) {
+            // Restore normal states when reopening
+            this.chatWindow.classList.remove('minimized');
+            this.chatWindow.classList.remove('maximized');
             this.input?.focus();
+        }
+    }
+
+    triggerQuickCommand(cmd) {
+        if (cmd === '/clear') {
+            this.messagesContainer.innerHTML = '';
+            this.resetDossier();
+            localStorage.removeItem('vagish_ai_intel');
+            this.addMessageToUI('ai', "[SYSTEM_RESET] :: Memory bank successfully purged.");
+            return;
+        }
+
+        let queryText = "";
+        if (cmd === '/projects') {
+            queryText = "Summarize your key projects and development systems.";
+        } else if (cmd === '/skills') {
+            queryText = "List your technical skills and capabilities telemetry.";
+        } else if (cmd === '/certs') {
+            queryText = "What certifications or qualifications do you hold?";
+        } else if (cmd === '/contact') {
+            queryText = "How can I contact Vagish N Kora securely?";
+        }
+
+        if (queryText && !this.isProcessing) {
+            this.input.value = queryText;
+            this.handleSendMessage();
         }
     }
 
@@ -834,21 +1080,25 @@ class TacticalAI {
                 parts: [{ text: text }]
             });
 
-            // Convert Gemini history format to OpenAI chat format for backend
-            const messages = this.history.map(msg => ({
-                role: msg.role === 'model' ? 'assistant' : 'user',
-                content: msg.parts[0].text
-            }));
+            // Standardize payloads by converting history to standard messages array
+            // Slicing out the first 2 Gemini setup turns to inject the system instructions properly
+            const systemPrompt = `${this.systemInstructions}\n\n=========================================\nSTRUCTURED INTELLIGENCE CORE (VAGISH BIOGRAPHY):\n${JSON.stringify(this.intelligenceCore, null, 2)}\n=========================================`;
 
-            // OpenRouter Payload sent to YOUR backend proxy
+            const messages = [
+                { role: "system", content: systemPrompt },
+                ...this.history.slice(2).map(msg => ({
+                    role: msg.role === 'model' ? 'assistant' : 'user',
+                    content: msg.parts[0].text
+                }))
+            ];
+
+            // OpenRouter/Gemini normalized payload
             const payload = {
-                model: this.selectedModel || "mistral/mistral-7b-instruct",
+                model: this.selectedModel,
                 messages: messages
             };
 
-            // Call YOUR backend (backend has the secret API key)
-            const backendUrl = '/api/chat'; // Change this if your backend is on a different URL
-            const response = await fetch(backendUrl, {
+            const response = await fetch(this.baseApiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -859,7 +1109,7 @@ class TacticalAI {
             if (!response.ok) {
                 const errorData = await response.json();
                 const errorMessage = errorData.error?.message || errorData.error || `STATUS_${response.status}`;
-                throw new Error(`[BACKEND_ERROR] - ${errorMessage}. Make sure your backend server is running.`);
+                throw new Error(`[BACKEND_ERROR] - ${errorMessage}`);
             }
 
             const data = await response.json();
@@ -872,7 +1122,7 @@ class TacticalAI {
                 throw new Error("[NULL_RESPONSE] - AI returned an empty response.");
             }
 
-            // Parse OpenRouter response (OpenAI format)
+            // Parse response
             const aiText = data.choices[0].message?.content || "[INTEL_REDACTED] - AI returned non-textual data.";
 
             // Add to Gemini-compatible history format for localStorage
@@ -890,7 +1140,7 @@ class TacticalAI {
             thinkingMsg?.remove();
             console.error("Tactical AI Error:", error);
             const detailedError = error.message.includes('BACKEND_ERROR')
-                ? `${error.message}. Check that: 1) Backend server is running. 2) .env has OPENROUTER_API_KEY set.`
+                ? `${error.message}. Check that your backend server is running.`
                 : error.message;
             this.addMessageToUI('ai', `ERROR: [NEURAL_LINK_INTERRUPTED] - ${detailedError}`);
         } finally {
@@ -907,24 +1157,50 @@ class TacticalAI {
 
         const prefix = role === 'user' ? 'GUEST:: ' : 'ALPHA:: ';
         
-        // Remove extreme markdown like triple backticks for chat UI clarity if needed
-        let formattedText = text.replace(/```[a-z]*\n?/g, '').replace(/```/g, '');
-        // Convert markdown bold to HTML for a tactical look
-        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>');
+        let formattedText = text;
+
+        // Escape dangerous HTML tags except our custom styling tags
+        formattedText = formattedText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        // Ingest styling markers
+        formattedText = formattedText
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold font-mono">$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em class="italic text-gray-200">$1</em>');
+
+        // Convert lists (lines beginning with - or * or •) to HTML list items with styling
+        const lines = formattedText.split('\n');
+        let inList = false;
+        const processedLines = lines.map(line => {
+            const match = line.match(/^\s*[-*•]\s+(.*)/);
+            if (match) {
+                const itemText = match[1];
+                if (!inList) {
+                    inList = true;
+                    return `<ul class="chat-bullet-list"><li class="chat-bullet-item">${itemText}</li>`;
+                }
+                return `<li class="chat-bullet-item">${itemText}</li>`;
+            } else {
+                if (inList) {
+                    inList = false;
+                    return `</ul>${line}`;
+                }
+                return line;
+            }
+        });
+        if (inList) {
+            processedLines.push('</ul>');
+        }
+        
+        formattedText = processedLines.join('<br>');
 
         msgDiv.innerHTML = `<span class="text-accent-pink font-bold">${prefix}</span> ${formattedText}`;
 
         this.messagesContainer.appendChild(msgDiv);
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
 
-        // TACTICAL MEMORY: Save conversation history
+        // TACTICAL MEMORY: Save conversation history (limit to last 10 dialog loops to avoid cookies/storage issues)
         if (this.history.length > 2) {
             localStorage.setItem('vagish_ai_intel', JSON.stringify(this.history.slice(-10)));
-        }
-
-        // INTEL_FEEDBACK: Log questions for Vagish to "Train" the AI later
-        if (role === 'user') {
-            console.log(`[TACTICAL_LOG] Unanswered intel request recorded: "${text}"`);
         }
 
         return msgDiv;
