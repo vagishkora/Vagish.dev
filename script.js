@@ -572,7 +572,7 @@ class OutreachCarousel {
         const card = document.createElement('div');
         const colorClass = item.color === 'accent-pink' ? 'accent-pink' : 'secondary';
 
-        card.className = `absolute w-full md:w-[800px] h-auto min-h-[320px] bg-surface border border-white/10 rounded-xl p-8 transition-all duration-500 ease-out group overflow-hidden shadow-2xl`;
+        card.className = `absolute w-full md:w-[800px] h-auto min-h-[320px] bg-surface border border-white/10 rounded-xl p-5 md:p-8 transition-all duration-500 ease-out group overflow-hidden shadow-2xl`;
 
         card.innerHTML = `
             <!-- Decorative Corner -->
@@ -580,8 +580,8 @@ class OutreachCarousel {
                 <div class="absolute top-0 right-0 w-[150%] h-[150%] bg-${colorClass}/10 -rotate-45 transform translate-x-1/2 -translate-y-1/2"></div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-8 items-center h-full">
-                <div class="shrink-0 relative w-full md:w-72 h-48 rounded-lg overflow-hidden border border-white/10 group-hover:border-${colorClass}/50 transition-colors">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-center h-full">
+                <div class="shrink-0 relative w-full md:w-72 h-40 md:h-48 rounded-lg overflow-hidden border border-white/10 group-hover:border-${colorClass}/50 transition-colors">
                     <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 </div>
 
