@@ -1,11 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Serve static files (HTML, CSS, JS, Assets) from the root directory
+app.use(express.static(__dirname));
+
+// Serve index.html on the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 const PORT = process.env.PORT || 3001;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
