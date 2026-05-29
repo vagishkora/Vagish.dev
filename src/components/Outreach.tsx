@@ -13,7 +13,7 @@ export default function Outreach() {
         title: "Ethical Hacking Workshop",
         org: "Participant • Ethical Edufabrica @ Pravega, IISc Bangalore",
         date: "15th & 16th Nov 2025",
-        img: "/assets/IISc_Banglore.jpeg",
+        img: "/Vagish.dev/assets/IISc_Banglore.jpeg",
         desc: "Completed a two-day intensive workshop gaining hands-on exposure to cybersecurity concepts and defensive techniques.",
         curriculum: ["Kali Linux & Tools", "Threat Methodologies", "VM Security", "Phishing & SQL Injection(for educational purpose only)"],
         color: "pink-500"
@@ -22,7 +22,7 @@ export default function Outreach() {
         title: "Cyber Awareness Speaker",
         org: "Speaker • Belman PU College",
         date: "30th Oct 2025",
-        img: "/assets/speaking.png",
+        img: "/Vagish.dev/assets/speaking.png",
         desc: "Leading interactive sessions to educate students on digital safety and the evolving threat landscape.",
         curriculum: ["Scam Detection", "Social Engineering", "Fake Giveaways", "Digital Hygiene"],
         color: "indigo-500"
