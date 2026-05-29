@@ -58,6 +58,7 @@ export default function Projects() {
               itemScale={0.03} 
               baseScale={0.9} 
               stackPosition="15%"
+              onStackComplete={() => {}}
             >
               {projects.map((project, idx) => (
                 <ScrollStackItem key={project.id}>
