@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import SocialSidebar from "@/components/SocialSidebar";
-import Education from "@/components/Education";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Certificates from "@/components/Certificates";
@@ -18,7 +17,7 @@ export default function Home() {
       <Hero />
       <div className="relative z-10 w-full bg-black">
         {/* Sticky Parallax Background */}
-        <div className="sticky top-0 h-screen w-full z-0 overflow-hidden pointer-events-none">
+        <div className="sticky top-0 h-screen w-full z-0 overflow-hidden pointer-events-none hidden md:block">
           <LightRays
             raysOrigin="top-center"
             raysColor="#06b6d4"
@@ -35,7 +34,6 @@ export default function Home() {
         {/* Main Content overlapping the background */}
         <div className="relative z-10 -mt-[100vh]">
           <Projects />
-          <Education />
           <Skills />
           <Certificates />
           <Outreach />

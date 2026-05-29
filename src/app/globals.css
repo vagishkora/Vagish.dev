@@ -25,7 +25,4 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Hide the default cursor everywhere since we are using a custom cursor */
-* {
-  cursor: none !important;
-}
+

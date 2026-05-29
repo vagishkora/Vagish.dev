@@ -108,7 +108,7 @@ export default function Hero() {
           muted
           playsInline
           preload="none"
-          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000"
+          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000 hidden md:block"
           style={{ opacity: scrollOpacity * 0.5 }}
         />
         <video
