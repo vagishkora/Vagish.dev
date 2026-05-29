@@ -13,8 +13,15 @@ export default function Hero() {
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
+      const willBeMuted = !videoRef.current.muted;
+      videoRef.current.muted = willBeMuted;
+      setIsMuted(willBeMuted);
+      
+      // If we are unmuting, restart the video from the beginning
+      if (!willBeMuted) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+      }
     }
     if (blurVideoRef.current) {
       blurVideoRef.current.muted = true;
@@ -44,6 +51,9 @@ export default function Hero() {
       if (videoRef.current && videoRef.current.muted) {
         videoRef.current.muted = false;
         setIsMuted(false);
+        // Restart video from the beginning when they interact for the first time
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
       }
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('touchstart', handleFirstInteraction);
