@@ -194,10 +194,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     img.onload = () => renderCanvas(img);
     img.onerror = () => {
       if (!img.src.includes('favicon.png')) {
-        img.src = '/assets/favicon.png';
+        img.src = '/Vagish.dev/assets/favicon.png';
       }
     };
-    img.src = '/assets/memoji.png';
+    img.src = '/Vagish.dev/assets/memoji.png';
 
   }, []);
 
