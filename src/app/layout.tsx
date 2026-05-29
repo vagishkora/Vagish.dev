@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
 import NetworkStatus from "@/components/NetworkStatus";
 
 const inter = Inter({
@@ -35,7 +34,6 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-background text-gray-100 font-sans transition-colors duration-300`}
       >
-        <CustomCursor />
         <NetworkStatus />
         <div className="bg-scanline"></div>
         {children}
