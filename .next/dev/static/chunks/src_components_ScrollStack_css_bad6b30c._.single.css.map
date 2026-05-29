@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/components/ScrollStack.css"],"sourcesContent":[".scroll-stack-scroller {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow-y: auto;\n  overflow-x: visible;\n  -webkit-overflow-scrolling: touch;\n  scroll-behavior: smooth;\n  -webkit-transform: translateZ(0);\n  transform: translateZ(0);\n  will-change: scroll-position;\n  scrollbar-width: none; /* Firefox */\n  -ms-overflow-style: none; /* IE and Edge */\n}\n\n.scroll-stack-scroller::-webkit-scrollbar {\n  display: none; /* Chrome, Safari and Opera */\n}\n\n.scroll-stack-inner {\n  padding: 10vh 0 30vh;\n  min-height: 100vh;\n}\n\n.scroll-stack-card-wrapper {\n  position: relative;\n}\n\n.scroll-stack-card {\n  transform-origin: top center;\n  will-change: transform, filter;\n  backface-visibility: hidden;\n  transform-style: preserve-3d;\n  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);\n  width: 100%;\n  margin: 30px 0;\n  box-sizing: border-box;\n  -webkit-transform: translateZ(0);\n  transform: translateZ(0);\n  position: relative;\n}\n\n.scroll-stack-end {\n  width: 100%;\n  height: 1px;\n}\n"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;AAeA;;;;AAIA;;;;;AAKA;;;;AAIA;;;;;;;;;;;;;AAcA"}}]
+}

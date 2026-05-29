@@ -1,0 +1,144 @@
+/* [project]/src/components/GlitchText.css [app-client] (css) */
+.glitch {
+  color: #fff;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  margin: 0 auto;
+  font-size: clamp(2rem, 10vw, 8rem);
+  font-weight: 900;
+  position: relative;
+}
+
+.glitch:after, .glitch:before {
+  content: attr(data-text);
+  color: #fff;
+  clip-path: inset(0);
+  background-color: #0000;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+}
+
+.glitch:not(.enable-on-hover):after {
+  text-shadow: var(--after-shadow, -10px 0 red);
+  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
+  left: 10px;
+}
+
+.glitch:not(.enable-on-hover):before {
+  text-shadow: var(--before-shadow, 10px 0 cyan);
+  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+  left: -10px;
+}
+
+.glitch.enable-on-hover:after, .glitch.enable-on-hover:before {
+  content: "";
+  opacity: 0;
+  animation: none;
+}
+
+.glitch.enable-on-hover:hover:after {
+  content: attr(data-text);
+  opacity: 1;
+  text-shadow: var(--after-shadow, -10px 0 red);
+  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
+  left: 10px;
+}
+
+.glitch.enable-on-hover:hover:before {
+  content: attr(data-text);
+  opacity: 1;
+  text-shadow: var(--before-shadow, 10px 0 cyan);
+  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+  left: -10px;
+}
+
+@keyframes animate-glitch {
+  0% {
+    clip-path: inset(20% 0 50%);
+  }
+
+  5% {
+    clip-path: inset(10% 0 60%);
+  }
+
+  10% {
+    clip-path: inset(15% 0 55%);
+  }
+
+  15% {
+    clip-path: inset(25% 0 35%);
+  }
+
+  20% {
+    clip-path: inset(30% 0 40%);
+  }
+
+  25% {
+    clip-path: inset(40% 0 20%);
+  }
+
+  30% {
+    clip-path: inset(10% 0 60%);
+  }
+
+  35% {
+    clip-path: inset(15% 0 55%);
+  }
+
+  40% {
+    clip-path: inset(25% 0 35%);
+  }
+
+  45% {
+    clip-path: inset(30% 0 40%);
+  }
+
+  50% {
+    clip-path: inset(20% 0 50%);
+  }
+
+  55% {
+    clip-path: inset(10% 0 60%);
+  }
+
+  60% {
+    clip-path: inset(15% 0 55%);
+  }
+
+  65% {
+    clip-path: inset(25% 0 35%);
+  }
+
+  70% {
+    clip-path: inset(30% 0 40%);
+  }
+
+  75% {
+    clip-path: inset(40% 0 20%);
+  }
+
+  80% {
+    clip-path: inset(20% 0 50%);
+  }
+
+  85% {
+    clip-path: inset(10% 0 60%);
+  }
+
+  90% {
+    clip-path: inset(15% 0 55%);
+  }
+
+  95% {
+    clip-path: inset(25% 0 35%);
+  }
+
+  100% {
+    clip-path: inset(30% 0 40%);
+  }
+}
+
+/*# sourceMappingURL=src_components_GlitchText_css_bad6b30c._.single.css.map*/
