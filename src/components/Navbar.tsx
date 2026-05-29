@@ -18,12 +18,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "#Work", href: "/#work" },
-    { label: "#Education", href: "/education" },
-    { label: "#Skills", href: "/#skills" },
-    { label: "#Certifications", href: "/#certifications" },
-    { label: "#Hobbies", href: "/#hobbies" },
-    { label: "#Contact", href: "/#contact" },
+    { label: "#Work", href: "#work" },
+    { label: "#Education", href: "#education" },
+    { label: "#Skills", href: "#skills" },
+    { label: "#Certifications", href: "#certifications" },
+    { label: "#Hobbies", href: "#hobbies" },
+    { label: "#Contact", href: "#contact" },
   ];
 
   return (
