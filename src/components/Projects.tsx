@@ -57,7 +57,11 @@ export default function Projects() {
               itemDistance={60} 
               itemScale={0.03} 
               baseScale={0.9} 
+<<<<<<< HEAD
               stackPosition="bottom"
+=======
+              stackPosition="15%"
+>>>>>>> c3fa5ecaea836cb46933d002038b48c5bf779424
               onStackComplete={() => {}}
             >
               {projects.map((project, idx) => (
