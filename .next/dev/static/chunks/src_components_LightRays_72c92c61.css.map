@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///C:/Vagish/portfolio/src/components/LightRays.css"],"sourcesContent":[".light-rays-container {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  pointer-events: none;\n  z-index: 3;\n  overflow: hidden;\n}\n"],"names":[],"mappings":"AAAA"}}]
-}
