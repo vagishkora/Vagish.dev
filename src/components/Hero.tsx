@@ -6,7 +6,7 @@ import Lanyard from "./Lanyard";
 import DecryptedText from "./DecryptedText";
 
 export default function Hero() {
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const videoRef = useRef<HTMLVideoElement>(null);
   const blurVideoRef = useRef<HTMLVideoElement>(null);
@@ -21,8 +21,25 @@ export default function Hero() {
     }
   };
 
-  // Browser auto-play policy workaround
+  // Browser auto-play policy workaround & attempt to play with sound
   useEffect(() => {
+    const tryPlayVideo = async () => {
+      if (videoRef.current) {
+        try {
+          // Attempt to play the video (it will try with sound because isMuted is false)
+          await videoRef.current.play();
+        } catch (error) {
+          console.warn("Browser blocked autoplay with sound. Falling back to muted autoplay.", error);
+          // If browser blocks it, we MUST mute it so the video visuals can at least play
+          videoRef.current.muted = true;
+          setIsMuted(true);
+          videoRef.current.play().catch(e => console.error("Video completely failed to play", e));
+        }
+      }
+    };
+    
+    tryPlayVideo();
+
     const handleFirstInteraction = () => {
       if (videoRef.current && videoRef.current.muted) {
         videoRef.current.muted = false;
