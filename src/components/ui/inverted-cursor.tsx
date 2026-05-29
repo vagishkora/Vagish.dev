@@ -36,6 +36,16 @@ export const Cursor: React.FC<CursorProps> = ({ size = 60 }) => {
   };
 
   useEffect(() => {
+    // Disable on touch devices and mobile screens
+    const isTouchDevice = 
+      "ontouchstart" in window || 
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia("(pointer: coarse)").matches;
+
+    if (isTouchDevice) {
+      return; // Do nothing on mobile
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       setVisible(true);
       setPosition({ x: e.clientX, y: e.clientY });
