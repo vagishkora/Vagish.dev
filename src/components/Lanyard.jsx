@@ -82,8 +82,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
   const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
 
   // Notice we use the public URL path for the .glb and .png since we will download them directly
-  const { nodes, materials } = useGLTF('/card.glb');
-  const texture = useTexture('/lanyard.png');
+  const { nodes, materials } = useGLTF('/Vagish.dev/card.glb');
+  const texture = useTexture('/Vagish.dev/lanyard.png');
 
   const [curve] = useState(
     () =>

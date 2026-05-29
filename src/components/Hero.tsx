@@ -52,20 +52,21 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <video
           ref={blurVideoRef}
-          src="/assets/mp_.mp4"
+          src="/Vagish.dev/assets/mp_.mp4"
           autoPlay
           loop
           muted
           playsInline
           preload="none"
-          className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-50 scale-110 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000"
+          style={{ opacity: scrollOpacity * 0.5 }}
         />
         <video
           ref={videoRef}
-          src="/assets/mp_.mp4"
+          src="/Vagish.dev/assets/mp_.mp4"
           autoPlay
           loop
-          muted
+          muted={isMuted}
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-1000"
         />
