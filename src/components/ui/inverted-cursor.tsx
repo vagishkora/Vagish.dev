@@ -8,7 +8,7 @@ interface CursorProps {
 
 export const Cursor: React.FC<CursorProps> = ({ size = 60 }) => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number>(0);
   const previousPos = useRef({ x: -size, y: -size }); // start off-screen
   
   const [visible, setVisible] = useState(false);
