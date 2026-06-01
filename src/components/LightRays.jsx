@@ -57,7 +57,17 @@ const LightRays = ({
   const meshRef = useRef(null);
   const cleanupFunctionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isScrolledOut, setIsScrolledOut] = useState(false);
   const observerRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolledOut(window.scrollY > window.innerHeight * 1.2);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -81,7 +91,7 @@ const LightRays = ({
   }, []);
 
   useEffect(() => {
-    if (!isVisible || !containerRef.current) return;
+    if (!isVisible || isScrolledOut || !containerRef.current) return;
 
     if (cleanupFunctionRef.current) {
       cleanupFunctionRef.current();
@@ -330,6 +340,7 @@ void main() {
     };
   }, [
     isVisible,
+    isScrolledOut,
     raysOrigin,
     raysColor,
     raysSpeed,

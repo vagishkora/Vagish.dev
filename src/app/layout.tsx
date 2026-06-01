@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import NetworkStatus from "@/components/NetworkStatus";
 
@@ -26,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        {/* PDF.js */}
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" strategy="lazyOnload" />
-      </head>
+      <head />
       <body
         suppressHydrationWarning
         className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-background text-gray-100 font-sans transition-colors duration-300`}

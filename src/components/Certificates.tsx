@@ -9,18 +9,18 @@ export default function Certificates() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const certificates = [
-    { title: "Ethical Hacking Workshop", issuer: "Ethical Edufabrica Pvt Ltd", key: "/Vagish.dev/certificates/iicsbanglore.jpeg" },
-    { title: "Cybersecurity Job Simulation", issuer: "Mastercard", key: "/Vagish.dev/certificates/Cybersecurity Job Simulation Mastercard_page-0001.jpg" },
-    { title: "Cybersecurity Analyst", issuer: "Tata", key: "/Vagish.dev/certificates/Cybersecurity Analyst Job Simulation TATA - Forage_page-0001.jpg" },
-    { title: "AI & Data Analytics", issuer: "AICTE", key: "/Vagish.dev/certificates/Vagish N Kora_AICTE_Certificate_page-0001.jpg" },
-    { title: "Internship Completion", issuer: "Karunadu Tech", key: "/Vagish.dev/certificates/karunadu internship certificate_page-0001.jpg" },
-    { title: "Data Visualization", issuer: "Accenture", key: "/Vagish.dev/certificates/accenture data_visulatization_completion_certificate_page-0001.jpg" },
-    { title: "Data Plus Overview", issuer: "TCS", key: "/Vagish.dev/certificates/TSC Data Plus Overview Course_page-0001.jpg" },
-    { title: "Hashgraph Developer", issuer: "Hedera", key: "/Vagish.dev/certificates/Vagish_Kora_Hashgraph Developer Course_certificate_page-0001.jpg" },
-    { title: "Career Edge", issuer: "TCS", key: "/Vagish.dev/certificates/Tcs Certificate._page-0001.jpg" },
-    { title: "Fundamentals of AI & ML", issuer: "Course Completion", key: "/Vagish.dev/certificates/Fundamentals of AI&ML certification_page-0001.jpg" },
-    { title: "AI for Metaverse", issuer: "Metaverse Cert", key: "/Vagish.dev/certificates/Introduction to AI For Metaverse Certification_page-0001.jpg" },
-    { title: "Info & Cyber Security", issuer: "Fundamentals", key: "/Vagish.dev/certificates/Fundamentals of Information Security-Cyber Security_page-0001.jpg" }
+    { title: "Ethical Hacking Workshop", issuer: "Ethical Edufabrica Pvt Ltd", key: "/Vagish.dev/certificates/iicsbanglore.webp" },
+    { title: "Cybersecurity Job Simulation", issuer: "Mastercard", key: "/Vagish.dev/certificates/Cybersecurity Job Simulation Mastercard_page-0001.webp" },
+    { title: "Cybersecurity Analyst", issuer: "Tata", key: "/Vagish.dev/certificates/Cybersecurity Analyst Job Simulation TATA - Forage_page-0001.webp" },
+    { title: "AI & Data Analytics", issuer: "AICTE", key: "/Vagish.dev/certificates/Vagish N Kora_AICTE_Certificate_page-0001.webp" },
+    { title: "Internship Completion", issuer: "Karunadu Tech", key: "/Vagish.dev/certificates/karunadu internship certificate_page-0001.webp" },
+    { title: "Data Visualization", issuer: "Accenture", key: "/Vagish.dev/certificates/accenture data_visulatization_completion_certificate_page-0001.webp" },
+    { title: "Data Plus Overview", issuer: "TCS", key: "/Vagish.dev/certificates/TSC Data Plus Overview Course_page-0001.webp" },
+    { title: "Hashgraph Developer", issuer: "Hedera", key: "/Vagish.dev/certificates/Vagish_Kora_Hashgraph Developer Course_certificate_page-0001.webp" },
+    { title: "Career Edge", issuer: "TCS", key: "/Vagish.dev/certificates/Tcs Certificate._page-0001.webp" },
+    { title: "Fundamentals of AI & ML", issuer: "Course Completion", key: "/Vagish.dev/certificates/Fundamentals of AI&ML certification_page-0001.webp" },
+    { title: "AI for Metaverse", issuer: "Metaverse Cert", key: "/Vagish.dev/certificates/Introduction to AI For Metaverse Certification_page-0001.webp" },
+    { title: "Info & Cyber Security", issuer: "Fundamentals", key: "/Vagish.dev/certificates/Fundamentals of Information Security-Cyber Security_page-0001.webp" }
   ];
 
   const scroll = (direction: "left" | "right") => {

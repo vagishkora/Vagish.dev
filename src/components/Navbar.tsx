@@ -18,12 +18,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "#Work", href: "/Vagish.dev/#work" },
-    { label: "#Education", href: "/Vagish.dev/education" },
-    { label: "#Skills", href: "/Vagish.dev/#skills" },
-    { label: "#Certifications", href: "/Vagish.dev/#certifications" },
-    { label: "#Hobbies", href: "/Vagish.dev/#hobbies" },
-    { label: "#Contact", href: "/Vagish.dev/#contact" },
+    { label: "#Work", href: "/#work" },
+    { label: "#Education", href: "/education" },
+    { label: "#Skills", href: "/#skills" },
+    { label: "#Certifications", href: "/#certifications" },
+    { label: "#Hobbies", href: "/#hobbies" },
+    { label: "#Contact", href: "/#contact" },
   ];
 
   return (
@@ -67,6 +67,7 @@ export default function Navbar() {
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-gray-300 hover:text-white focus:outline-none p-2"
+                suppressHydrationWarning
               >
                 {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
               </button>

@@ -32,7 +32,7 @@ export default function Home() {
         </div>
         
         {/* Main Content overlapping the background */}
-        <div className="relative z-10 -mt-[100vh]">
+        <div className="relative z-10 md:-mt-[100vh]">
           <Projects />
           <Skills />
           <Certificates />

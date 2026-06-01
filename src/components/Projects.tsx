@@ -12,7 +12,7 @@ export default function Projects() {
       id: "PROJ-WEB-000",
       title: "Birthday Site",
       description: "High-performance interactive web app featuring 60fps canvas particles, 3D holographic tilt-cards, and a gamified constellation puzzle.",
-      image: "/Vagish.dev/assets/Birthday.png",
+      image: "/Vagish.dev/assets/Birthday.webp",
       link: "https://github.com/vagishkora/Birthday-template",
       tags: ["Vanilla JS", "HTML5 Canvas"],
       accent: "accent-purple",
@@ -21,7 +21,7 @@ export default function Projects() {
       id: "PROJ-FIN-000",
       title: "Wealth Nest — AI Finance",
       description: "AI-powered PWA for tracking stocks, mutual funds, and smart expenses.",
-      image: "/Vagish.dev/assets/Wealthnest.jpg",
+      image: "/Vagish.dev/assets/Wealthnest.webp",
       link: "https://github.com/vagishkora/WealthNest",
       tags: ["Next.js", "LIVE PWA"],
       accent: "accent-pink",
@@ -30,7 +30,7 @@ export default function Projects() {
       id: "PROJ-SEC-001",
       title: "Malware Analysis",
       description: "Deep dive into dynamic and static malware analysis techniques in sandboxed environments.",
-      image: "/Vagish.dev/assets/cybersecurity.png",
+      image: "/Vagish.dev/assets/cybersecurity.webp",
       link: "https://github.com/vagishkora/malwares-found-recently",
       tags: ["Security", "Reverse Engineering"],
       accent: "accent-cyan",
@@ -39,7 +39,7 @@ export default function Projects() {
       id: "PROJ-AI-002",
       title: "Face Recognition",
       description: "Real-time biometric system using OpenCV and deep learning models for accurate identity verification.",
-      image: "/Vagish.dev/assets/face-recognition.png",
+      image: "/Vagish.dev/assets/face-recognition.webp",
       link: "https://github.com/vagishkora/Face-recognition",
       tags: ["Python", "OpenCV"],
       accent: "accent-emerald",
@@ -62,7 +62,7 @@ export default function Projects() {
               stackPosition="bottom"
               onStackComplete={() => {}}
             >
-              {projects.map((project, idx) => (
+              {projects.map((project) => (
                 <ScrollStackItem key={project.id}>
                   <article
                     className={`bg-black overflow-hidden border border-white/10 hover:border-indigo-500/50 transition-all duration-300 group relative w-full h-full rounded-[40px]`}
@@ -122,6 +122,17 @@ export default function Projects() {
                 </ScrollStackItem>
               ))}
             </ScrollStack>
+          </div>
+          
+          {/* Explore More Button to escape the scrolling section */}
+          <div className="shrink-0 pb-6 flex justify-center w-full relative z-50">
+            <button 
+              onClick={() => document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' })}
+              className="px-6 py-3 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-mono text-sm rounded-full hover:bg-indigo-500/20 hover:text-white transition-all flex items-center gap-2 cursor-pointer animate-pulse"
+              suppressHydrationWarning
+            >
+              EXPLORE MORE ↓
+            </button>
           </div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
-import { useGLTF, useTexture, Environment, Lightformer, Html } from '@react-three/drei';
+import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from '@lume/three-meshline';
 import * as THREE from 'three';
@@ -13,7 +13,9 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
+    setTimeout(() => {
+      setIsMobile(window.innerWidth < 768);
+    }, 0);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -79,16 +81,29 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     rot = new THREE.Vector3(),
     dir = new THREE.Vector3();
 
-  const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
+  const segmentProps = { type: 'dynamic', canSleep: false, colliders: false, angularDamping: 4, linearDamping: 4 };
 
   // Notice we use the public URL path for the .glb and .png since we will download them directly
   const { nodes, materials } = useGLTF('/Vagish.dev/card.glb');
   const texture = useTexture('/Vagish.dev/lanyard.png');
 
-  const [curve] = useState(
-    () =>
-      new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
-  );
+  const curve = useMemo(() => {
+    const c = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+      new THREE.Vector3()
+    ]);
+    c.curveType = 'chordal';
+    return c;
+  }, []);
+
+  useEffect(() => {
+    if (texture) {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    }
+  }, [texture]);
 
   const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
@@ -191,13 +206,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
 
     // Load Image asynchronously
     const img = new Image();
+    img.crossOrigin = "anonymous"; // Fix for tainted canvas not displaying in WebGL
     img.onload = () => renderCanvas(img);
     img.onerror = () => {
-      if (!img.src.includes('favicon.png')) {
-        img.src = '/Vagish.dev/assets/favicon.png';
+      if (!img.src.includes('favicon.webp')) {
+        img.src = '/Vagish.dev/assets/favicon.webp';
       }
     };
-    img.src = '/Vagish.dev/assets/memoji.png';
+    img.src = '/Vagish.dev/assets/memoji.webp';
 
   }, []);
 
@@ -226,7 +242,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     }
     if (fixed.current) {
       [j1, j2].forEach(ref => {
-        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
+        if (!ref.current?.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
         const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
         ref.current.lerped.lerp(
           ref.current.translation(),
@@ -244,23 +260,21 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     }
   });
 
-  curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
       <group position={[0, 4, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+        <RigidBody position={[0, 5, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+        <RigidBody position={[0, 6, 0]} ref={j2} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+        <RigidBody position={[0, 7, 0]} ref={j3} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[2, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
+        <RigidBody position={[0, 8.5, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
             scale={2.25}

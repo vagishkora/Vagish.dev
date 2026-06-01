@@ -7,11 +7,10 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true,  
   },
   experimental: {
     cpus: 1,
-    workerThreads: false,
   },
 };
 

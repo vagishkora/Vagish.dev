@@ -1,15 +1,23 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Suspense } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import Lanyard from "./Lanyard";
 import DecryptedText from "./DecryptedText";
 
 export default function Hero() {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [isMobile, setIsMobile] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const blurVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize(); // Ensure it updates immediately after hydration
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -97,7 +105,11 @@ export default function Hero() {
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-32 pb-32 md:pt-0 md:pb-0"
     >
-      <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
+      {!isMobile && scrollOpacity > 0 && (
+        <Suspense fallback={<div className="absolute right-0 top-0 w-[400px] h-[100vh] flex items-center justify-center pointer-events-none opacity-20"><div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" /></div>}>
+          <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
+        </Suspense>
+      )}
       {/* Video Backgrounds */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <video
@@ -141,9 +153,6 @@ export default function Hero() {
         className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-100"
         style={{ opacity: scrollOpacity }}
       >
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 border border-pink-500/10 rounded-full animate-float"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] border border-cyan-500/10 rounded-full animate-float" style={{ animationDelay: "-2s" }}></div>
-
         {/* Tech Pattern Accents */}
         <div className="absolute top-20 left-10 font-mono text-xs text-indigo-500/50 tracking-widest">[ HUD_STATUS: ACTIVE ]</div>
         <div className="absolute top-40 left-1/4 font-mono text-xs text-indigo-500/50">04 // SYSTEM_CORE</div>
