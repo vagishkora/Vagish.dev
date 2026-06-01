@@ -190,7 +190,7 @@ export default function Hero() {
             <a href="#work" className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1" style={{ fontFamily: "var(--font-space-grotesk)" }}>
               EXPLORE WORK &rarr;
             </a>
-            <a href="/Vagish_Resume.pdf" download className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+            <a href="/Vagish.dev/Vagish_Resume.pdf" download className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1" style={{ fontFamily: "var(--font-space-grotesk)" }}>
               DOWNLOAD RESUME &darr;
             </a>
           </div>
