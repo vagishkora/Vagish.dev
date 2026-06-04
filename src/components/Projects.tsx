@@ -28,10 +28,10 @@ export default function Projects() {
     },
     {
       id: "PROJ-SEC-001",
-      title: "Malware Analysis",
+      title: "AI for identifying Cybersecurity Threats",
       description: "Deep dive into dynamic and static malware analysis techniques in sandboxed environments.",
       image: "/Vagish.dev/assets/cybersecurity.webp",
-      link: "https://github.com/vagishkora/malwares-found-recently",
+      link: "https://github.com/vagishkora/-AI-for-Identifying-Cybersecurity-Threats",
       tags: ["Security", "Reverse Engineering"],
       accent: "accent-cyan",
     },
