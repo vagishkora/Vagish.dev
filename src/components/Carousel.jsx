@@ -56,7 +56,7 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
 }
 
 export default function Carousel({
-  items = [],
+  items = /** @type {any[]} */ ([]),
   baseWidth: initialBaseWidth = 350,
   autoplay = false,
   autoplayDelay = 3000,
