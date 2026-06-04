@@ -6,6 +6,7 @@
   padding: 16px;
   --outer-r: 24px;
   --p-distance: 12px;
+  touch-action: pan-y;
 }
 
 .carousel-track {

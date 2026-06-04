@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
 import { Award } from 'lucide-react';
@@ -55,15 +57,28 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
 
 export default function Carousel({
   items = [],
-  baseWidth = 300,
+  baseWidth: initialBaseWidth = 350,
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
   loop = false,
   round = false
 }) {
+  const [baseWidth, setBaseWidth] = useState(initialBaseWidth);
+
+  // Responsive width calculation
+  useEffect(() => {
+    const handleResize = () => {
+      // Use the smaller of the initial width or the window width minus padding
+      setBaseWidth(Math.min(initialBaseWidth, window.innerWidth - 32));
+    };
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [initialBaseWidth]);
+
   const containerPadding = 16;
-  const itemWidth = baseWidth - containerPadding * 2;
+  const itemWidth = Math.max(150, baseWidth - containerPadding * 2); // Ensure it doesn't get impossibly small
   const trackItemOffset = itemWidth + GAP;
   const itemsForRender = useMemo(() => {
     if (!loop) return items;
@@ -83,11 +98,24 @@ export default function Carousel({
       const container = containerRef.current;
       const handleMouseEnter = () => setIsHovered(true);
       const handleMouseLeave = () => setIsHovered(false);
+      
+      // Also pause on touch events for mobile
+      const handleTouchStart = () => setIsHovered(true);
+      const handleTouchEnd = () => {
+        // slight delay to resume autoplay after touch ends
+        setTimeout(() => setIsHovered(false), 2000); 
+      };
+
       container.addEventListener('mouseenter', handleMouseEnter);
       container.addEventListener('mouseleave', handleMouseLeave);
+      container.addEventListener('touchstart', handleTouchStart);
+      container.addEventListener('touchend', handleTouchEnd);
+      
       return () => {
         container.removeEventListener('mouseenter', handleMouseEnter);
         container.removeEventListener('mouseleave', handleMouseLeave);
+        container.removeEventListener('touchstart', handleTouchStart);
+        container.removeEventListener('touchend', handleTouchEnd);
       };
     }
   }, [pauseOnHover]);
@@ -191,6 +219,7 @@ export default function Carousel({
       className={`carousel-container ${round ? 'round' : ''}`}
       style={{
         width: `${baseWidth}px`,
+        maxWidth: '100%',
         ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
       }}
     >
