@@ -1,13 +1,10 @@
 "use client";
 
-import { useRef } from "react";
-import { ChevronLeft, ChevronRight, Award } from "lucide-react";
+import { Award } from "lucide-react";
 import DecryptedText from "./DecryptedText";
-import Image from "next/image";
+import Carousel from "./Carousel";
 
 export default function Certificates() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const certificates = [
     { title: "Ethical Hacking Workshop", issuer: "Ethical Edufabrica Pvt Ltd", key: "/Vagish.dev/certificates/iicsbanglore.webp" },
     { title: "Cybersecurity Job Simulation", issuer: "Mastercard", key: "/Vagish.dev/certificates/Cybersecurity Job Simulation Mastercard_page-0001.webp" },
@@ -23,95 +20,40 @@ export default function Certificates() {
     { title: "Info & Cyber Security", issuer: "Fundamentals", key: "/Vagish.dev/certificates/Fundamentals of Information Security-Cyber Security_page-0001.webp" }
   ];
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.8;
-      scrollRef.current.scrollTo({
-        left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const carouselItems = certificates.map((cert, idx) => ({
+    title: cert.title,
+    description: cert.issuer,
+    id: `CERT-${String(idx + 1).padStart(3, '0')}`,
+    image: cert.key,
+  }));
 
   return (
     <section id="certifications" className="py-24 relative overflow-hidden bg-background border-t border-white/5">
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/10 via-background to-background pointer-events-none"></div>
       
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col items-center overflow-visible">
         <h2 className="text-4xl font-extrabold mb-12 text-center">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
             <DecryptedText text="Certifications" animateOn="view" />
           </span>
         </h2>
         
-        <div className="relative w-full">
-          {/* Scrollable Container */}
-          <div 
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar relative z-10"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {certificates.map((cert, idx) => (
-              <div 
-                key={idx}
-                className="min-w-[300px] md:min-w-[400px] bg-white/5 border border-white/10 rounded-xl p-8 snap-center hover:bg-white/10 transition-all group relative overflow-hidden flex-shrink-0 cursor-pointer"
-                onClick={() => window.open(cert.key, "_blank")}
-                suppressHydrationWarning
-              >
-                <div className="absolute inset-0 z-0">
-                  <Image 
-                    src={cert.key} 
-                    alt={cert.title} 
-                    fill
-                    sizes="(max-width: 768px) 300px, 400px"
-                    className="object-cover opacity-30 group-hover:opacity-100 transition-opacity duration-500 blur-[2px] group-hover:blur-none" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent group-hover:bg-black/50 transition-colors duration-500"></div>
-                </div>
-                
-                <div className="relative z-10 flex flex-col h-full justify-between">
-                  <div>
-                    <div className="text-xs font-mono text-indigo-400 mb-4 bg-black/50 inline-block px-2 py-1 rounded backdrop-blur-sm">CERT-{String(idx + 1).padStart(3, '0')}</div>
-                    <h3 className="text-xl font-bold text-white mb-2 leading-tight group-hover:text-indigo-300 transition-colors drop-shadow-md">{cert.title}</h3>
-                    <p className="text-gray-300 font-medium drop-shadow-md">{cert.issuer}</p>
-                  </div>
-                  <div className="mt-8 text-sm text-gray-400 font-mono flex justify-between items-center bg-black/50 px-3 py-2 rounded backdrop-blur-sm">
-                    <span>ISSUED</span>
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-indigo-400 font-bold">VIEW &rarr;</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Navigation Controls */}
-          <div className="flex justify-center gap-4 mt-4">
-            <button 
-              onClick={() => scroll("left")}
-              suppressHydrationWarning
-              className="p-3 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button 
-              onClick={() => scroll("right")}
-              suppressHydrationWarning
-              className="p-3 rounded-full bg-black/50 border border-white/20 hover:bg-white/10 text-white transition-all hover:scale-110 backdrop-blur-sm"
-            >
-              <ChevronRight size={20} />
-            </button>
+        <div className="w-full flex justify-center py-8">
+          {/* We use a custom Carousel component here with motion/react */}
+          <div style={{ height: '400px', position: 'relative', maxWidth: '100vw', overflowX: 'hidden' }}>
+            <Carousel
+              items={carouselItems}
+              baseWidth={350}
+              autoplay={true}
+              autoplayDelay={3000}
+              pauseOnHover={true}
+              loop={true}
+              round={false}
+            />
           </div>
         </div>
       </div>
-      
-      {/* Hide scrollbar global style specifically for this component if needed */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}} />
     </section>
   );
 }
