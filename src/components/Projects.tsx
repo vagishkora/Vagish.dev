@@ -40,7 +40,7 @@ export default function Projects() {
       title: "Face Recognition",
       description: "Real-time biometric system using OpenCV and deep learning models for accurate identity verification.",
       image: "/Vagish.dev/assets/face-recognition.webp",
-      link: "https://github.com/vagishkora/Face-recognition",
+      link: "",
       tags: ["Python", "OpenCV"],
       accent: "accent-emerald",
     },
@@ -75,30 +75,48 @@ export default function Projects() {
                     </div>
 
                     <div className="h-64 bg-gray-800 relative overflow-hidden group">
-                      <Link href={project.link} target="_blank" className="block w-full h-full relative z-10">
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
-                          <span className="text-white font-bold text-lg mb-2 text-center flex items-center gap-2">
-                            View Project <ExternalLink size={20} />
-                          </span>
+                      {project.link ? (
+                        <Link href={project.link} target="_blank" className="block w-full h-full relative z-10">
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
+                            <span className="text-white font-bold text-lg mb-2 text-center flex items-center gap-2">
+                              View Project <ExternalLink size={20} />
+                            </span>
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="block w-full h-full relative z-10">
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
                         </div>
-                      </Link>
+                      )}
                     </div>
 
                     <div className="p-8 relative z-30">
                       <div className="flex items-center justify-between mb-4">
-                        <Link href={project.link} target="_blank" className="hover:text-indigo-400 transition-colors">
+                        {project.link ? (
+                          <>
+                            <Link href={project.link} target="_blank" className="hover:text-indigo-400 transition-colors">
+                              <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+                            </Link>
+                            <Link href={project.link} target="_blank" className="text-indigo-500 hover:text-white transition-colors">
+                              <ExternalLink size={24} />
+                            </Link>
+                          </>
+                        ) : (
                           <h3 className="text-2xl font-bold text-white">{project.title}</h3>
-                        </Link>
-                        <Link href={project.link} target="_blank" className="text-indigo-500 hover:text-white transition-colors">
-                          <ExternalLink size={24} />
-                        </Link>
+                        )}
                       </div>
                       
                       <div className="space-y-2 mb-6">
