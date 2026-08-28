@@ -103,13 +103,18 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-32 pb-32 md:pt-0 md:pb-0"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black"
     >
-      {!isMobile && scrollOpacity > 0 && (
-        <Suspense fallback={<div className="absolute right-0 top-0 w-[400px] h-[100vh] flex items-center justify-center pointer-events-none opacity-20"><div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" /></div>}>
-          <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
-        </Suspense>
-      )}
+      <div 
+        style={{ 
+          opacity: scrollOpacity, 
+          pointerEvents: scrollOpacity === 0 ? 'none' : 'auto',
+          visibility: scrollOpacity === 0 ? 'hidden' : 'visible'
+        }}
+        className="transition-opacity duration-150"
+      >
+        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
+      </div>
       {/* Video Backgrounds */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <video
@@ -120,7 +125,7 @@ export default function Hero() {
           muted
           playsInline
           preload="none"
-          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000 hidden md:block"
+          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000"
           style={{ opacity: scrollOpacity * 0.5 }}
         />
         <video
@@ -140,7 +145,7 @@ export default function Hero() {
         onClick={toggleMute}
         suppressHydrationWarning
         style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? 'none' : 'auto' }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-black/70 transition-all cursor-pointer animate-bounce"
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-black/70 transition-all cursor-pointer animate-bounce"
       >
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         <span className="text-sm font-medium tracking-wide">
@@ -167,7 +172,7 @@ export default function Hero() {
         style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? 'none' : 'auto' }}
       >
         {/* Corner Brackets for Hero */}
-        <div className="absolute -inset-4 pointer-events-none opacity-20 hidden md:block">
+        <div className="absolute -inset-4 pointer-events-none opacity-20">
           <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-pink-500"></div>
           <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-purple-500"></div>
           <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyan-500"></div>

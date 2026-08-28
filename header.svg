@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 530" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap');
+      
+      .bg { fill: #0d1117; }
+      .border { stroke: #00e5ff; stroke-width: 1.2; fill: none; opacity: 0.25; }
+      .titlebar-bg { fill: #161b22; }
+      .dot-r { fill: #ff5f57; }
+      .dot-y { fill: #febc2e; }
+      .dot-g { fill: #28c840; }
+      .title { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #58a6ff; font-size: 11.5px; letter-spacing: 1.5px; }
+      .scanning { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #00e5ff; font-size: 10px; letter-spacing: 3px; font-weight: 700; }
+      
+      .map-label { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #30363d; font-size: 9.5px; letter-spacing: 4px; font-weight: 700; }
+      .ascii { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #00e5ff; font-size: 6.2px; opacity: 0.75; letter-spacing: 0.5px; }
+      
+      .sys-label { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #30363d; font-size: 10px; letter-spacing: 3px; font-weight: 700; }
+      .username { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #58a6ff; font-size: 14px; font-weight: 700; }
+      .dash-line { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #58a6ff; font-size: 12px; opacity: 0.6; }
+      
+      .bullet { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #30363d; font-size: 12px; }
+      .key { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #c9d1d9; font-size: 12px; font-weight: 700; }
+      .dots { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #21262d; font-size: 12px; letter-spacing: 1px; }
+      .val { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #e6edf3; font-size: 12px; }
+      .val-green { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #3fb950; font-size: 12px; }
+      
+      .tech-key { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #c084fc; font-size: 12px; font-weight: 700; }
+      .tech-dots { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #21262d; font-size: 12px; }
+      .tech-val { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #e6edf3; font-size: 12px; }
+      
+      .sec-border { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #00e5ff; font-size: 12px; opacity: 0.4; }
+      .sec-title { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #00e5ff; font-size: 12px; font-weight: 700; }
+      
+      .contact-key { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #f778ba; font-size: 12px; font-weight: 700; }
+      .contact-dots { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #21262d; font-size: 12px; }
+      .contact-val { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #58a6ff; font-size: 12px; }
+      
+      .stats-icon { fill: #58a6ff; }
+      .stats-text { font-family: 'JetBrains Mono', 'Courier New', monospace; fill: #8b949e; font-size: 12px; }
+      
+      .vert-line { stroke: #00e5ff; stroke-width: 0.5; opacity: 0.1; }
+      .horiz-line { stroke: #00e5ff; stroke-width: 0.5; opacity: 0.06; }
+      
+      @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+      @keyframes scan { 0% { transform: translateY(-530px); } 100% { transform: translateY(530px); } }
+      .blink { animation: blink 1.2s step-end infinite; }
+      .scanline { animation: scan 5s linear infinite; opacity: 0.025; }
+    </style>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="1020" height="530" rx="14" class="bg"/>
+  <rect x="0.5" y="0.5" width="1019" height="529" rx="14" class="border"/>
+
+  <!-- Animated scanline -->
+  <rect class="scanline" x="0" y="0" width="1020" height="2" fill="#00e5ff"/>
+
+  <!-- Faint horizontal scan lines -->
+  <line x1="0" y1="195" x2="1020" y2="195" class="horiz-line"/>
+  <line x1="0" y1="330" x2="1020" y2="330" class="horiz-line"/>
+
+  <!-- ── Title Bar ── -->
+  <rect y="0" width="1020" height="38" rx="14" class="titlebar-bg"/>
+  <rect x="0" y="26" width="1020" height="12" class="titlebar-bg"/>
+  <line x1="0" y1="38" x2="1020" y2="38" stroke="#21262d" stroke-width="1"/>
+  
+  <!-- Traffic lights -->
+  <circle cx="22" cy="19" r="6.5" class="dot-r"/>
+  <circle cx="42" cy="19" r="6.5" class="dot-y"/>
+  <circle cx="62" cy="19" r="6.5" class="dot-g"/>
+  
+  <!-- Title text -->
+  <text x="510" y="24" text-anchor="middle" class="title">vagish@interceptor ~ % ./profile.sh --live</text>
+  <text x="965" y="24" text-anchor="end" class="scanning">SCANNING</text>
+
+  <!-- ── Vertical Divider ── -->
+  <line x1="345" y1="52" x2="345" y2="510" class="vert-line"/>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ══  LEFT PANEL — VISUAL MAP + ASCII ART          ══ -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  
+  <text x="172" y="65" text-anchor="middle" class="map-label">VISUAL.MAP</text>
+
+  <!-- ASCII Art — Abstract waveform / digital portrait -->
+  <text x="30" y="88" class="ascii">                                                         </text>
+  <text x="30" y="95" class="ascii">              ░░░░░░░░░░░░░░░░░░░░░░░░░░                 </text>
+  <text x="30" y="102" class="ascii">          ░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░             </text>
+  <text x="30" y="109" class="ascii">        ░░▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒░░           </text>
+  <text x="30" y="116" class="ascii">      ░░▒▒▓▓▓▓████████████████████▓▓▓▓▒▒░░           </text>
+  <text x="30" y="123" class="ascii">     ░▒▒▓▓████████████████████████████▓▓▒▒░          </text>
+  <text x="30" y="130" class="ascii">    ░▒▓▓████▓▓▓▓▓▓▓▓████████▓▓▓▓▓▓▓▓████▓▒░         </text>
+  <text x="30" y="137" class="ascii">   ░▒▓████▓▓░░░░░░▓▓████████▓▓░░░░░░▓▓████▓▒░       </text>
+  <text x="30" y="144" class="ascii">   ░▒████▓▓░░░██░░▓▓████████▓▓░░██░░░▓▓████▒░       </text>
+  <text x="30" y="151" class="ascii">   ░▒████▓▓░░░██░░▓▓████████▓▓░░██░░░▓▓████▒░       </text>
+  <text x="30" y="158" class="ascii">   ░▒▓████▓▓░░░░░░▓▓████████▓▓░░░░░░▓▓████▓▒░       </text>
+  <text x="30" y="165" class="ascii">    ░▒▓▓████▓▓▓▓▓▓▓▓████████▓▓▓▓▓▓▓▓████▓▓▒░        </text>
+  <text x="30" y="172" class="ascii">     ░▒▒▓▓████████████████████████████▓▓▒▒░          </text>
+  <text x="30" y="179" class="ascii">      ░░▒▒▓▓████████████████████████▓▓▒▒░░           </text>
+  <text x="30" y="186" class="ascii">       ░░▒▒▓▓▓▓████▓▓▓▓▓▓▓▓████▓▓▓▓▒▒░░            </text>
+  <text x="30" y="193" class="ascii">        ░░▒▒▓▓▓▓▓▓░░░░░░░░░░▓▓▓▓▓▓▒▒░░             </text>
+  <text x="30" y="200" class="ascii">         ░░▒▒▓▓▓▓░░░░░░░░░░░░▓▓▓▓▒▒░░              </text>
+  <text x="30" y="207" class="ascii">          ░░▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒░░               </text>
+  <text x="30" y="214" class="ascii">           ░░▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒░░                </text>
+  <text x="30" y="221" class="ascii">    ░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░       </text>
+  <text x="30" y="228" class="ascii">  ░░▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░    </text>
+  <text x="30" y="235" class="ascii">  ░▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒░    </text>
+  <text x="30" y="242" class="ascii">  ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░    </text>
+  <text x="30" y="249" class="ascii">  ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░    </text>
+  <text x="30" y="256" class="ascii">  ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░    </text>
+  <text x="30" y="263" class="ascii">   ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░     </text>
+  <text x="30" y="270" class="ascii">    ░▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒░      </text>
+  <text x="30" y="277" class="ascii">     ░░▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓████▓▓▓▓▓▓▓▓▓▓▓▓▒▒░░        </text>
+  <text x="30" y="284" class="ascii">       ░░▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒░░           </text>
+  <text x="30" y="291" class="ascii">          ░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░              </text>
+
+  <!-- Box under ASCII -->
+  <text x="30" y="310" class="ascii">  ╔══════════════════════════════════════════════╗    </text>
+  <text x="30" y="318" class="ascii">  ║  INTERCEPTOR SYS — VAGISH N KORA — v2.4     ║    </text>
+  <text x="30" y="326" class="ascii">  ╚══════════════════════════════════════════════╝    </text>
+
+  <!-- Status indicators under ASCII -->
+  <text x="172" y="355" text-anchor="middle" class="map-label">THREAT.LEVEL: ████████████ 9000</text>
+  <text x="172" y="372" text-anchor="middle" class="map-label">ENCRYPTION: AES_256_GCM</text>
+  <text x="172" y="389" text-anchor="middle" class="map-label">CLEARANCE: TOP SECRET / SCI</text>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ══  RIGHT PANEL — SYSTEM INFO                    ══ -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <text x="370" y="62" class="sys-label">SYSTEM.INFO</text>
+  
+  <!-- Username -->
+  <text x="470" y="62" class="username">vagish@interceptor</text>
+  <text x="370" y="75" class="dash-line">──────────────────────────────────────────────────────</text>
+
+  <!-- Profile fields -->
+  <text x="375" y="100" class="bullet">·</text>
+  <text x="390" y="100" class="key">Subject:</text>
+  <text x="510" y="100" class="dots">.........................</text>
+  <text x="745" y="100" class="val">Vagish N Kora</text>
+
+  <text x="375" y="122" class="bullet">·</text>
+  <text x="390" y="122" class="key">Role:</text>
+  <text x="510" y="122" class="dots">.........................</text>
+  <text x="745" y="122" class="val">CyberSec Eng · Full-Stack Dev</text>
+
+  <text x="375" y="144" class="bullet">·</text>
+  <text x="390" y="144" class="key">Origin:</text>
+  <text x="510" y="144" class="dots">.........................</text>
+  <text x="745" y="144" class="val">Karnataka, India</text>
+
+  <text x="375" y="166" class="bullet">·</text>
+  <text x="390" y="166" class="key">Education:</text>
+  <text x="510" y="166" class="dots">.........................</text>
+  <text x="745" y="166" class="val">B.Tech CSE (CyberSec), CGPA 7.16</text>
+
+  <text x="375" y="188" class="bullet">·</text>
+  <text x="390" y="188" class="key">Status:</text>
+  <text x="510" y="188" class="dots">.........................</text>
+  <text x="745" y="188" class="val-green">Building · Learning · Shipping</text>
+
+  <text x="375" y="210" class="bullet">·</text>
+  <text x="390" y="210" class="key">ToolChain:</text>
+  <text x="510" y="210" class="dots">.........................</text>
+  <text x="745" y="210" class="val">VS Code, Git, Docker, Wireshark</text>
+
+  <!-- Blank space + tech stack divider -->
+  <line x1="370" y1="228" x2="990" y2="228" class="horiz-line" style="opacity: 0.15"/>
+
+  <!-- Tech Stack -->
+  <text x="375" y="252" class="bullet">·</text>
+  <text x="390" y="252" class="tech-key">Core.Lang:</text>
+  <text x="530" y="252" class="tech-dots">............</text>
+  <text x="670" y="252" class="tech-val">Python, Java, C, JavaScript</text>
+
+  <text x="375" y="274" class="bullet">·</text>
+  <text x="390" y="274" class="tech-key">Core.Frontend:</text>
+  <text x="530" y="274" class="tech-dots">............</text>
+  <text x="670" y="274" class="tech-val">React, Next.js, HTML, CSS, Tailwind</text>
+
+  <text x="375" y="296" class="bullet">·</text>
+  <text x="390" y="296" class="tech-key">Core.Backend:</text>
+  <text x="530" y="296" class="tech-dots">............</text>
+  <text x="670" y="296" class="tech-val">Node.js, Express.js, REST APIs</text>
+
+  <text x="375" y="318" class="bullet">·</text>
+  <text x="390" y="318" class="tech-key">Core.Database:</text>
+  <text x="530" y="318" class="tech-dots">............</text>
+  <text x="670" y="318" class="tech-val">PostgreSQL, MySQL, Supabase</text>
+
+  <text x="375" y="340" class="bullet">·</text>
+  <text x="390" y="340" class="tech-key">Core.Security:</text>
+  <text x="530" y="340" class="tech-dots">............</text>
+  <text x="670" y="340" class="tech-val">Wireshark, Nmap, Burp Suite</text>
+
+  <text x="375" y="362" class="bullet">·</text>
+  <text x="390" y="362" class="tech-key">Core.Infra:</text>
+  <text x="530" y="362" class="tech-dots">............</text>
+  <text x="670" y="362" class="tech-val">Docker, Linux, Git, CI/CD</text>
+
+  <!-- ── Contact Section ── -->
+  <text x="370" y="395" class="sec-border">─</text>
+  <text x="380" y="395" class="sec-title"> Contact </text>
+  <text x="462" y="395" class="sec-border">──────────────────────────────────────────────</text>
+
+  <text x="375" y="418" class="bullet">·</text>
+  <text x="390" y="418" class="contact-key">Grid.Mail:</text>
+  <text x="530" y="418" class="contact-dots">................</text>
+  <text x="700" y="418" class="contact-val">vagishkora@gmail.com</text>
+
+  <text x="375" y="440" class="bullet">·</text>
+  <text x="390" y="440" class="contact-key">Grid.Portfolio:</text>
+  <text x="530" y="440" class="contact-dots">................</text>
+  <text x="700" y="440" class="contact-val">vagishkora.github.io/Vagish.dev</text>
+
+  <text x="375" y="462" class="bullet">·</text>
+  <text x="390" y="462" class="contact-key">Grid.LinkedIn:</text>
+  <text x="530" y="462" class="contact-dots">................</text>
+  <text x="700" y="462" class="contact-val">vagish-n-kora-459149212</text>
+
+  <text x="375" y="484" class="bullet">·</text>
+  <text x="390" y="484" class="contact-key">Grid.Github:</text>
+  <text x="530" y="484" class="contact-dots">................</text>
+  <text x="700" y="484" class="contact-val">vagishkora</text>
+
+  <!-- ── Live Stats Section ── -->
+  <text x="370" y="508" class="sec-border">─</text>
+  <text x="380" y="508" class="sec-title"> Live Stats </text>
+  <text x="475" y="508" class="sec-border">─────────────────────────────────────────────</text>
+
+  <rect x="390" y="516" width="9" height="9" rx="1.5" class="stats-icon"/>
+  <text x="406" y="524" class="stats-text">See live GitHub stats badges below in README ↓</text>
+
+</svg>

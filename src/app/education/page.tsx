@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import DockNav from "@/components/DockNav";
 import SocialSidebar from "@/components/SocialSidebar";
 import Education from "@/components/Education";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 export default function EducationPage() {
   return (
     <main className="relative w-full min-h-screen bg-black">
-      <Navbar />
+      <DockNav />
       <SocialSidebar />
       
       {/* Return to Base Button */}
