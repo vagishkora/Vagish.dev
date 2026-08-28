@@ -1,14 +1,91 @@
-import { Car, Music, Plane, Cpu, Code2, Sparkles } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  Car,
+  Music,
+  Plane,
+  Cpu,
+  Code2,
+  Gamepad2,
+  Gamepad,
+  Sparkles,
+  Camera,
+  Dices,
+  Trophy,
+  BookOpen,
+  Bike,
+  Flame,
+  Coffee,
+  HeartHandshake,
+  LucideIcon,
+} from "lucide-react";
 import DecryptedText from "./DecryptedText";
+import { supabase } from "@/lib/supabase";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  car: Car,
+  automobiles: Car,
+  music: Music,
+  plane: Plane,
+  travel: Plane,
+  travelling: Plane,
+  cpu: Cpu,
+  hardware: Cpu,
+  code: Code2,
+  code2: Code2,
+  coding: Code2,
+  games: Gamepad2,
+  gaming: Gamepad2,
+  gamepad: Gamepad2,
+  gamepad2: Gamepad2,
+  camera: Camera,
+  photography: Camera,
+  dices: Dices,
+  trophy: Trophy,
+  book: BookOpen,
+  bike: Bike,
+  flame: Flame,
+  coffee: Coffee,
+};
+
+export interface HobbyItem {
+  id: string;
+  name: string;
+  icon_name: string;
+  order_index?: number;
+}
+
+const INITIAL_HOBBIES: HobbyItem[] = [
+  { id: "HB-001", name: "Automobiles", icon_name: "Car" },
+  { id: "HB-002", name: "Music", icon_name: "Music" },
+  { id: "HB-003", name: "Travelling", icon_name: "Plane" },
+  { id: "HB-004", name: "Hardware Mods", icon_name: "Cpu" },
+  { id: "HB-005", name: "Coding", icon_name: "Code2" },
+];
 
 export default function Hobbies() {
-  const hobbies = [
-    { id: "HB-001", name: "Automobiles", icon: Car },
-    { id: "HB-002", name: "Music", icon: Music },
-    { id: "HB-003", name: "Travelling", icon: Plane },
-    { id: "HB-004", name: "Hardware Mods", icon: Cpu },
-    { id: "HB-005", name: "Coding", icon: Code2 },
-  ];
+  const [hobbies, setHobbies] = useState<HobbyItem[]>(INITIAL_HOBBIES);
+
+  // Fetch dynamic hobbies from Supabase
+  useEffect(() => {
+    async function fetchHobbies() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from("hobbies")
+          .select("*")
+          .order("order_index", { ascending: true });
+
+        if (data && data.length > 0 && !error) {
+          setHobbies(data);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch fallback to static hobbies:", err);
+      }
+    }
+    fetchHobbies();
+  }, []);
 
   return (
     <section id="hobbies" className="py-28 bg-black/40 relative overflow-hidden border-t border-white/5">
@@ -38,13 +115,16 @@ export default function Hobbies() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {/* Dynamic Auto-Centering Layout for any number of hobbies (5, 6, 7+) */}
+        <div className="flex flex-wrap justify-center items-stretch gap-6 max-w-6xl mx-auto">
           {hobbies.map((hobby) => {
-            const Icon = hobby.icon;
+            const normalizedKey = (hobby.icon_name || hobby.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            const Icon = ICON_MAP[normalizedKey] || ICON_MAP[hobby.icon_name] || Gamepad2 || Code2;
+
             return (
               <div
                 key={hobby.id}
-                className="relative bg-white/5 border border-white/10 p-10 text-center transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center group hover:border-indigo-500 hover:bg-indigo-500/5 hover:-translate-y-1"
+                className="relative flex-1 min-w-[170px] max-w-[225px] w-full sm:w-auto bg-white/5 border border-white/10 p-8 text-center transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center group hover:border-indigo-500 hover:bg-indigo-500/5 hover:-translate-y-1"
               >
                 {/* M-Stripe Accents */}
                 <div className="absolute top-0 left-0 w-[3px] h-0 bg-gradient-to-b from-blue-400 via-blue-600 to-red-600 transition-all duration-500 group-hover:h-full"></div>
@@ -59,11 +139,10 @@ export default function Hobbies() {
                   {hobby.id}
                 </div>
 
-                <div className="w-10 h-10 mb-4 flex items-center justify-center text-gray-500 transition-all duration-300 group-hover:text-white group-hover:scale-110">
-                  <Icon size={32} strokeWidth={1.5} />
+                <div className="relative mb-4 text-gray-400 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300">
+                  <Icon size={38} strokeWidth={1.5} />
                 </div>
-                
-                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500 transition-colors duration-300 group-hover:text-white">
+                <span className="text-xs font-mono tracking-widest uppercase text-gray-300 group-hover:text-white transition-colors">
                   {hobby.name}
                 </span>
               </div>

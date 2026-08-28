@@ -5,12 +5,12 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./CinematicProjects.css";
 import { Sparkles, ExternalLink } from "lucide-react";
-
 import DecryptedText from "./DecryptedText";
+import { supabase } from "@/lib/supabase";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROJECTS = [
+const INITIAL_PROJECTS = [
   {
     id: "PROJ-WEB-000",
     badge: "INTERACTIVE EXP",
@@ -58,11 +58,32 @@ const PROJECTS = [
 ];
 
 const CinematicProjects = () => {
+  const [projects, setProjects] = useState(INITIAL_PROJECTS);
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
   const frameRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Fetch dynamic projects from Supabase
+  useEffect(() => {
+    async function fetchProjects() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from("projects")
+          .select("*")
+          .order("order_index", { ascending: true });
+
+        if (data && data.length > 0 && !error) {
+          setProjects(data);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch fallback to static projects:", err);
+      }
+    }
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -152,7 +173,7 @@ const CinematicProjects = () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
       scrollTween.kill();
     };
-  }, []);
+  }, [projects]);
 
   return (
     <section
@@ -177,13 +198,13 @@ const CinematicProjects = () => {
       </div>
 
       <div ref={trackRef} className="cinematic-projects-track">
-        {PROJECTS.map((project, i) => (
+        {projects.map((project, i) => (
           <div
-            key={project.id}
+            key={project.id || i}
             ref={(el) => {
               frameRefs.current[i] = el;
             }}
-            className={`cinematic-projects-frame cinematic-projects-frame--${project.accent}`}
+            className={`cinematic-projects-frame cinematic-projects-frame--${project.accent || "indigo"}`}
           >
             {/* Ambient Background Aura */}
             <div className="cinematic-projects-ambient-bg" />
@@ -209,7 +230,7 @@ const CinematicProjects = () => {
                 </p>
 
                 <div className="cinematic-projects-frame__tags">
-                  {project.tags.map((tag) => (
+                  {(project.tags || []).map((tag) => (
                     <span key={tag} className="cinematic-projects-frame__tag">
                       {tag}
                     </span>
@@ -270,12 +291,12 @@ const CinematicProjects = () => {
           {String(activeIndex + 1).padStart(2, "0")}
         </span>
         {" / "}
-        {String(PROJECTS.length).padStart(2, "0")}
+        {String(projects.length).padStart(2, "0")}
       </div>
 
       {/* Dot nav */}
       <div className="cinematic-projects-dots">
-        {PROJECTS.map((_, i) => (
+        {projects.map((_, i) => (
           <button
             key={i}
             className={`cinematic-projects-dot${i === activeIndex ? " cinematic-projects-dot--active" : ""}`}

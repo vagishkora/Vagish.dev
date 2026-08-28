@@ -5,12 +5,12 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./CinematicOutreach.css";
 import { MapPin, Calendar, Sparkles } from "lucide-react";
-
 import DecryptedText from "./DecryptedText";
+import { supabase } from "@/lib/supabase";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const INITIATIVES = [
+const INITIAL_INITIATIVES = [
   {
     id: "LEAD-ACM-01",
     badge: "CORE LEADERSHIP",
@@ -19,7 +19,7 @@ const INITIATIVES = [
     location: "Nitte, Karnataka",
     date: "2025 — PRESENT",
     description:
-      "Spearheading the technical vision and engineering operations for the official ACM student chapter. Architecting flagship campus hackathons, leading CTFs, and mentoring 200+ student developers across cybersecurity and modern distributed software systems.",
+      "Spearheading the technical vision and engineering operations for the official ACM student chapter. Architecting campus-wide hackathons, leading CTFs, and mentoring 200+ student developers across cybersecurity and modern distributed software systems.",
     image: "/Vagish.dev/assets/acm_team.jpg",
     tags: ["Technical Leadership", "Hackathons & CTFs", "Workshop Architecture", "Peer Mentorship"],
     accent: "cyan",
@@ -53,11 +53,32 @@ const INITIATIVES = [
 ];
 
 export default function CinematicOutreach() {
+  const [initiatives, setInitiatives] = useState(INITIAL_INITIATIVES);
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
   const frameRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Fetch dynamic outreach initiatives from Supabase
+  useEffect(() => {
+    async function fetchOutreach() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from("outreach")
+          .select("*")
+          .order("order_index", { ascending: true });
+
+        if (data && data.length > 0 && !error) {
+          setInitiatives(data);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch fallback to static outreach:", err);
+      }
+    }
+    fetchOutreach();
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -147,7 +168,7 @@ export default function CinematicOutreach() {
       ScrollTrigger.getAll().forEach((st) => st.kill());
       scrollTween.kill();
     };
-  }, []);
+  }, [initiatives]);
 
   return (
     <section
@@ -172,13 +193,13 @@ export default function CinematicOutreach() {
       </div>
 
       <div ref={trackRef} className="cinematic-outreach-track">
-        {INITIATIVES.map((item, i) => (
+        {initiatives.map((item, i) => (
           <div
-            key={item.id}
+            key={item.id || i}
             ref={(el) => {
               frameRefs.current[i] = el;
             }}
-            className={`cinematic-outreach-frame cinematic-outreach-frame--${item.accent}`}
+            className={`cinematic-outreach-frame cinematic-outreach-frame--${item.accent || "cyan"}`}
           >
             {/* Ambient Background Aura */}
             <div className="cinematic-outreach-ambient-bg" />
@@ -216,7 +237,7 @@ export default function CinematicOutreach() {
                 <p className="cinematic-outreach-frame__desc">{item.description}</p>
 
                 <div className="cinematic-outreach-frame__tags">
-                  {item.tags.map((tag) => (
+                  {(item.skills || []).map((tag) => (
                     <span key={tag} className="cinematic-outreach-frame__tag">
                       {tag}
                     </span>
@@ -265,12 +286,12 @@ export default function CinematicOutreach() {
           {String(activeIndex + 1).padStart(2, "0")}
         </span>
         {" / "}
-        {String(INITIATIVES.length).padStart(2, "0")}
+        {String(initiatives.length).padStart(2, "0")}
       </div>
 
       {/* Dot nav */}
       <div className="cinematic-outreach-dots">
-        {INITIATIVES.map((_, i) => (
+        {initiatives.map((_, i) => (
           <button
             key={i}
             className={`cinematic-outreach-dot${i === activeIndex ? " cinematic-outreach-dot--active" : ""}`}
