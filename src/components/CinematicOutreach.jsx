@@ -249,8 +249,8 @@ export default function CinematicOutreach() {
                 <p className="cinematic-outreach-frame__desc">{item.description}</p>
 
                 <div className="cinematic-outreach-frame__tags">
-                  {(item.skills || []).map((tag) => (
-                    <span key={tag} className="cinematic-outreach-frame__tag">
+                  {((Array.isArray(item.tags) ? item.tags : Array.isArray(item.skills) ? item.skills : typeof (item.tags || item.skills) === "string" ? (item.tags || item.skills).split(",").map((s) => s.trim()) : []) || []).map((tag, idx) => (
+                    <span key={idx} className="cinematic-outreach-frame__tag">
                       {tag}
                     </span>
                   ))}

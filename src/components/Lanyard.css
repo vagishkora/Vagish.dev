@@ -23,22 +23,7 @@
 
 @media (max-width: 768px) {
   .lanyard-wrapper {
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    width: 200px;
-    height: auto;
-    transform: scale(0.72);
-    transform-origin: top right;
-  }
-}
-
-@media (max-width: 480px) {
-  .lanyard-wrapper {
-    top: 55px;
-    right: 5px;
-    transform: scale(0.62);
-    transform-origin: top right;
+    display: none !important;
   }
 }
 

@@ -468,70 +468,70 @@
 
 @media (max-width: 768px) {
   .cinematic-projects-frame {
-    padding: 0 20px;
+    padding: 0 16px;
     height: 100vh;
   }
 
   .cinematic-projects-layout {
     grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 60px;
+    gap: 14px;
+    margin-top: 120px;
   }
 
   .cinematic-projects-photo-card {
-    height: 200px;
+    height: 180px;
     max-width: 100%;
     backdrop-filter: none;
     background: rgba(10, 10, 18, 0.95);
   }
 
   .cinematic-projects-frame__title {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
   }
 
   .cinematic-projects-frame__desc {
-    font-size: 0.82rem;
-    line-height: 1.4;
+    font-size: 0.78rem;
+    line-height: 1.38;
   }
 
   .cinematic-projects-top-header {
-    top: 20px;
+    top: 68px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 90vw;
+    max-width: 92vw;
     text-align: center;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 4px;
   }
 
   .cinematic-projects-heading {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     justify-content: center;
     text-align: center;
   }
 
   .cinematic-projects-watermark {
-    font-size: 0.62rem;
-    padding: 3px 10px;
+    font-size: 0.58rem;
+    padding: 2px 8px;
     margin: 0 auto;
   }
 
   .cinematic-projects-dots {
-    right: 10px;
-    gap: 8px;
+    right: 8px;
+    gap: 6px;
   }
 
   .cinematic-projects-dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   .cinematic-projects-counter {
-    right: 14px;
-    bottom: 14px;
-    font-size: 0.72rem;
+    right: 12px;
+    bottom: 12px;
+    font-size: 0.7rem;
   }
 
   .cinematic-projects-scroll-hint {

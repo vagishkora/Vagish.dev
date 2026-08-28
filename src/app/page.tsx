@@ -7,41 +7,19 @@ import Certificates from "@/components/Certificates";
 import CinematicOutreach from "@/components/CinematicOutreach";
 import Hobbies from "@/components/Hobbies";
 import Contact from "@/components/Contact";
-import LightRays from "@/components/LightRays";
 
 export default function Home() {
   return (
-    <main className="relative w-full">
+    <main className="relative w-full bg-black min-h-screen">
       <DockNav />
       <SocialSidebar />
       <Hero />
-      <div className="relative z-10 w-full bg-black">
-        {/* Sticky Parallax Background (Optimized for 60fps: rendered on Desktop, lightweight on Mobile) */}
-        <div className="hidden md:block sticky top-0 h-screen w-full z-0 overflow-hidden pointer-events-none">
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#06b6d4"
-            raysSpeed={1.2}
-            lightSpread={0.8}
-            rayLength={1.2}
-            followMouse={true}
-            mouseInfluence={0.1}
-            noiseAmount={0.1}
-            distortion={0.05}
-          />
-        </div>
-        
-        {/* Main Content overlapping the background */}
-        <div className="relative z-10 -mt-[100vh]">
-          <CinematicProjects />
-          <Skills />
-          <Certificates />
-          <CinematicOutreach />
-          <Hobbies />
-          <Contact />
-        </div>
-      </div>
+      <CinematicProjects />
+      <Skills />
+      <Certificates />
+      <CinematicOutreach />
+      <Hobbies />
+      <Contact />
     </main>
   );
 }
-

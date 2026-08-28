@@ -95,13 +95,13 @@ export default function Hobbies() {
 
       <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
         {/* Centered Section Header */}
-        <div className="text-center mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+        <div className="text-center mb-12 sm:mb-16 space-y-2.5 sm:space-y-3 px-2">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-0.5 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-[10px] sm:text-xs uppercase tracking-widest backdrop-blur-md">
             <Sparkles size={12} className="text-cyan-400 animate-pulse" />
             <span>[ LIFESTYLE // PASSIONS ]</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight flex flex-wrap justify-center items-center gap-1.5 sm:gap-2">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-400">
               <DecryptedText text="Personal" animateOn="view" />
             </span>{" "}
@@ -115,8 +115,8 @@ export default function Hobbies() {
           </p>
         </div>
 
-        {/* Dynamic Auto-Centering Layout for any number of hobbies (5, 6, 7+) */}
-        <div className="flex flex-wrap justify-center items-stretch gap-6 max-w-6xl mx-auto">
+        {/* Dynamic 2-column mobile combo, auto-centering on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:flex lg:flex-wrap lg:justify-center gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto px-2">
           {hobbies.map((hobby) => {
             const normalizedKey = (hobby.icon_name || hobby.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
             const Icon = ICON_MAP[normalizedKey] || ICON_MAP[hobby.icon_name] || Gamepad2 || Code2;
@@ -124,7 +124,7 @@ export default function Hobbies() {
             return (
               <div
                 key={hobby.id}
-                className="relative flex-1 min-w-[170px] max-w-[225px] w-full sm:w-auto bg-white/5 border border-white/10 p-8 text-center transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center group hover:border-indigo-500 hover:bg-indigo-500/5 hover:-translate-y-1"
+                className="relative w-full lg:w-[190px] xl:w-[210px] bg-white/5 border border-white/10 p-4 sm:p-7 text-center transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center group hover:border-indigo-500 hover:bg-indigo-500/5 hover:-translate-y-1 rounded-xl sm:rounded-none"
               >
                 {/* M-Stripe Accents */}
                 <div className="absolute top-0 left-0 w-[3px] h-0 bg-gradient-to-b from-blue-400 via-blue-600 to-red-600 transition-all duration-500 group-hover:h-full"></div>

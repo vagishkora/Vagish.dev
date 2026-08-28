@@ -58,13 +58,13 @@ export default function Skills() {
   return (
     <section id="skills" className="relative py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
       {/* Centered Section Header */}
-      <div className="text-center mb-16 space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+      <div className="text-center mb-12 sm:mb-16 space-y-2.5 sm:space-y-3 px-2">
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-0.5 sm:py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-[10px] sm:text-xs uppercase tracking-widest backdrop-blur-md">
           <Sparkles size={12} className="text-cyan-400 animate-pulse" />
           <span>[ CORE_CAPABILITIES // ARSENAL ]</span>
         </div>
 
-        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight flex flex-wrap justify-center items-center gap-1.5 sm:gap-2">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-400">
             <DecryptedText text="Technical" animateOn="view" />
           </span>{" "}

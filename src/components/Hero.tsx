@@ -36,53 +36,18 @@ export default function Hero() {
     }
   };
 
-  // Browser auto-play policy workaround & attempt to play with sound
+  // Start video muted by default, respecting browser and user privacy
   useEffect(() => {
-    const tryPlayVideo = async () => {
-      if (videoRef.current) {
-        try {
-          // Attempt to play the video (it will try with sound because isMuted is false)
-          await videoRef.current.play();
-        } catch (error) {
-          console.warn("Browser blocked autoplay with sound. Falling back to muted autoplay.", error);
-          // If browser blocks it, we MUST mute it so the video visuals can at least play
-          videoRef.current.muted = true;
-          setIsMuted(true);
-          videoRef.current.play().catch(e => console.error("Video completely failed to play", e));
-        }
-      }
-    };
-    
-    tryPlayVideo();
-
-    const handleFirstInteraction = () => {
-      if (videoRef.current && videoRef.current.muted) {
-        videoRef.current.muted = false;
-        setIsMuted(false);
-        // Restart video from the beginning when they interact for the first time
-        videoRef.current.currentTime = 0;
-        videoRef.current.play();
-      }
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-    };
-
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
-    document.addEventListener('keydown', handleFirstInteraction);
-
-    return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-    };
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch((e) => console.warn("Muted video autoplay:", e));
+    }
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Auto-mute if scrolled past Hero section
-      if (window.scrollY > 150) {
+      // Auto-mute immediately if scrolled past Hero section (50px)
+      if (window.scrollY > 50) {
         if (videoRef.current && !videoRef.current.muted) {
           videoRef.current.muted = true;
           setIsMuted(true);
@@ -95,7 +60,6 @@ export default function Hero() {
     };
     
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial check
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -105,18 +69,11 @@ export default function Hero() {
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black"
     >
+      {/* Video Backgrounds */}
       <div 
-        style={{ 
-          opacity: scrollOpacity, 
-          pointerEvents: scrollOpacity === 0 ? 'none' : 'auto',
-          visibility: scrollOpacity === 0 ? 'hidden' : 'visible'
-        }}
-        className="transition-opacity duration-150"
+        className="absolute inset-0 z-0 w-full h-full overflow-hidden pointer-events-none"
+        style={{ opacity: scrollOpacity }}
       >
-        <Lanyard />
-      </div>
-      {/* Video Backgrounds (Optimized: single video on mobile, double video on desktop) */}
-      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <video
           ref={blurVideoRef}
           src="/Vagish.dev/assets/mp_.mp4"
@@ -124,9 +81,8 @@ export default function Hero() {
           loop
           muted
           playsInline
-          preload="none"
-          className="hidden md:block absolute inset-0 w-full h-full object-cover blur-[80px] scale-150 opacity-40 transition-opacity duration-1000"
-          style={{ opacity: scrollOpacity * 0.4 }}
+          preload="auto"
+          className="hidden md:block absolute inset-0 w-full h-full object-cover blur-[50px] scale-125 opacity-40"
         />
         <video
           ref={videoRef}
@@ -135,21 +91,35 @@ export default function Hero() {
           loop
           muted={isMuted}
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-1000"
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-background"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80"></div>
+        {/* Subtle cinematic vignette */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50"></div>
+      </div>
+
+      {/* Lanyard 3D Badge (Foreground) */}
+      <div 
+        style={{ 
+          opacity: scrollOpacity, 
+          pointerEvents: scrollOpacity === 0 ? 'none' : 'auto',
+          visibility: scrollOpacity === 0 ? 'hidden' : 'visible'
+        }}
+        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-150"
+      >
+        <Lanyard />
       </div>
 
       <button
         onClick={toggleMute}
         suppressHydrationWarning
         style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? 'none' : 'auto' }}
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-black/70 transition-all cursor-pointer animate-bounce"
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-md border border-white/15 rounded-full text-white/90 hover:text-white hover:bg-black/80 transition-all cursor-pointer shadow-lg shadow-black/50"
       >
-        {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-        <span className="text-sm font-medium tracking-wide">
-          {isMuted ? "Tap for sound" : "Muted"}
+        {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        <span className="text-xs font-mono tracking-wider uppercase">
+          {isMuted ? "Tap for sound" : "Sound on"}
         </span>
       </button>
 

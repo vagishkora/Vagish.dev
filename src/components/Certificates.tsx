@@ -60,13 +60,13 @@ export default function Certificates() {
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col items-center overflow-visible">
         {/* Centered Section Header */}
-        <div className="text-center mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+        <div className="text-center mb-12 sm:mb-16 space-y-2.5 sm:space-y-3 px-2">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-mono text-[10px] sm:text-xs uppercase tracking-widest backdrop-blur-md">
             <Sparkles size={12} className="text-indigo-400 animate-pulse" />
             <span>[ ACCREDITATIONS // CLEARANCES ]</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight flex flex-wrap justify-center items-center gap-1.5 sm:gap-2">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
               <DecryptedText text="Verified" animateOn="view" />
             </span>{" "}

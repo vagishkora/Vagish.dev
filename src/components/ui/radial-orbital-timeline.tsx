@@ -111,18 +111,30 @@ export default function RadialOrbitalTimeline({
     setRotationAngle(270 - targetAngle);
   };
 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    const radius = 220;
+    const radius = isMobile ? 120 : 220;
     const radian = (angle * Math.PI) / 180;
 
-    const x = radius * Math.cos(radian) + centerOffset.x;
-    const y = radius * Math.sin(radian) + centerOffset.y;
+    const x = Number((radius * Math.cos(radian) + centerOffset.x).toFixed(2));
+    const y = Number((radius * Math.sin(radian) + centerOffset.y).toFixed(2));
 
     const zIndex = Math.round(100 + 50 * Math.cos(radian));
-    const opacity = Math.max(
-      0.4,
-      Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2))
+    const opacity = Number(
+      Math.max(0.4, Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2))).toFixed(3)
     );
 
     return { x, y, angle, zIndex, opacity };
@@ -152,36 +164,46 @@ export default function RadialOrbitalTimeline({
     }
   };
 
+  if (!mounted) {
+    return (
+      <div className="w-full min-h-[85vh] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="w-full min-h-[85vh] flex flex-col items-center justify-center bg-transparent overflow-visible relative py-12"
       ref={containerRef}
       onClick={handleContainerClick}
+      suppressHydrationWarning
     >
-      <div className="relative w-full max-w-4xl h-[600px] flex items-center justify-center">
+      <div className="relative w-full max-w-4xl h-[600px] flex items-center justify-center" suppressHydrationWarning>
         <div
           className="absolute w-full h-full flex items-center justify-center"
           ref={orbitRef}
+          suppressHydrationWarning
           style={{
             perspective: "1000px",
             transform: `translate(${centerOffset.x}px, ${centerOffset.y}px)`,
           }}
         >
           {/* Central Pulsing Star Core */}
-          <div className="absolute w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 via-cyan-500 to-teal-500 animate-pulse flex items-center justify-center z-10 shadow-[0_0_50px_rgba(6,182,212,0.6)]">
-            <div className="absolute w-28 h-28 rounded-full border border-cyan-400/30 animate-ping opacity-70"></div>
+          <div className={`absolute ${isMobile ? 'w-14 h-14' : 'w-20 h-20'} rounded-full bg-gradient-to-br from-indigo-500 via-cyan-500 to-teal-500 animate-pulse flex items-center justify-center z-10 shadow-[0_0_50px_rgba(6,182,212,0.6)]`}>
+            <div className={`absolute ${isMobile ? 'w-20 h-20' : 'w-28 h-28'} rounded-full border border-cyan-400/30 animate-ping opacity-70`}></div>
             <div
-              className="absolute w-36 h-36 rounded-full border border-indigo-500/20 animate-ping opacity-40"
+              className={`absolute ${isMobile ? 'w-24 h-24' : 'w-36 h-36'} rounded-full border border-indigo-500/20 animate-ping opacity-40`}
               style={{ animationDelay: "0.5s" }}
             ></div>
-            <div className="w-10 h-10 rounded-full bg-black/80 backdrop-blur-md border border-cyan-400/50 flex items-center justify-center">
-              <div className="w-3 h-3 rounded-full bg-cyan-400 animate-ping" />
+            <div className={`${isMobile ? 'w-7 h-7' : 'w-10 h-10'} rounded-full bg-black/80 backdrop-blur-md border border-cyan-400/50 flex items-center justify-center`}>
+              <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
             </div>
           </div>
 
           {/* Orbital Orbit Ring */}
-          <div className="absolute w-[440px] h-[440px] rounded-full border border-cyan-500/20 shadow-[0_0_30px_rgba(99,102,241,0.15)] pointer-events-none"></div>
-          <div className="absolute w-[480px] h-[480px] rounded-full border border-dashed border-white/5 pointer-events-none"></div>
+          <div className={`absolute ${isMobile ? 'w-[240px] h-[240px]' : 'w-[440px] h-[440px]'} rounded-full border border-cyan-500/20 shadow-[0_0_30px_rgba(99,102,241,0.15)] pointer-events-none`}></div>
+          <div className={`absolute ${isMobile ? 'w-[260px] h-[260px]' : 'w-[480px] h-[480px]'} rounded-full border border-dashed border-white/5 pointer-events-none`}></div>
 
           {timelineData.map((item, index) => {
             const position = calculateNodePosition(index, timelineData.length);
@@ -204,6 +226,7 @@ export default function RadialOrbitalTimeline({
                 }}
                 className="absolute transition-all duration-700 cursor-pointer"
                 style={nodeStyle}
+                suppressHydrationWarning
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleItem(item.id);
@@ -216,17 +239,17 @@ export default function RadialOrbitalTimeline({
                   }`}
                   style={{
                     background: `radial-gradient(circle, rgba(6,182,212,0.3) 0%, rgba(99,102,241,0) 70%)`,
-                    width: `${item.energy * 0.6 + 40}px`,
-                    height: `${item.energy * 0.6 + 40}px`,
-                    left: `-${(item.energy * 0.6 + 40 - 40) / 2}px`,
-                    top: `-${(item.energy * 0.6 + 40 - 40) / 2}px`,
+                    width: `${isMobile ? item.energy * 0.4 + 25 : item.energy * 0.6 + 40}px`,
+                    height: `${isMobile ? item.energy * 0.4 + 25 : item.energy * 0.6 + 40}px`,
+                    left: `-${(isMobile ? item.energy * 0.4 + 25 - 32 : item.energy * 0.6 + 40 - 40) / 2}px`,
+                    top: `-${(isMobile ? item.energy * 0.4 + 25 - 32 : item.energy * 0.6 + 40 - 40) / 2}px`,
                   }}
                 ></div>
 
                 {/* Satellite Node Badge */}
                 <div
                   className={`
-                  w-12 h-12 rounded-full flex items-center justify-center
+                  ${isMobile ? 'w-9 h-9' : 'w-12 h-12'} rounded-full flex items-center justify-center
                   ${
                     isExpanded
                       ? "bg-cyan-500 text-black shadow-[0_0_25px_rgba(6,182,212,0.8)]"
@@ -245,15 +268,15 @@ export default function RadialOrbitalTimeline({
                   transition-all duration-300 transform
                 `}
                 >
-                  <Icon size={20} />
+                  <Icon size={isMobile ? 15 : 20} />
                 </div>
 
                 {/* Node Title */}
                 <div
                   className={`
-                  absolute top-14 left-1/2 -translate-x-1/2 whitespace-nowrap
-                  text-xs font-mono font-bold tracking-wider
-                  transition-all duration-300 pointer-events-none
+                  absolute ${isMobile ? 'top-10 text-[9px] max-w-[80px]' : 'top-14 text-xs'} left-1/2 -translate-x-1/2 text-center
+                  font-mono font-bold tracking-wider
+                  transition-all duration-300 pointer-events-none line-clamp-1
                   ${isExpanded ? "text-cyan-400 scale-110" : "text-white/80"}
                 `}
                 >
@@ -262,7 +285,7 @@ export default function RadialOrbitalTimeline({
 
                 {/* Expanded Dossier Card */}
                 {isExpanded && (
-                  <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-80 bg-black/95 backdrop-blur-xl border-cyan-500/40 shadow-2xl shadow-cyan-500/20 overflow-visible z-50">
+                  <Card className="absolute top-16 left-1/2 -translate-x-1/2 w-[85vw] max-w-[320px] bg-black/95 backdrop-blur-xl border-cyan-500/40 shadow-2xl shadow-cyan-500/20 overflow-visible z-50">
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-cyan-400/80"></div>
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-center">
