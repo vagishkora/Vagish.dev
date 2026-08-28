@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import {
   FolderGit2,
@@ -19,7 +19,8 @@ import {
   CheckCircle2,
   AlertCircle,
   KeyRound,
-  ShieldCheck
+  ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 
 type TabType = "projects" | "certifications" | "skills" | "outreach" | "hobbies";
@@ -29,7 +30,17 @@ const ADMIN_PASSCODES = ["vagish2026", "vagishkora", "admin123", "vagish@2026"];
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>("projects");
-  const [dataList, setDataList] = useState<any[]>([]);
+  
+  // Instant in-memory cache for all 5 tabs
+  const [cache, setCache] = useState<Record<TabType, any[]>>({
+    projects: [],
+    certifications: [],
+    skills: [],
+    outreach: [],
+    hobbies: [],
+  });
+  
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [formData, setFormData] = useState<any>({});
@@ -48,39 +59,45 @@ export default function AdminPage() {
     }
   }, []);
 
-  // ── Fetch Current Tab Data ─────────────────────────────
-  const fetchData = async () => {
-    if (!supabase) return;
-    try {
-      const { data, error } = await supabase
-        .from(activeTab)
-        .select("*")
-        .order("order_index", { ascending: true });
-
-      if (error) {
-        showStatus(error.message, "error");
-      } else {
-        setDataList(data || []);
-      }
-    } catch (err: any) {
-      showStatus(err.message, "error");
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchData();
-    }
-  }, [isAuthenticated, activeTab]);
-
   // ── Helper: Show Status Message ────────────────────────
   const showStatus = (text: string, type: "success" | "error") => {
     setStatusMessage({ text, type });
-    setTimeout(() => setStatusMessage(null), 4000);
+    setTimeout(() => setStatusMessage(null), 3000);
   };
 
+  // ── Fetch Tab Data (Fast Background Refresh) ───────────
+  const fetchData = async (tab: TabType = activeTab, isInitial = false) => {
+    if (!supabase) return;
+    if (isInitial && cache[tab].length === 0) setLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from(tab)
+        .select("*")
+        .order("order_index", { ascending: true });
+
+      if (!error && data) {
+        setCache((prev) => ({ ...prev, [tab]: data }));
+      }
+    } catch (err: any) {
+      console.warn("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Pre-fetch all 5 tabs in parallel upon login for instant 0ms switching!
+  useEffect(() => {
+    if (isAuthenticated) {
+      const tabs: TabType[] = ["projects", "certifications", "skills", "outreach", "hobbies"];
+      tabs.forEach((t) => fetchData(t, t === activeTab));
+    }
+  }, [isAuthenticated]);
+
+  const currentList = cache[activeTab] || [];
+
   // ── Handle Login ───────────────────────────────────────
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
     setAuthError("");
@@ -106,7 +123,7 @@ export default function AdminPage() {
   // ── Modal Actions (Add / Edit) ─────────────────────────
   const openAddModal = () => {
     setEditingItem(null);
-    let defaultForm: any = { order_index: dataList.length };
+    let defaultForm: any = { order_index: currentList.length };
 
     if (activeTab === "projects") {
       defaultForm = {
@@ -118,26 +135,26 @@ export default function AdminPage() {
         link: "",
         tags: "Next.js, Tailwind CSS",
         accent: "indigo",
-        order_index: dataList.length,
+        order_index: currentList.length,
       };
     } else if (activeTab === "certifications") {
       defaultForm = {
-        cert_id: `CERT-${String(dataList.length + 1).padStart(3, "0")}`,
+        cert_id: `CERT-${String(currentList.length + 1).padStart(3, "0")}`,
         title: "",
         issuer: "",
         key: "/Vagish.dev/certificates/iicsbanglore.webp",
         vertical: false,
         status: "ISSUED",
         view_link: "",
-        order_index: dataList.length,
+        order_index: currentList.length,
       };
     } else if (activeTab === "skills") {
       defaultForm = {
-        id: `SYS_${String(dataList.length + 1).padStart(2, "0")}`,
+        id: `SYS_${String(currentList.length + 1).padStart(2, "0")}`,
         name: "",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
         category: "General",
-        order_index: dataList.length,
+        order_index: currentList.length,
       };
     } else if (activeTab === "outreach") {
       defaultForm = {
@@ -152,14 +169,14 @@ export default function AdminPage() {
         description: "",
         skills: "Public Speaking, Outreach",
         accent: "cyan",
-        order_index: dataList.length,
+        order_index: currentList.length,
       };
     } else if (activeTab === "hobbies") {
       defaultForm = {
-        id: `HB-${String(dataList.length + 1).padStart(3, "0")}`,
+        id: `HB-${String(currentList.length + 1).padStart(3, "0")}`,
         name: "",
         icon_name: "Gamepad2",
-        order_index: dataList.length,
+        order_index: currentList.length,
       };
     }
 
@@ -176,6 +193,7 @@ export default function AdminPage() {
     setIsModalOpen(true);
   };
 
+  // ── Blazing Fast Optimistic Save ──────────────────────
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const payload = { ...formData };
@@ -187,76 +205,97 @@ export default function AdminPage() {
       payload.skills = payload.skills.split(",").map((s: string) => s.trim()).filter(Boolean);
     }
 
+    // 1. Instant Optimistic UI Update (0ms lag)
+    setIsModalOpen(false);
+    showStatus(editingItem ? "Record updated!" : "New record added!", "success");
+
+    if (editingItem) {
+      setCache((prev) => ({
+        ...prev,
+        [activeTab]: prev[activeTab].map((item) =>
+          item.id === editingItem.id ? { ...item, ...payload } : item
+        ),
+      }));
+    } else {
+      setCache((prev) => ({
+        ...prev,
+        [activeTab]: [...prev[activeTab], payload],
+      }));
+    }
+
+    // 2. Background Sync with Supabase
     try {
       if (editingItem) {
-        const idField = "id";
-        const idVal = editingItem[idField];
-        const { error } = await supabase
-          .from(activeTab)
-          .update(payload)
-          .eq(idField, idVal);
-
-        if (error) throw error;
-        showStatus("Entry updated successfully!", "success");
+        await supabase.from(activeTab).update(payload).eq("id", editingItem.id);
       } else {
-        const { error } = await supabase.from(activeTab).insert([payload]);
-        if (error) throw error;
-        showStatus("New entry created successfully!", "success");
+        await supabase.from(activeTab).insert([payload]);
       }
-      setIsModalOpen(false);
-      fetchData();
+      fetchData(activeTab);
     } catch (err: any) {
       showStatus(err.message, "error");
+      fetchData(activeTab);
     }
   };
 
-  // ── Delete Action ──────────────────────────────────────
+  // ── Blazing Fast Optimistic Delete ─────────────────────
   const handleDelete = async (id: any) => {
     if (!confirm("Are you sure you want to delete this record?")) return;
+
+    // 1. Instant Optimistic UI Removal (0ms)
+    setCache((prev) => ({
+      ...prev,
+      [activeTab]: prev[activeTab].filter((item) => item.id !== id),
+    }));
+    showStatus("Entry deleted!", "success");
+
+    // 2. Background Sync
     try {
-      const idField = "id";
-      const { error } = await supabase.from(activeTab).delete().eq(idField, id);
-      if (error) throw error;
-      showStatus("Entry deleted successfully!", "success");
-      fetchData();
+      await supabase.from(activeTab).delete().eq("id", id);
+      fetchData(activeTab);
     } catch (err: any) {
       showStatus(err.message, "error");
+      fetchData(activeTab);
     }
   };
 
-  // ── Move Up / Move Down Reordering ─────────────────────
+  // ── Blazing Fast 0ms Optimistic Reordering ─────────────
   const handleMove = async (index: number, direction: "up" | "down") => {
     if (
       (direction === "up" && index === 0) ||
-      (direction === "down" && index === dataList.length - 1)
+      (direction === "down" && index === currentList.length - 1)
     ) {
       return;
     }
 
     const targetIndex = direction === "up" ? index - 1 : index + 1;
-    const currentItem = dataList[index];
-    const targetItem = dataList[targetIndex];
+    const currentItem = currentList[index];
+    const targetItem = currentList[targetIndex];
 
-    const currentId = currentItem.id;
-    const targetId = targetItem.id;
+    // 1. Instant UI Swap (0ms)
+    const updatedList = [...currentList];
+    const tempOrder = currentItem.order_index ?? index;
+    currentItem.order_index = targetItem.order_index ?? targetIndex;
+    targetItem.order_index = tempOrder;
+    updatedList[index] = targetItem;
+    updatedList[targetIndex] = currentItem;
 
+    setCache((prev) => ({ ...prev, [activeTab]: updatedList }));
+
+    // 2. Parallel Background Sync (Super Fast)
     try {
-      const { error: err1 } = await supabase
-        .from(activeTab)
-        .update({ order_index: targetItem.order_index })
-        .eq("id", currentId);
-
-      const { error: err2 } = await supabase
-        .from(activeTab)
-        .update({ order_index: currentItem.order_index })
-        .eq("id", targetId);
-
-      if (err1 || err2) throw err1 || err2;
-
-      showStatus("Order updated!", "success");
-      fetchData();
+      await Promise.all([
+        supabase
+          .from(activeTab)
+          .update({ order_index: currentItem.order_index })
+          .eq("id", currentItem.id),
+        supabase
+          .from(activeTab)
+          .update({ order_index: targetItem.order_index })
+          .eq("id", targetItem.id),
+      ]);
     } catch (err: any) {
       showStatus(err.message, "error");
+      fetchData(activeTab);
     }
   };
 
@@ -264,7 +303,6 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-zinc-950 p-4 relative overflow-hidden">
-        {/* Background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-full max-w-md bg-zinc-900/90 border border-zinc-800 rounded-2xl p-8 shadow-2xl backdrop-blur-xl relative z-10">
@@ -303,9 +341,6 @@ export default function AdminPage() {
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-cyan-500 transition-colors font-mono"
                 />
               </div>
-              <p className="text-[11px] text-zinc-500 font-mono mt-1">
-                Tip: Enter your passcode (e.g. <code className="text-cyan-400">vagish2026</code>) to enter instantly.
-              </p>
             </div>
 
             <button
@@ -335,14 +370,21 @@ export default function AdminPage() {
               Vagish.dev Control Center
             </h1>
             <p className="text-[11px] text-cyan-400 font-mono">
-              LIVE SUPABASE SYNC • CONNECTED
+              INSTANT OPTIMISTIC SYNC • LIVE
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => fetchData(activeTab)}
+            className="p-2 text-zinc-400 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+            title="Refresh Table"
+          >
+            <RefreshCw size={14} className={loading ? "animate-spin text-cyan-400" : ""} />
+          </button>
           <a
-            href="https://vagishkora.github.io/Vagish.dev/"
+            href="http://localhost:3000/Vagish.dev"
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg flex items-center gap-1.5 transition-colors"
@@ -404,6 +446,9 @@ export default function AdminPage() {
                 >
                   <Icon size={15} />
                   {tab.label}
+                  <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-400">
+                    {cache[tab.id as TabType]?.length || 0}
+                  </span>
                 </button>
               );
             })}
@@ -421,9 +466,9 @@ export default function AdminPage() {
 
         {/* Content List & Table */}
         <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
-          {dataList.length === 0 ? (
+          {currentList.length === 0 ? (
             <div className="p-12 text-center text-zinc-500 font-mono text-sm">
-              No entries found in this section. Click "+ ADD ENTRY" to create one.
+              {loading ? "Loading entries..." : "No entries found in this section. Click '+ ADD ENTRY' to create one."}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -438,7 +483,7 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/50">
-                  {dataList.map((item, idx) => (
+                  {currentList.map((item, idx) => (
                     <tr
                       key={item.id || idx}
                       className="hover:bg-zinc-800/30 transition-colors"
@@ -449,7 +494,7 @@ export default function AdminPage() {
                           <button
                             onClick={() => handleMove(idx, "up")}
                             disabled={idx === 0}
-                            className="p-1 text-zinc-400 hover:text-cyan-400 disabled:opacity-20 transition-colors"
+                            className="p-1 text-zinc-400 hover:text-cyan-400 disabled:opacity-20 transition-colors cursor-pointer"
                             title="Move Up"
                           >
                             <ArrowUp size={14} />
@@ -459,8 +504,8 @@ export default function AdminPage() {
                           </span>
                           <button
                             onClick={() => handleMove(idx, "down")}
-                            disabled={idx === dataList.length - 1}
-                            className="p-1 text-zinc-400 hover:text-cyan-400 disabled:opacity-20 transition-colors"
+                            disabled={idx === currentList.length - 1}
+                            className="p-1 text-zinc-400 hover:text-cyan-400 disabled:opacity-20 transition-colors cursor-pointer"
                             title="Move Down"
                           >
                             <ArrowDown size={14} />
@@ -527,14 +572,14 @@ export default function AdminPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openEditModal(item)}
-                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-400 transition-colors cursor-pointer"
                             title="Edit"
                           >
                             <Edit2 size={14} />
                           </button>
                           <button
                             onClick={() => handleDelete(item.id)}
-                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-red-500/20 text-zinc-300 hover:text-red-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-red-500/20 text-zinc-300 hover:text-red-400 transition-colors cursor-pointer"
                             title="Delete"
                           >
                             <Trash2 size={14} />
