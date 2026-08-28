@@ -2,6 +2,7 @@
 
 import DecryptedText from "./DecryptedText";
 import CertificateGrid from "./CertificateGrid";
+import { Sparkles } from "lucide-react";
 
 export default function Certificates() {
   const certificates = [
@@ -20,16 +21,31 @@ export default function Certificates() {
   ];
 
   return (
-    <section id="certifications" className="py-24 relative overflow-hidden bg-background border-t border-white/5">
+    <section id="certifications" className="py-28 relative overflow-hidden bg-background border-t border-white/5">
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/10 via-background to-background pointer-events-none"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col items-center overflow-visible">
-        <h2 className="text-4xl font-extrabold mb-12 text-center">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-            <DecryptedText text="Certifications" animateOn="view" />
-          </span>
-        </h2>
+        {/* Centered Section Header */}
+        <div className="text-center mb-16 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+            <Sparkles size={12} className="text-indigo-400 animate-pulse" />
+            <span>[ ACCREDITATIONS // CLEARANCES ]</span>
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+              <DecryptedText text="Verified" animateOn="view" />
+            </span>{" "}
+            <span className="text-white">
+              <DecryptedText text="Certifications" animateOn="view" />
+            </span>
+          </h2>
+
+          <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto font-mono">
+            Industry credentials from Mastercard, Tata, TCS, Accenture, and AICTE.
+          </p>
+        </div>
 
         {/* ── All Certificates (Scrollable Grid) ──────── */}
         <div className="w-full">

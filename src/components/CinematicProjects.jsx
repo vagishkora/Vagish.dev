@@ -4,45 +4,56 @@ import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./CinematicProjects.css";
+import { Sparkles, ExternalLink } from "lucide-react";
+
+import DecryptedText from "./DecryptedText";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const PROJECTS = [
   {
     id: "PROJ-WEB-000",
+    badge: "INTERACTIVE EXP",
     title: "Birthday Site",
     description:
-      "High-performance interactive web app featuring 60fps canvas particles, 3D holographic tilt-cards, and a gamified constellation puzzle.",
+      "High-performance interactive web experience featuring 60fps canvas particles, 3D holographic tilt-cards, dynamic sound integration, and a gamified constellation puzzle.",
     image: "/Vagish.dev/assets/Birthday.webp",
     link: "https://github.com/vagishkora/Birthday-template",
-    tags: ["Vanilla JS", "HTML5 Canvas"],
+    tags: ["Vanilla JS", "HTML5 Canvas", "Web Audio", "Interactive 3D"],
+    accent: "indigo",
   },
   {
     id: "PROJ-FIN-000",
+    badge: "AI FINTECH PWA",
     title: "Wealth Nest — AI Finance",
     description:
-      "AI-powered PWA for tracking stocks, mutual funds, and smart expenses with real-time market data.",
+      "Intelligent financial assistant and Progressive Web App for tracking equities, mutual funds, automated portfolio rebalancing, and smart budget analytics with real-time telemetry.",
     image: "/Vagish.dev/assets/Wealthnest.webp",
     link: "https://github.com/vagishkora/WealthNest",
-    tags: ["Next.js", "LIVE PWA"],
+    tags: ["Next.js", "LIVE PWA", "Tailwind CSS", "Financial AI"],
+    accent: "emerald",
   },
   {
     id: "PROJ-SEC-001",
-    title: "AI for Identifying Cybersecurity Threats",
+    badge: "CYBER SECURITY",
+    title: "AI for Identifying Threats",
     description:
-      "Deep dive into dynamic and static malware analysis techniques in sandboxed environments using AI-driven detection.",
+      "Deep dive into dynamic and static malware analysis techniques in sandboxed environments, utilizing machine learning models for automated heuristic threat detection.",
     image: "/Vagish.dev/assets/cybersecurity.webp",
     link: "https://github.com/vagishkora/-AI-for-Identifying-Cybersecurity-Threats",
-    tags: ["Security", "Reverse Engineering"],
+    tags: ["Security", "Reverse Engineering", "Threat Modeling", "Python"],
+    accent: "cyan",
   },
   {
     id: "PROJ-AI-002",
-    title: "Face Recognition",
+    badge: "COMPUTER VISION",
+    title: "Face Recognition Biometrics",
     description:
-      "Real-time biometric system using OpenCV and deep learning models for accurate identity verification.",
+      "Real-time edge biometric surveillance and identity verification system using OpenCV computer vision pipelines and deep neural network embeddings.",
     image: "/Vagish.dev/assets/face-recognition.webp",
-    link: "",
-    tags: ["Python", "OpenCV"],
+    link: "https://github.com/vagishkora",
+    tags: ["Python", "OpenCV", "Deep Learning", "Biometrics"],
+    accent: "indigo",
   },
 ];
 
@@ -72,11 +83,9 @@ const CinematicProjects = () => {
         end: () => `+=${track.scrollWidth - window.innerWidth}`,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
-          // Progress bar
           if (progressRef.current) {
             progressRef.current.style.width = `${self.progress * 100}%`;
           }
-          // Active dot
           const idx = Math.min(
             Math.floor(self.progress * totalFrames),
             totalFrames - 1
@@ -88,42 +97,23 @@ const CinematicProjects = () => {
 
     // ── Per-frame animations ──────────────────────────
     frames.forEach((frame) => {
-      const bg = frame.querySelector(".cinematic-frame__bg img");
-      const id = frame.querySelector(".cinematic-frame__id");
-      const title = frame.querySelector(".cinematic-frame__title");
-      const desc = frame.querySelector(".cinematic-frame__desc");
-      const tags = frame.querySelector(".cinematic-frame__tags");
-      const link = frame.querySelector(".cinematic-frame__link");
-
-      // Ken Burns — subtle scale on scroll
-      if (bg) {
-        gsap.fromTo(
-          bg,
-          { scale: 1.15 },
-          {
-            scale: 1.02,
-            ease: "none",
-            scrollTrigger: {
-              trigger: frame,
-              containerAnimation: scrollTween,
-              start: "left right",
-              end: "right left",
-              scrub: true,
-            },
-          }
-        );
-      }
+      const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
+      const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
+      const title = frame.querySelector(".cinematic-projects-frame__title");
+      const desc = frame.querySelector(".cinematic-projects-frame__desc");
+      const tags = frame.querySelector(".cinematic-projects-frame__tags");
+      const link = frame.querySelector(".cinematic-projects-frame__link");
 
       // Text reveal
-      const textEls = [id, title, desc, tags, link].filter(Boolean);
+      const textEls = [badge, title, desc, tags, link].filter(Boolean);
       gsap.fromTo(
         textEls,
-        { opacity: 0, y: (_, el) => (el === title ? 40 : 25) },
+        { opacity: 0, x: -30 },
         {
           opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
+          x: 0,
+          duration: 0.7,
+          stagger: 0.08,
           ease: "power3.out",
           scrollTrigger: {
             trigger: frame,
@@ -134,6 +124,28 @@ const CinematicProjects = () => {
           },
         }
       );
+
+      // Photo card scale & entrance
+      if (cardPhoto) {
+        gsap.fromTo(
+          cardPhoto,
+          { opacity: 0, scale: 0.92, y: 20 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: frame,
+              containerAnimation: scrollTween,
+              start: "left 70%",
+              end: "left 30%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
     });
 
     return () => {
@@ -148,76 +160,113 @@ const CinematicProjects = () => {
       id="work"
       className="cinematic-projects"
     >
-      <div ref={trackRef} className="cinematic-track">
+      {/* Top Section Header */}
+      <div className="cinematic-projects-top-header">
+        <div className="cinematic-projects-watermark">
+          <Sparkles size={12} className="text-indigo-400 animate-pulse" />
+          <span>[ ARCHITECTURE & FEATURED WORK ]</span>
+        </div>
+        <h2 className="cinematic-projects-heading">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+            <DecryptedText text="Featured" animateOn="view" />
+          </span>{" "}
+          <span className="text-white">
+            <DecryptedText text="Projects" animateOn="view" />
+          </span>
+        </h2>
+      </div>
+
+      <div ref={trackRef} className="cinematic-projects-track">
         {PROJECTS.map((project, i) => (
           <div
             key={project.id}
-            ref={(el) => (frameRefs.current[i] = el)}
-            className="cinematic-frame"
+            ref={(el) => {
+              frameRefs.current[i] = el;
+            }}
+            className={`cinematic-projects-frame cinematic-projects-frame--${project.accent}`}
           >
-            {/* Full-bleed background */}
-            <div className="cinematic-frame__bg">
-              <img
-                src={project.image}
-                alt={project.title}
-                draggable="false"
-                loading={i === 0 ? "eager" : "lazy"}
-              />
-            </div>
+            {/* Ambient Background Aura */}
+            <div className="cinematic-projects-ambient-bg" />
 
-            {/* Gradient overlay */}
-            <div className="cinematic-frame__overlay" />
-
-            {/* Content */}
-            <div className="cinematic-frame__content">
-              <span className="cinematic-frame__id">{project.id}</span>
-
-              <h3 className="cinematic-frame__title">{project.title}</h3>
-
-              <p className="cinematic-frame__desc">{project.description}</p>
-
-              <div className="cinematic-frame__tags">
-                {project.tags.map((tag) => (
-                  <span key={tag} className="cinematic-frame__tag">
-                    {tag}
+            <div className="cinematic-projects-layout">
+              {/* Left Column: Text Dossier */}
+              <div className="cinematic-projects-info">
+                <div className="cinematic-projects-frame__badge-row">
+                  <span className="cinematic-projects-frame__badge">
+                    {project.badge}
                   </span>
-                ))}
+                  <span className="cinematic-projects-frame__id">
+                    {project.id}
+                  </span>
+                </div>
+
+                <h3 className="cinematic-projects-frame__title">
+                  {project.title}
+                </h3>
+
+                <p className="cinematic-projects-frame__desc">
+                  {project.description}
+                </p>
+
+                <div className="cinematic-projects-frame__tags">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="cinematic-projects-frame__tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cinematic-projects-frame__link"
+                  >
+                    <span>View Repository & Live Demo</span>
+                    <ExternalLink size={15} />
+                  </a>
+                )}
               </div>
 
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cinematic-frame__link"
-                >
-                  View Project
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </a>
-              )}
+              {/* Right Column: Crystal-Clear Unobscured Project Preview Card */}
+              <div className="cinematic-projects-media">
+                <div className="cinematic-projects-photo-card">
+                  {/* HUD Corner Brackets */}
+                  <div className="cinematic-projects-photo-corner tl" />
+                  <div className="cinematic-projects-photo-corner tr" />
+                  <div className="cinematic-projects-photo-corner bl" />
+                  <div className="cinematic-projects-photo-corner br" />
+
+                  {/* Floating Top Tag */}
+                  <div className="cinematic-projects-photo-tag">
+                    <span className="cinematic-projects-photo-dot" />
+                    {project.title}
+                  </div>
+
+                  {/* 100% Unobscured Project Screenshot */}
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="cinematic-projects-photo-img"
+                    draggable="false"
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Progress bar */}
-      <div className="cinematic-progress">
-        <div ref={progressRef} className="cinematic-progress__bar" />
+      <div className="cinematic-projects-progress">
+        <div ref={progressRef} className="cinematic-projects-progress__bar" />
       </div>
 
       {/* Frame counter */}
-      <div className="cinematic-counter">
-        <span className="cinematic-counter__current">
+      <div className="cinematic-projects-counter">
+        <span className="cinematic-projects-counter__current">
           {String(activeIndex + 1).padStart(2, "0")}
         </span>
         {" / "}
@@ -225,11 +274,11 @@ const CinematicProjects = () => {
       </div>
 
       {/* Dot nav */}
-      <div className="cinematic-dots">
+      <div className="cinematic-projects-dots">
         {PROJECTS.map((_, i) => (
           <button
             key={i}
-            className={`cinematic-dot${i === activeIndex ? " cinematic-dot--active" : ""}`}
+            className={`cinematic-projects-dot${i === activeIndex ? " cinematic-projects-dot--active" : ""}`}
             aria-label={`Go to project ${i + 1}`}
           />
         ))}
@@ -237,9 +286,9 @@ const CinematicProjects = () => {
 
       {/* Scroll hint (first frame only) */}
       {activeIndex === 0 && (
-        <div className="cinematic-scroll-hint">
-          <div className="cinematic-scroll-hint__mouse">
-            <div className="cinematic-scroll-hint__dot" />
+        <div className="cinematic-projects-scroll-hint">
+          <div className="cinematic-projects-scroll-hint__mouse">
+            <div className="cinematic-projects-scroll-hint__dot" />
           </div>
           SCROLL
         </div>

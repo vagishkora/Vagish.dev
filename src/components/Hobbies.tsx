@@ -1,4 +1,4 @@
-import { Car, Music, Plane, Cpu, Code2 } from "lucide-react";
+import { Car, Music, Plane, Cpu, Code2, Sparkles } from "lucide-react";
 import DecryptedText from "./DecryptedText";
 
 export default function Hobbies() {
@@ -11,18 +11,32 @@ export default function Hobbies() {
   ];
 
   return (
-    <section id="hobbies" className="py-24 bg-black/40 relative overflow-hidden">
+    <section id="hobbies" className="py-28 bg-black/40 relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 z-0 pointer-events-none opacity-10" suppressHydrationWarning>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-indigo-500/20 rounded-full" suppressHydrationWarning></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
-        <h2 className="text-3xl font-bold mb-4 text-center text-white">
-          <DecryptedText text="Personal Interests" animateOn="view" />
-        </h2>
-        <p className="text-gray-500 font-mono text-xs text-center mb-16 tracking-[0.4em] uppercase">
-          [ PERSONAL_INTERESTS // MISSION_PROFILE ]
-        </p>
+        {/* Centered Section Header */}
+        <div className="text-center mb-16 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+            <Sparkles size={12} className="text-cyan-400 animate-pulse" />
+            <span>[ LIFESTYLE // PASSIONS ]</span>
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-400">
+              <DecryptedText text="Personal" animateOn="view" />
+            </span>{" "}
+            <span className="text-white">
+              <DecryptedText text="Passions" animateOn="view" />
+            </span>
+          </h2>
+
+          <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto font-mono">
+            Automotive engineering, music production, travels, and hardware hacking.
+          </p>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {hobbies.map((hobby) => {

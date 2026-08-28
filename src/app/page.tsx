@@ -4,7 +4,7 @@ import SocialSidebar from "@/components/SocialSidebar";
 import Skills from "@/components/Skills";
 import CinematicProjects from "@/components/CinematicProjects";
 import Certificates from "@/components/Certificates";
-import Outreach from "@/components/Outreach";
+import CinematicOutreach from "@/components/CinematicOutreach";
 import Hobbies from "@/components/Hobbies";
 import Contact from "@/components/Contact";
 import LightRays from "@/components/LightRays";
@@ -36,7 +36,7 @@ export default function Home() {
           <CinematicProjects />
           <Skills />
           <Certificates />
-          <Outreach />
+          <CinematicOutreach />
           <Hobbies />
           <Contact />
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, Sparkles } from "lucide-react";
 import DecryptedText from "./DecryptedText";
 
 export default function Contact() {
@@ -18,17 +18,31 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 bg-black/50 border-t border-white/5">
-      <div className="max-w-xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-4 text-center text-white">
-          <DecryptedText text="Let's Connect" animateOn="view" />
-        </h2>
-        <p className="text-center text-gray-400 mb-10">
-          Reach out for collaborations or opportunities.<br />
-          <a href="mailto:vagishkora2003@gmail.com" className="text-indigo-400 hover:text-indigo-300 hover:underline transition-colors">
-            vagishkora2003@gmail.com
-          </a>
-        </p>
+    <section id="contact" className="py-28 bg-black/50 border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-2xl mx-auto px-4">
+        {/* Centered Section Header */}
+        <div className="text-center mb-14 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+            <Sparkles size={12} className="text-cyan-400 animate-pulse" />
+            <span>[ INITIATE_HANDSHAKE // SECURE_CHANNEL ]</span>
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+              <DecryptedText text="Let's" animateOn="view" />
+            </span>{" "}
+            <span className="text-white">
+              <DecryptedText text="Connect" animateOn="view" />
+            </span>
+          </h2>
+
+          <p className="text-gray-400 text-xs sm:text-sm max-w-md mx-auto font-mono">
+            Open for collaborations, security consulting, or engineering roles.<br />
+            <a href="mailto:vagishkora2003@gmail.com" className="text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">
+              vagishkora2003@gmail.com
+            </a>
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="relative group">

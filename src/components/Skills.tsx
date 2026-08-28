@@ -1,5 +1,6 @@
 import DecryptedText from "./DecryptedText";
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
 
 export default function Skills() {
   const skills = [
@@ -21,10 +22,27 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="relative py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-      <h2 className="text-3xl font-bold mb-12 text-center text-gray-100">
-        <DecryptedText text="Technical Arsenal" animateOn="view" />
-      </h2>
+    <section id="skills" className="relative py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+      {/* Centered Section Header */}
+      <div className="text-center mb-16 space-y-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs uppercase tracking-widest backdrop-blur-md">
+          <Sparkles size={12} className="text-cyan-400 animate-pulse" />
+          <span>[ CORE_CAPABILITIES // ARSENAL ]</span>
+        </div>
+
+        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight flex justify-center items-center gap-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-400">
+            <DecryptedText text="Technical" animateOn="view" />
+          </span>{" "}
+          <span className="text-white">
+            <DecryptedText text="Arsenal" animateOn="view" />
+          </span>
+        </h2>
+
+        <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto font-mono">
+          Languages, frameworks, database architectures, and security analysis tools.
+        </p>
+      </div>
       
       <div suppressHydrationWarning className="cyber-terminal w-full max-w-4xl mx-auto bg-black/90 border border-cyan-500/20 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,255,255,0.05)] font-mono relative">
         {/* Terminal Scanline Background */}
