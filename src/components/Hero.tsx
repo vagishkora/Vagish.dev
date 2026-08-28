@@ -113,7 +113,7 @@ export default function Hero() {
         }}
         className="transition-opacity duration-150"
       >
-        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
+        <Lanyard />
       </div>
       {/* Video Backgrounds */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
