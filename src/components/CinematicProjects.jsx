@@ -90,12 +90,14 @@ const CinematicProjects = () => {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // Desktop: Pin & scrub horizontally
+    mm.add("(min-width: 768px)", () => {
       const frames = frameRefs.current.filter(Boolean);
       const totalFrames = frames.length;
       if (totalFrames === 0) return;
 
-      // ── Main horizontal scroll ────────────────────────
       const scrollTween = gsap.to(track, {
         x: () => -(track.scrollWidth - window.innerWidth),
         ease: "none",
@@ -118,7 +120,6 @@ const CinematicProjects = () => {
         },
       });
 
-      // ── Per-frame animations ──────────────────────────
       frames.forEach((frame, index) => {
         const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
         const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
@@ -129,7 +130,6 @@ const CinematicProjects = () => {
 
         const textEls = [badge, title, desc, tags, link].filter(Boolean);
 
-        // Frame 0 is visible by default so it never starts hidden/blank
         if (index === 0) {
           gsap.set(textEls, { opacity: 1, x: 0 });
           if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0 });
@@ -175,15 +175,32 @@ const CinematicProjects = () => {
           }
         }
       });
-    }, sectionRef);
+    });
+
+    // Mobile: Clean, natural flow without fixed pinning (zero section collision)
+    mm.add("(max-width: 767px)", () => {
+      const frames = frameRefs.current.filter(Boolean);
+      frames.forEach((frame) => {
+        const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
+        const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
+        const title = frame.querySelector(".cinematic-projects-frame__title");
+        const desc = frame.querySelector(".cinematic-projects-frame__desc");
+        const tags = frame.querySelector(".cinematic-projects-frame__tags");
+        const link = frame.querySelector(".cinematic-projects-frame__link");
+        const textEls = [badge, title, desc, tags, link].filter(Boolean);
+
+        gsap.set(textEls, { opacity: 1, x: 0, clearProps: "all" });
+        if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0, clearProps: "all" });
+      });
+    });
 
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 200);
+    }, 250);
 
     return () => {
       clearTimeout(refreshTimer);
-      ctx.revert();
+      mm.revert();
     };
   }, [projects]);
 

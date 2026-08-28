@@ -85,12 +85,14 @@ export default function CinematicOutreach() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // Desktop: Pin & scrub horizontally
+    mm.add("(min-width: 768px)", () => {
       const frames = frameRefs.current.filter(Boolean);
       const totalFrames = frames.length;
       if (totalFrames === 0) return;
 
-      // ── Main horizontal scroll ────────────────────────
       const scrollTween = gsap.to(track, {
         x: () => -(track.scrollWidth - window.innerWidth),
         ease: "none",
@@ -113,7 +115,6 @@ export default function CinematicOutreach() {
         },
       });
 
-      // ── Per-frame animations ──────────────────────────
       frames.forEach((frame, index) => {
         const cardPhoto = frame.querySelector(".cinematic-photo-card");
         const badge = frame.querySelector(".cinematic-outreach-frame__badge-row");
@@ -124,7 +125,6 @@ export default function CinematicOutreach() {
 
         const textEls = [badge, title, meta, desc, tags].filter(Boolean);
 
-        // Frame 0 is visible by default so it never starts hidden/blank
         if (index === 0) {
           gsap.set(textEls, { opacity: 1, x: 0 });
           if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0 });
@@ -170,15 +170,32 @@ export default function CinematicOutreach() {
           }
         }
       });
-    }, sectionRef);
+    });
+
+    // Mobile: Clean, natural flow without fixed pinning (zero section collision)
+    mm.add("(max-width: 767px)", () => {
+      const frames = frameRefs.current.filter(Boolean);
+      frames.forEach((frame) => {
+        const cardPhoto = frame.querySelector(".cinematic-photo-card");
+        const badge = frame.querySelector(".cinematic-outreach-frame__badge-row");
+        const title = frame.querySelector(".cinematic-outreach-frame__title");
+        const meta = frame.querySelector(".cinematic-outreach-frame__meta");
+        const desc = frame.querySelector(".cinematic-outreach-frame__desc");
+        const tags = frame.querySelector(".cinematic-outreach-frame__tags");
+        const textEls = [badge, title, meta, desc, tags].filter(Boolean);
+
+        gsap.set(textEls, { opacity: 1, x: 0, clearProps: "all" });
+        if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0, clearProps: "all" });
+      });
+    });
 
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 200);
+    }, 250);
 
     return () => {
       clearTimeout(refreshTimer);
-      ctx.revert();
+      mm.revert();
     };
   }, [initiatives]);
 
