@@ -3,4 +3,4 @@
 :HL["/Vagish.dev/_next/static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Vagish.dev/_next/static/chunks/5641a313ec98719c.css","style"]
 :HL["/Vagish.dev/_next/static/chunks/3d4a131c65f0b79e.css","style"]
-0:{"buildId":"2f1blweXFuQ1sb0f_LuxV","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"lQ5tn_Bav2UthjUEM2Nqc","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

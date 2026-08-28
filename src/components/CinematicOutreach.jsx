@@ -219,6 +219,12 @@ export default function CinematicOutreach() {
             <DecryptedText text="& Community" animateOn="view" />
           </span>
         </h2>
+        {/* Mobile Swipe Hint */}
+        <div className="md:hidden flex items-center justify-center gap-2 mt-2 py-1 px-3.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 font-mono text-[11px] uppercase tracking-widest backdrop-blur-md">
+          <span>⟵</span>
+          <span>SWIPE TO VIEW MORE</span>
+          <span>⟶</span>
+        </div>
       </div>
 
       <div ref={trackRef} className="cinematic-outreach-track">
