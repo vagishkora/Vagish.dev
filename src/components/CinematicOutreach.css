@@ -452,53 +452,70 @@
 
 @media (max-width: 768px) {
   .cinematic-outreach-frame {
-    padding: 0 24px;
+    padding: 0 20px;
     height: 100vh;
   }
 
   .cinematic-outreach-layout {
     grid-template-columns: 1fr;
-    gap: 20px;
-    margin-top: 40px;
+    gap: 16px;
+    margin-top: 60px;
   }
 
   .cinematic-photo-card {
-    height: 220px;
+    height: 200px;
     max-width: 100%;
+    backdrop-filter: none;
+    background: rgba(10, 10, 18, 0.95);
   }
 
   .cinematic-outreach-frame__title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
   .cinematic-outreach-frame__desc {
-    font-size: 0.85rem;
-    line-height: 1.45;
+    font-size: 0.82rem;
+    line-height: 1.4;
   }
 
   .cinematic-outreach-top-header {
-    top: 16px;
-    left: 20px;
-    gap: 4px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 90vw;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
 
   .cinematic-outreach-heading {
     font-size: 1.25rem;
+    justify-content: center;
+    text-align: center;
   }
 
   .cinematic-outreach-watermark {
     font-size: 0.62rem;
     padding: 3px 10px;
+    margin: 0 auto;
   }
 
   .cinematic-outreach-dots {
-    right: 14px;
+    right: 10px;
+    gap: 8px;
+  }
+
+  .cinematic-outreach-dot {
+    width: 6px;
+    height: 6px;
   }
 
   .cinematic-outreach-counter {
-    right: 16px;
-    bottom: 16px;
-    font-size: 0.75rem;
+    right: 14px;
+    bottom: 14px;
+    font-size: 0.72rem;
   }
 
   .cinematic-outreach-scroll-hint {

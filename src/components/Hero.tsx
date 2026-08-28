@@ -115,7 +115,7 @@ export default function Hero() {
       >
         <Lanyard />
       </div>
-      {/* Video Backgrounds */}
+      {/* Video Backgrounds (Optimized: single video on mobile, double video on desktop) */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <video
           ref={blurVideoRef}
@@ -125,8 +125,8 @@ export default function Hero() {
           muted
           playsInline
           preload="none"
-          className="absolute inset-0 w-full h-full object-cover blur-[100px] scale-150 opacity-50 transition-opacity duration-1000"
-          style={{ opacity: scrollOpacity * 0.5 }}
+          className="hidden md:block absolute inset-0 w-full h-full object-cover blur-[80px] scale-150 opacity-40 transition-opacity duration-1000"
+          style={{ opacity: scrollOpacity * 0.4 }}
         />
         <video
           ref={videoRef}
