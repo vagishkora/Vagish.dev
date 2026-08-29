@@ -21,31 +21,28 @@ export default function Hero() {
 
   const toggleMute = (e?: React.MouseEvent) => {
     if (e) {
+      e.preventDefault();
       e.stopPropagation();
     }
     const video = videoRef.current;
     if (!video) return;
 
-    if (isMuted) {
+    if (video.muted) {
       video.muted = false;
       video.volume = 1.0;
-      setIsMuted(false);
-      video.play().catch((err) => console.warn("Video play error upon unmuting:", err));
+      video.play().then(() => {
+        setIsMuted(false);
+      }).catch((err) => {
+        console.warn("Audio play error:", err);
+        setIsMuted(false);
+      });
     } else {
       video.muted = true;
       setIsMuted(true);
     }
   };
 
-  // Ensure DOM element muted property stays 100% in sync with state
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted;
-      videoRef.current.volume = 1.0;
-    }
-  }, [isMuted]);
-
-  // Start video muted by default
+  // Start video muted by default on load
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = true;
@@ -90,7 +87,7 @@ export default function Hero() {
           src="/Vagish.dev/assets/mp_.mp4"
           autoPlay
           loop
-          muted={isMuted}
+          muted
           playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-90"
