@@ -20,19 +20,16 @@ export default function Hero() {
   }, []);
 
   const toggleMute = () => {
-    if (videoRef.current) {
-      const willBeMuted = !videoRef.current.muted;
-      videoRef.current.muted = willBeMuted;
-      setIsMuted(willBeMuted);
-      
-      // If we are unmuting, restart the video from the beginning
-      if (!willBeMuted) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play();
-      }
-    }
-    if (blurVideoRef.current) {
-      blurVideoRef.current.muted = true;
+    const video = videoRef.current;
+    if (!video) return;
+
+    const nextMuted = !isMuted;
+    video.muted = nextMuted;
+    setIsMuted(nextMuted);
+
+    if (!nextMuted) {
+      video.currentTime = 0;
+      video.play().catch((err) => console.warn("Video play error upon unmuting:", err));
     }
   };
 
@@ -144,9 +141,10 @@ export default function Hero() {
               DOWNLOAD RESUME &darr;
             </a>
             <button
+              type="button"
               onClick={toggleMute}
               suppressHydrationWarning
-              className={`px-5 py-3.5 border font-mono text-xs font-bold tracking-widest uppercase rounded-sm backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer min-w-[160px] ${
+              className={`px-5 py-3.5 border font-mono text-xs font-bold tracking-widest uppercase rounded-sm backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer pointer-events-auto relative z-30 min-w-[160px] ${
                 isMuted 
                   ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.12)]" 
                   : "bg-indigo-500/25 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] animate-pulse"
