@@ -19,21 +19,33 @@ export default function Hero() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleMute = () => {
+  const toggleMute = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     const video = videoRef.current;
     if (!video) return;
 
-    const nextMuted = !isMuted;
-    video.muted = nextMuted;
-    setIsMuted(nextMuted);
-
-    if (!nextMuted) {
-      video.currentTime = 0;
+    if (isMuted) {
+      video.muted = false;
+      video.volume = 1.0;
+      setIsMuted(false);
       video.play().catch((err) => console.warn("Video play error upon unmuting:", err));
+    } else {
+      video.muted = true;
+      setIsMuted(true);
     }
   };
 
-  // Start video muted by default, respecting browser and user privacy
+  // Ensure DOM element muted property stays 100% in sync with state
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+      videoRef.current.volume = 1.0;
+    }
+  }, [isMuted]);
+
+  // Start video muted by default
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = true;
@@ -43,14 +55,6 @@ export default function Hero() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Auto-mute immediately if scrolled past Hero section (50px)
-      if (window.scrollY > 50) {
-        if (videoRef.current && !videoRef.current.muted) {
-          videoRef.current.muted = true;
-          setIsMuted(true);
-        }
-      }
-      
       // Fade out content on scroll (fully faded by 600px)
       const newOpacity = Math.max(0, 1 - window.scrollY / 600);
       setScrollOpacity(newOpacity);
