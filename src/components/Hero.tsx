@@ -111,31 +111,6 @@ export default function Hero() {
         <Lanyard />
       </div>
 
-      <button
-        onClick={toggleMute}
-        suppressHydrationWarning
-        style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? 'none' : 'auto' }}
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-md border border-white/15 rounded-full text-white/90 hover:text-white hover:bg-black/80 transition-all cursor-pointer shadow-lg shadow-black/50"
-      >
-        {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        <span className="text-xs font-mono tracking-wider uppercase">
-          {isMuted ? "Tap for sound" : "Sound on"}
-        </span>
-      </button>
-
-      {/* Geometric Decor */}
-      <div 
-        className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-100"
-        style={{ opacity: scrollOpacity }}
-      >
-        {/* Tech Pattern Accents */}
-        <div className="absolute top-20 left-10 font-mono text-xs text-indigo-500/50 tracking-widest">[ HUD_STATUS: ACTIVE ]</div>
-        <div className="absolute top-40 left-1/4 font-mono text-xs text-indigo-500/50">04 // SYSTEM_CORE</div>
-        <div className="absolute bottom-40 left-20 font-mono text-xs text-indigo-500/50">LAT: 12.9716° N / LONG: 77.5946° E</div>
-        <div className="absolute top-1/3 right-10 rotate-90 font-mono text-xs text-indigo-500/50">ENGINEERING_v2.4</div>
-        <div className="absolute bottom-20 right-20 font-mono text-xs text-indigo-500/50">ENCRYPTION: AES_256_GCM</div>
-      </div>
-
       {/* Content */}
       <div 
         className="relative z-10 w-full max-w-7xl mx-auto px-6 flex items-center h-full transition-opacity duration-100"
@@ -161,13 +136,34 @@ export default function Hero() {
             A <span className="text-white font-medium">Cybersecurity Engineer</span> dedicated to solving complex, real-world problems through high-performance intelligent systems and secure product experiences.
           </p>
 
-          <div className="flex flex-col md:flex-row items-center justify-start gap-6 mt-10 relative z-20 w-full max-w-2xl">
-            <a href="#work" className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch justify-start gap-4 mt-8 relative z-20 w-full max-w-3xl">
+            <a href="#work" className="px-6 py-3.5 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-0.5 text-center flex-1 min-w-[170px]" style={{ fontFamily: "var(--font-space-grotesk)" }}>
               EXPLORE WORK &rarr;
             </a>
-            <a href="/Vagish.dev/Vagish_Resume.pdf" download className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+            <a href="/Vagish.dev/Vagish_Resume.pdf" download className="px-6 py-3.5 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-0.5 text-center flex-1 min-w-[170px]" style={{ fontFamily: "var(--font-space-grotesk)" }}>
               DOWNLOAD RESUME &darr;
             </a>
+            <button
+              onClick={toggleMute}
+              suppressHydrationWarning
+              className={`px-5 py-3.5 border font-mono text-xs font-bold tracking-widest uppercase rounded-sm backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer min-w-[160px] ${
+                isMuted 
+                  ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.12)]" 
+                  : "bg-indigo-500/25 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] animate-pulse"
+              }`}
+            >
+              {isMuted ? (
+                <>
+                  <VolumeX size={16} className="text-cyan-400 shrink-0" />
+                  <span>AUDIO: MUTED</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 size={16} className="text-indigo-400 shrink-0" />
+                  <span>AUDIO: ACTIVE</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
