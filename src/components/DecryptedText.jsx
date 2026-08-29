@@ -314,6 +314,14 @@ export default function DecryptedText({
   useEffect(() => {
     if (animateOn !== 'view' && animateOn !== 'inViewHover') return;
 
+    // On mobile devices, show clean text instantly to prevent text jitter and GPU lag
+    if (typeof window !== 'undefined' && (window.innerWidth < 768 || 'ontouchstart' in window)) {
+      setDisplayText(text);
+      setIsDecrypted(true);
+      setHasAnimated(true);
+      return;
+    }
+
     const observerCallback = entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting && !hasAnimated) {
@@ -340,7 +348,7 @@ export default function DecryptedText({
         observer.unobserve(currentRef);
       }
     };
-  }, [animateOn, hasAnimated, triggerDecrypt]);
+  }, [animateOn, hasAnimated, triggerDecrypt, text]);
 
   useEffect(() => {
     if (animateOn === 'click') {

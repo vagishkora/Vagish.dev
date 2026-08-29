@@ -74,7 +74,7 @@ export const Cursor: React.FC<CursorProps> = ({ size = 60 }) => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       document.body.style.cursor = "auto"; // restore native cursor
     };
-  }, [animate]);
+  }, []);
 
   return (
     <div

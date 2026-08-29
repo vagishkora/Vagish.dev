@@ -332,11 +332,15 @@
 /* ── Responsive ──────────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .cert-grid-wrapper {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
   .cert-card {
     flex: 0 0 260px;
     height: 180px;
   }
-
 
   .cert-expanded-container {
     padding: 20px;
@@ -359,10 +363,10 @@
     height: 165px;
   }
 
-
   .cert-grid-scroll {
     gap: 14px;
     padding: 16px 20px 24px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .cert-scroll-btn {
