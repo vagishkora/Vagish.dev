@@ -450,94 +450,150 @@
   }
 }
 
+
 @media (max-width: 768px) {
   .cinematic-outreach {
-    position: relative;
-    width: 100%;
     overflow: hidden;
-    height: auto;
-    padding-bottom: 40px;
   }
 
+  /* ── Compact sticky header ── */
   .cinematic-outreach-top-header {
-    position: relative;
+    position: absolute;
     top: 0;
-    left: 0;
-    transform: none;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
     width: 100%;
-    max-width: 100%;
-    margin-bottom: 24px;
-    padding-top: 48px;
+    padding: 14px 16px 10px;
     text-align: center;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
+    background: linear-gradient(to bottom, rgba(3,2,8,0.95) 70%, transparent);
   }
 
   .cinematic-outreach-heading {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     justify-content: center;
     text-align: center;
+    gap: 6px;
   }
 
   .cinematic-outreach-watermark {
-    font-size: 0.6rem;
-    padding: 3px 10px;
+    font-size: 0.55rem;
+    padding: 2px 8px;
     margin: 0 auto;
+    letter-spacing: 0.08em;
   }
 
+  /* ── Track: GSAP controlled ── */
   .cinematic-outreach-track {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    padding: 0 16px 20px 16px;
-    scrollbar-width: none;
+    flex-wrap: nowrap;
+    overflow: visible;
+    will-change: transform;
+    padding: 0;
+    gap: 0;
   }
 
-  .cinematic-outreach-track::-webkit-scrollbar {
-    display: none;
-  }
-
+  /* ── Full-viewport frame ── */
   .cinematic-outreach-frame {
     position: relative;
-    width: calc(100vw - 32px);
-    height: auto;
-    scroll-snap-align: center;
+    width: 100vw;
+    height: 100svh;
     flex-shrink: 0;
-    padding: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 90px 20px 72px;
   }
 
-  .cinematic-outreach-layout {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 0;
+  /* ── Photo: full width on top, NO cropping ── */
+  .cinematic-photo-card {
+    width: 100%;
+    height: auto;
+    backdrop-filter: none;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #050508;
+  }
+
+  .cinematic-photo-img {
+    object-fit: contain;
+    object-position: center center;
+    height: auto;
+    max-height: 55vw;
     width: 100%;
   }
 
-  .cinematic-photo-card {
-    height: 200px;
-    max-width: 100%;
-    backdrop-filter: none;
-    background: rgba(10, 10, 18, 0.95);
+  /* Layout: vertical — photo top, text bottom */
+  .cinematic-outreach-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 0;
+    width: 100%;
+    overflow-y: auto;
+    max-height: calc(100svh - 156px);
+  }
+
+  /* Text info panel */
+  .cinematic-outreach-info {
+    background: rgba(10, 10, 20, 0.85);
+    border: 1px solid rgba(6, 182, 212, 0.18);
+    border-radius: 12px;
+    padding: 14px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cinematic-outreach-frame__badge-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .cinematic-outreach-frame__title {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .cinematic-outreach-frame__meta {
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    gap: 4px;
   }
 
   .cinematic-outreach-frame__desc {
-    font-size: 0.82rem;
-    line-height: 1.4;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: rgba(156, 163, 175, 1);
   }
 
+  .cinematic-outreach-frame__tags {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  /* Show counter */
   .cinematic-outreach-dots,
-  .cinematic-outreach-counter,
+  .cinematic-outreach-counter {
+    display: flex !important;
+  }
+
   .cinematic-outreach-scroll-hint {
     display: none !important;
   }
 }
+
+

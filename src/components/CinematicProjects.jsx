@@ -90,119 +90,103 @@ const CinematicProjects = () => {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const mm = gsap.matchMedia();
+    const frames = frameRefs.current.filter(Boolean);
+    const totalFrames = frames.length;
+    if (totalFrames === 0) return;
 
-    // Desktop: Pin & scrub horizontally
-    mm.add("(min-width: 768px)", () => {
-      const frames = frameRefs.current.filter(Boolean);
-      const totalFrames = frames.length;
-      if (totalFrames === 0) return;
-
-      const scrollTween = gsap.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth),
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          scrub: 1,
-          end: () => `+=${track.scrollWidth - window.innerWidth}`,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            if (progressRef.current) {
-              progressRef.current.style.width = `${self.progress * 100}%`;
-            }
-            const idx = Math.min(
-              Math.floor(self.progress * totalFrames),
-              totalFrames - 1
-            );
-            setActiveIndex(idx);
-          },
+    const scrollTween = gsap.to(track, {
+      x: () => -(track.scrollWidth - window.innerWidth),
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
+        end: () => `+=${track.scrollWidth - window.innerWidth}`,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (progressRef.current) {
+            progressRef.current.style.width = `${self.progress * 100}%`;
+          }
+          const idx = Math.min(
+            Math.floor(self.progress * totalFrames),
+            totalFrames - 1
+          );
+          setActiveIndex(idx);
         },
-      });
+      },
+    });
 
-      frames.forEach((frame, index) => {
-        const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
-        const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
-        const title = frame.querySelector(".cinematic-projects-frame__title");
-        const desc = frame.querySelector(".cinematic-projects-frame__desc");
-        const tags = frame.querySelector(".cinematic-projects-frame__tags");
-        const link = frame.querySelector(".cinematic-projects-frame__link");
+    frames.forEach((frame, index) => {
+      const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
+      const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
+      const title = frame.querySelector(".cinematic-projects-frame__title");
+      const desc = frame.querySelector(".cinematic-projects-frame__desc");
+      const tags = frame.querySelector(".cinematic-projects-frame__tags");
+      const link = frame.querySelector(".cinematic-projects-frame__link");
 
-        const textEls = [badge, title, desc, tags, link].filter(Boolean);
+      const textEls = [badge, title, desc, tags, link].filter(Boolean);
 
-        if (index === 0) {
-          gsap.set(textEls, { opacity: 1, x: 0 });
-          if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0 });
-        } else {
+      if (index === 0) {
+        gsap.set(textEls, { opacity: 1, x: 0 });
+        if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0 });
+      } else {
+        gsap.fromTo(
+          textEls,
+          { opacity: 0, x: -30 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: frame,
+              containerAnimation: scrollTween,
+              start: "left 85%",
+              end: "left 35%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        if (cardPhoto) {
           gsap.fromTo(
-            textEls,
-            { opacity: 0, x: -30 },
+            cardPhoto,
+            { opacity: 0, scale: 0.92, y: 20 },
             {
               opacity: 1,
-              x: 0,
-              duration: 0.7,
-              stagger: 0.08,
+              scale: 1,
+              y: 0,
+              duration: 0.8,
               ease: "power3.out",
               scrollTrigger: {
                 trigger: frame,
                 containerAnimation: scrollTween,
-                start: "left 85%",
+                start: "left 80%",
                 end: "left 35%",
                 toggleActions: "play none none reverse",
               },
             }
           );
-
-          if (cardPhoto) {
-            gsap.fromTo(
-              cardPhoto,
-              { opacity: 0, scale: 0.92, y: 20 },
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: frame,
-                  containerAnimation: scrollTween,
-                  start: "left 80%",
-                  end: "left 35%",
-                  toggleActions: "play none none reverse",
-                },
-              }
-            );
-          }
         }
-      });
-    });
-
-    // Mobile: Clean, natural flow without fixed pinning (zero section collision)
-    mm.add("(max-width: 767px)", () => {
-      const frames = frameRefs.current.filter(Boolean);
-      frames.forEach((frame) => {
-        const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
-        const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
-        const title = frame.querySelector(".cinematic-projects-frame__title");
-        const desc = frame.querySelector(".cinematic-projects-frame__desc");
-        const tags = frame.querySelector(".cinematic-projects-frame__tags");
-        const link = frame.querySelector(".cinematic-projects-frame__link");
-        const textEls = [badge, title, desc, tags, link].filter(Boolean);
-
-        gsap.set(textEls, { opacity: 1, x: 0, clearProps: "all" });
-        if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0, clearProps: "all" });
-      });
+      }
     });
 
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 250);
+    }, 400);
 
+    // Only kill THIS section's trigger on cleanup — not all triggers
+    const st = scrollTween.scrollTrigger;
     return () => {
       clearTimeout(refreshTimer);
-      mm.revert();
+      if (st) st.kill();
+      scrollTween.kill();
     };
   }, [projects]);
+
+
 
   return (
     <section
@@ -226,12 +210,7 @@ const CinematicProjects = () => {
         </h2>
       </div>
 
-      {/* Prominent Mobile Swipe Indicator */}
-      <div className="md:hidden flex items-center justify-center gap-2.5 my-3 px-4 py-1.5 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-purple-500/20 border border-cyan-400/40 rounded-full text-cyan-300 font-mono text-xs font-semibold tracking-wider shadow-[0_0_15px_rgba(6,182,212,0.3)] mx-auto w-fit">
-        <span className="animate-pulse text-cyan-400">⟵</span>
-        <span>SWIPE CARDS TO VIEW MORE</span>
-        <span className="animate-pulse text-cyan-400">⟶</span>
-      </div>
+
 
       <div ref={trackRef} className="cinematic-projects-track">
         {projects.map((project, i) => (

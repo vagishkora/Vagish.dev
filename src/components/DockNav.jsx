@@ -108,7 +108,9 @@ export default function DockNav() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-80 transition-opacity"
+          className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-80 transition-all duration-300 ${
+            isScrolled ? "md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto" : "opacity-100"
+          }`}
         >
           Vagish N Kora
         </Link>
