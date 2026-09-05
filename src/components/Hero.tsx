@@ -15,10 +15,15 @@ export default function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (video.muted) {
+    if (video.muted || isMuted) {
       video.muted = false;
       video.volume = 1.0;
       setIsMuted(false);
+      video.play().catch((err) => {
+        console.warn("Audio play error:", err);
+        video.muted = false;
+        setIsMuted(false);
+      });
     } else {
       video.muted = true;
       setIsMuted(true);
@@ -63,12 +68,13 @@ export default function Hero() {
           preload="auto"
           className="hidden md:block absolute inset-0 w-full h-full object-cover blur-[50px] scale-125 opacity-40"
         />
-        {/* Main video — no muted prop so JS can control it */}
+        {/* Main video */}
         <video
           ref={videoRef}
           src="/Vagish.dev/assets/mp_.mp4"
           autoPlay
           loop
+          muted
           playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-90"
@@ -82,7 +88,6 @@ export default function Hero() {
       <div
         style={{
           opacity: scrollOpacity,
-          pointerEvents: scrollOpacity === 0 ? "none" : "auto",
           visibility: scrollOpacity === 0 ? "hidden" : "visible",
         }}
         className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-150"
@@ -90,35 +95,23 @@ export default function Hero() {
         <Lanyard />
       </div>
 
-      {/* Audio toggle — original floating pill at bottom center */}
+      {/* Audio toggle — floating pill with high z-index */}
       <button
         type="button"
         onClick={toggleMute}
         suppressHydrationWarning
         style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? "none" : "auto" }}
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-md border border-white/15 rounded-full text-white/90 hover:text-white hover:bg-black/80 transition-all cursor-pointer shadow-lg shadow-black/50"
+        className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-5 py-2.5 bg-black/80 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-black hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xl shadow-black/70 pointer-events-auto"
       >
-        {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        <span className="text-xs font-mono tracking-wider uppercase">
+        {isMuted ? <VolumeX size={18} className="text-pink-400" /> : <Volume2 size={18} className="text-emerald-400" />}
+        <span className="text-xs font-mono tracking-wider uppercase font-semibold">
           {isMuted ? "Tap for sound" : "Sound on"}
         </span>
       </button>
 
-      {/* Tech Pattern Accents */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-100"
-        style={{ opacity: scrollOpacity }}
-      >
-        <div className="absolute top-20 left-10 font-mono text-xs text-indigo-500/50 tracking-widest">[ HUD_STATUS: ACTIVE ]</div>
-        <div className="absolute top-40 left-1/4 font-mono text-xs text-indigo-500/50">04 // SYSTEM_CORE</div>
-        <div className="absolute bottom-40 left-20 font-mono text-xs text-indigo-500/50">LAT: 12.9716° N / LONG: 77.5946° E</div>
-        <div className="absolute top-1/3 right-10 rotate-90 font-mono text-xs text-indigo-500/50">ENGINEERING_v2.4</div>
-        <div className="absolute bottom-20 right-20 font-mono text-xs text-indigo-500/50">ENCRYPTION: AES_256_GCM</div>
-      </div>
-
       {/* Hero Content */}
       <div
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 flex items-center h-full transition-opacity duration-100"
+        className="relative z-30 w-full max-w-7xl mx-auto px-6 flex items-center h-full transition-opacity duration-100 pointer-events-auto"
         style={{ opacity: scrollOpacity, pointerEvents: scrollOpacity === 0 ? "none" : "auto" }}
       >
         {/* Corner Brackets */}
@@ -148,18 +141,44 @@ export default function Hero() {
             secure product experiences.
           </p>
 
-          <div className="flex flex-col md:flex-row items-center justify-start gap-6 mt-10 relative z-20 w-full max-w-2xl">
+          <div className="flex flex-col md:flex-row items-center justify-start gap-6 mt-10 relative z-30 w-full max-w-2xl">
             <a
               href="#work"
-              className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1"
+              onClick={(e) => {
+                e.preventDefault();
+                const workSection = document.getElementById("work");
+                if (workSection) {
+                  workSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                } else {
+                  window.location.hash = "work";
+                }
+              }}
+              className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/15 hover:border-white/50 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1 cursor-pointer pointer-events-auto"
               style={{ fontFamily: "var(--font-space-grotesk)" }}
             >
               EXPLORE WORK &rarr;
             </a>
             <a
               href="/Vagish.dev/Vagish_Resume.pdf"
-              download
-              className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/10 hover:border-white/40 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1"
+              download="Vagish_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                let targetUrl = "/Vagish.dev/Vagish_Resume.pdf";
+                if (typeof window !== "undefined") {
+                  const saved = localStorage.getItem("vagish_active_resume");
+                  if (saved) targetUrl = saved;
+                }
+                const link = document.createElement("a");
+                link.href = targetUrl;
+                link.download = "Vagish_Resume.pdf";
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="px-8 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-sm hover:bg-white/15 hover:border-white/50 backdrop-blur-md transition-all transform hover:-translate-y-1 w-full md:w-auto text-center flex-1 cursor-pointer pointer-events-auto"
               style={{ fontFamily: "var(--font-space-grotesk)" }}
             >
               DOWNLOAD RESUME &darr;

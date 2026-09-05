@@ -18,13 +18,33 @@ import {
 
 export default function DockNav() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDockVisible, setIsDockVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      setIsScrolled(currentScrollY > 50);
+
+      if (currentScrollY <= 50) {
+        setIsDockVisible(true);
+      } else if (currentScrollY > lastScrollY + 5) {
+        // Scrolling DOWN -> hide dock
+        setIsDockVisible(false);
+      } else if (currentScrollY < lastScrollY - 5) {
+        // Scrolling UP -> show dock
+        setIsDockVisible(true);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -126,7 +146,11 @@ export default function DockNav() {
       </div>
 
       {/* Desktop Dock — fixed bottom center */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+      <div
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden md:block transition-all duration-300 transform ${
+          isDockVisible ? "translate-y-0 opacity-100 pointer-events-auto" : "translate-y-28 opacity-0 pointer-events-none"
+        }`}
+      >
         <Dock
           items={dockItems}
           magnification={64}
@@ -158,7 +182,11 @@ export default function DockNav() {
       </div>
 
       {/* Mobile Dock — fixed bottom, smaller */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
+      <div
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 md:hidden transition-all duration-300 transform ${
+          isDockVisible ? "translate-y-0 opacity-100 pointer-events-auto" : "translate-y-24 opacity-0 pointer-events-none"
+        }`}
+      >
         <Dock
           items={dockItems}
           magnification={52}

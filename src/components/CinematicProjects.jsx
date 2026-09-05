@@ -12,8 +12,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 const INITIAL_PROJECTS = [
   {
-    id: "PROJ-WEB-000",
-    badge: "INTERACTIVE EXP",
+    id: "birthday-site",
+    slug: "birthday-experience",
+    badge: "Interactive Web Experience",
     title: "Birthday Site",
     description:
       "High-performance interactive web experience featuring 60fps canvas particles, 3D holographic tilt-cards, dynamic sound integration, and a gamified constellation puzzle.",
@@ -23,19 +24,21 @@ const INITIAL_PROJECTS = [
     accent: "indigo",
   },
   {
-    id: "PROJ-FIN-000",
-    badge: "AI FINTECH PWA",
+    id: "wealth-nest",
+    slug: "wealth-nest-finance",
+    badge: "AI FinTech Platform",
     title: "Wealth Nest — AI Finance",
     description:
       "Intelligent financial assistant and Progressive Web App for tracking equities, mutual funds, automated portfolio rebalancing, and smart budget analytics with real-time telemetry.",
     image: "/Vagish.dev/assets/Wealthnest.webp",
     link: "https://github.com/vagishkora/WealthNest",
-    tags: ["Next.js", "LIVE PWA", "Tailwind CSS", "Financial AI"],
+    tags: ["Next.js", "PWA", "Tailwind CSS", "Financial AI"],
     accent: "emerald",
   },
   {
-    id: "PROJ-SEC-001",
-    badge: "CYBER SECURITY",
+    id: "threat-detection",
+    slug: "threat-intelligence",
+    badge: "Cybersecurity & ML",
     title: "AI for Identifying Threats",
     description:
       "Deep dive into dynamic and static malware analysis techniques in sandboxed environments, utilizing machine learning models for automated heuristic threat detection.",
@@ -45,8 +48,9 @@ const INITIAL_PROJECTS = [
     accent: "cyan",
   },
   {
-    id: "PROJ-AI-002",
-    badge: "COMPUTER VISION",
+    id: "face-recognition",
+    slug: "edge-biometrics-vision",
+    badge: "Computer Vision & AI",
     title: "Face Recognition Biometrics",
     description:
       "Real-time edge biometric surveillance and identity verification system using OpenCV computer vision pipelines and deep neural network embeddings.",
@@ -118,7 +122,7 @@ const CinematicProjects = () => {
     });
 
     frames.forEach((frame, index) => {
-      const cardPhoto = frame.querySelector(".cinematic-projects-photo-card");
+      const rightPane = frame.querySelector(".cinematic-projects-right-pane");
       const badge = frame.querySelector(".cinematic-projects-frame__badge-row");
       const title = frame.querySelector(".cinematic-projects-frame__title");
       const desc = frame.querySelector(".cinematic-projects-frame__desc");
@@ -129,7 +133,7 @@ const CinematicProjects = () => {
 
       if (index === 0) {
         gsap.set(textEls, { opacity: 1, x: 0 });
-        if (cardPhoto) gsap.set(cardPhoto, { opacity: 1, scale: 1, y: 0 });
+        if (rightPane) gsap.set(rightPane, { opacity: 1, scale: 1, y: 0 });
       } else {
         gsap.fromTo(
           textEls,
@@ -150,10 +154,10 @@ const CinematicProjects = () => {
           }
         );
 
-        if (cardPhoto) {
+        if (rightPane) {
           gsap.fromTo(
-            cardPhoto,
-            { opacity: 0, scale: 0.92, y: 20 },
+            rightPane,
+            { opacity: 0, scale: 0.94, y: 15 },
             {
               opacity: 1,
               scale: 1,
@@ -197,8 +201,8 @@ const CinematicProjects = () => {
       {/* Top Section Header */}
       <div className="cinematic-projects-top-header">
         <div className="cinematic-projects-watermark">
-          <Sparkles size={12} className="text-indigo-400 animate-pulse" />
-          <span>[ ARCHITECTURE & FEATURED WORK ]</span>
+          <Sparkles size={13} className="text-indigo-400" />
+          <span>Featured Architecture & Projects</span>
         </div>
         <h2 className="cinematic-projects-heading">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
@@ -209,8 +213,6 @@ const CinematicProjects = () => {
           </span>
         </h2>
       </div>
-
-
 
       <div ref={trackRef} className="cinematic-projects-track">
         {projects.map((project, i) => (
@@ -224,67 +226,75 @@ const CinematicProjects = () => {
             {/* Ambient Background Aura */}
             <div className="cinematic-projects-ambient-bg" />
 
-            <div className="cinematic-projects-layout">
-              {/* Left Column: Text Dossier */}
-              <div className="cinematic-projects-info">
-                <div className="cinematic-projects-frame__badge-row">
-                  <span className="cinematic-projects-frame__badge">
-                    {project.badge}
-                  </span>
-                  <span className="cinematic-projects-frame__id">
-                    {project.id}
+            <div className="cinematic-projects-master-window">
+              {/* Single Master Window Top Header */}
+              <div className="cinematic-projects-master-header">
+                <div className="cinematic-projects-browser-dots">
+                  <span className="cinematic-projects-browser-dot dot-red" />
+                  <span className="cinematic-projects-browser-dot dot-yellow" />
+                  <span className="cinematic-projects-browser-dot dot-green" />
+                </div>
+                <div className="cinematic-projects-browser-url">
+                  <span>
+                    vagish.dev/projects/
+                    {project.slug ||
+                      project.id?.toLowerCase().replace(/^proj-[a-z]+-0*/i, "") ||
+                      project.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-") ||
+                      "project"}
                   </span>
                 </div>
-
-                <h3 className="cinematic-projects-frame__title">
-                  {project.title}
-                </h3>
-
-                <p className="cinematic-projects-frame__desc">
-                  {project.description}
-                </p>
-
-                <div className="cinematic-projects-frame__tags">
-                  {(project.tags || []).map((tag) => (
-                    <span key={tag} className="cinematic-projects-frame__tag">
-                      {tag}
-                    </span>
-                  ))}
+                <div className="cinematic-projects-browser-status">
+                  <span className="cinematic-projects-live-indicator" />
+                  <span>LIVE SYSTEM</span>
                 </div>
-
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cinematic-projects-frame__link"
-                  >
-                    <span>View Repository & Live Demo</span>
-                    <ExternalLink size={15} />
-                  </a>
-                )}
               </div>
 
-              {/* Right Column: Crystal-Clear Unobscured Project Preview Card */}
-              <div className="cinematic-projects-media">
-                <div className="cinematic-projects-photo-card">
-                  {/* HUD Corner Brackets */}
-                  <div className="cinematic-projects-photo-corner tl" />
-                  <div className="cinematic-projects-photo-corner tr" />
-                  <div className="cinematic-projects-photo-corner bl" />
-                  <div className="cinematic-projects-photo-corner br" />
-
-                  {/* Floating Top Tag */}
-                  <div className="cinematic-projects-photo-tag">
-                    <span className="cinematic-projects-photo-dot" />
-                    {project.title}
+              {/* Master Window Body: Split 2-Column Pane */}
+              <div className="cinematic-projects-master-body">
+                {/* Left Pane: Info & Details */}
+                <div className="cinematic-projects-left-pane">
+                  <div className="cinematic-projects-frame__badge-row">
+                    <div className="cinematic-projects-frame__badge">
+                      <span className="cinematic-projects-frame__badge-dot" />
+                      <span>{project.badge || "Featured Project"}</span>
+                    </div>
                   </div>
 
-                  {/* 100% Unobscured Project Screenshot */}
+                  <h3 className="cinematic-projects-frame__title">
+                    {project.title}
+                  </h3>
+
+                  <p className="cinematic-projects-frame__desc">
+                    {project.description}
+                  </p>
+
+                  <div className="cinematic-projects-frame__tags">
+                    {(project.tags || []).map((tag) => (
+                      <span key={tag} className="cinematic-projects-frame__tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cinematic-projects-frame__link"
+                    >
+                      <span>View Repository & Live Demo</span>
+                      <ExternalLink size={15} />
+                    </a>
+                  )}
+                </div>
+
+                {/* Right Pane: Live Media Preview */}
+                <div className="cinematic-projects-right-pane">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="cinematic-projects-photo-img"
+                    className="cinematic-projects-master-img"
                     draggable="false"
                     loading={i === 0 ? "eager" : "lazy"}
                   />

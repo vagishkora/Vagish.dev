@@ -52,6 +52,23 @@ export default function Lanyard() {
     setGlare({ x: glareX, y: glareY });
   };
 
+  const dragStartTimeRef = useRef(0);
+
+  const handleDragStart = () => {
+    dragStartTimeRef.current = Date.now();
+    setIsDragging(true);
+  };
+
+  const handleCardClick = (e) => {
+    e.stopPropagation();
+    // If it was a tap/click rather than a long drag action
+    if (Date.now() - dragStartTimeRef.current < 250) {
+      if (typeof window !== "undefined") {
+        window.location.href = "/Vagish.dev/education";
+      }
+    }
+  };
+
   const handleDragEnd = () => {
     setIsDragging(false);
     // Smoothly and slowly animate back to resting position (0, 0)
@@ -125,13 +142,14 @@ export default function Lanyard() {
             rotateZ,
             transformPerspective: 1000,
           }}
-          onDragStart={() => setIsDragging(true)}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          onClick={handleCardClick}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onMouseMove={handleMouseMove}
           whileDrag={{ scale: 1.06, cursor: "grabbing" }}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.03, cursor: "pointer" }}
           className={`lanyard-draggable-wrapper ${isDragging ? 'is-dragging' : ''}`}
         >
           {/* Metallic Clip */}

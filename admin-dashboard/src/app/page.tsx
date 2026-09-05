@@ -21,9 +21,11 @@ import {
   KeyRound,
   ShieldCheck,
   RefreshCw,
+  FileText,
+  Upload,
 } from "lucide-react";
 
-type TabType = "projects" | "certifications" | "skills" | "outreach" | "hobbies";
+type TabType = "projects" | "certifications" | "skills" | "outreach" | "hobbies" | "resume";
 
 const ADMIN_PASSCODES = ["vagish2026", "vagishkora", "admin123", "vagish@2026"];
 
@@ -31,6 +33,10 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>("projects");
   
+  // Resume state
+  const [resumeUrl, setResumeUrl] = useState<string>("/Vagish.dev/Vagish_Resume.pdf");
+  const [resumeUploading, setResumeUploading] = useState<boolean>(false);
+
   // Instant in-memory cache for all 5 tabs
   const [cache, setCache] = useState<Record<TabType, any[]>>({
     projects: [],
@@ -38,6 +44,7 @@ export default function AdminPage() {
     skills: [],
     outreach: [],
     hobbies: [],
+    resume: [],
   });
   
   const [loading, setLoading] = useState(false);
@@ -51,13 +58,88 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
 
-  // Check saved session in browser
+  // Check saved session in browser & load active resume
   useEffect(() => {
     const saved = localStorage.getItem("vagish_admin_auth");
     if (saved === "true") {
       setIsAuthenticated(true);
     }
   }, []);
+
+  useEffect(() => {
+    async function loadResume() {
+      const savedResume = localStorage.getItem("vagish_active_resume");
+      if (savedResume) setResumeUrl(savedResume);
+
+      if (supabase) {
+        try {
+          const { data } = await supabase.from("settings").select("value").eq("key", "resume_url").single();
+          if (data && data.value) {
+            setResumeUrl(data.value);
+            localStorage.setItem("vagish_active_resume", data.value);
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+    if (isAuthenticated) {
+      loadResume();
+    }
+  }, [isAuthenticated]);
+
+  const handleSaveResumeUrl = async (newUrl: string) => {
+    setResumeUrl(newUrl);
+    localStorage.setItem("vagish_active_resume", newUrl);
+
+    if (supabase) {
+      try {
+        await supabase.from("settings").upsert({ key: "resume_url", value: newUrl });
+        showStatus("Resume updated & published live!", "success");
+      } catch (err: any) {
+        showStatus("Saved locally (" + newUrl + ")", "success");
+      }
+    } else {
+      showStatus("Saved locally!", "success");
+    }
+  };
+
+  const handleResumeFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setResumeUploading(true);
+    try {
+      if (supabase) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `resume_${Date.now()}.${fileExt}`;
+        const { data, error } = await supabase.storage.from("resumes").upload(fileName, file, { upsert: true });
+
+        if (!error && data) {
+          const { data: publicUrlData } = supabase.storage.from("resumes").getPublicUrl(fileName);
+          if (publicUrlData?.publicUrl) {
+            await handleSaveResumeUrl(publicUrlData.publicUrl);
+            setResumeUploading(false);
+            return;
+          }
+        }
+      }
+
+      // Fallback: convert file to Data URL for instant live preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (result) {
+          handleSaveResumeUrl(result);
+        }
+        setResumeUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      showStatus("Failed to upload resume file", "error");
+      setResumeUploading(false);
+    }
+  };
 
   // ── Helper: Show Status Message ────────────────────────
   const showStatus = (text: string, type: "success" | "error") => {
@@ -431,6 +513,7 @@ export default function AdminPage() {
               { id: "skills", label: "Technical Skills", icon: Cpu },
               { id: "outreach", label: "Leadership & Outreach", icon: Users },
               { id: "hobbies", label: "Personal Hobbies", icon: Smile },
+              { id: "resume", label: "Resume Manager", icon: FileText },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -446,26 +529,115 @@ export default function AdminPage() {
                 >
                   <Icon size={15} />
                   {tab.label}
-                  <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-400">
-                    {cache[tab.id as TabType]?.length || 0}
-                  </span>
+                  {tab.id !== "resume" && (
+                    <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-400">
+                      {cache[tab.id as TabType]?.length || 0}
+                    </span>
+                  )}
                 </button>
               );
             })}
           </div>
 
           {/* Add New Button */}
-          <button
-            onClick={openAddModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs font-mono shadow-md shadow-cyan-500/20 transition-all shrink-0"
-          >
-            <Plus size={16} />
-            ADD ENTRY
-          </button>
+          {activeTab !== "resume" && (
+            <button
+              onClick={openAddModal}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs font-mono shadow-md shadow-cyan-500/20 transition-all shrink-0"
+            >
+              <Plus size={16} />
+              ADD ENTRY
+            </button>
+          )}
         </div>
 
-        {/* Content List & Table */}
-        <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
+        {/* Content List & Table or Resume Manager */}
+        {activeTab === "resume" ? (
+          <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-8 shadow-xl space-y-6">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <FileText className="text-cyan-400" size={20} />
+                  Resume Distribution & Control Center
+                </h2>
+                <p className="text-xs text-zinc-400 font-mono mt-1">
+                  Upload a new PDF resume or update your live download link anytime without altering codebase files.
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs rounded-full">
+                LIVE PRODUCTION ACTIVE
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* File Upload Box */}
+              <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-950/60 flex flex-col gap-4">
+                <h3 className="text-sm font-bold text-zinc-200 font-mono uppercase flex items-center gap-2">
+                  <Upload size={16} className="text-cyan-400" />
+                  Upload New Resume PDF
+                </h3>
+                <p className="text-xs text-zinc-400 font-mono">
+                  Select a PDF file from your device to automatically update the live "DOWNLOAD RESUME" button target on your portfolio.
+                </p>
+                <label className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-700 hover:border-cyan-500 rounded-xl p-6 cursor-pointer bg-zinc-900/40 hover:bg-zinc-900/80 transition-all group">
+                  <FileText size={32} className="text-zinc-500 group-hover:text-cyan-400 transition-colors mb-2" />
+                  <span className="text-xs font-mono font-bold text-zinc-300 group-hover:text-white">
+                    {resumeUploading ? "Uploading Resume..." : "Click to Upload PDF File"}
+                  </span>
+                  <span className="text-[11px] font-mono text-zinc-500 mt-1">
+                    Accepts .pdf files (Max 10MB)
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleResumeFileUpload}
+                    className="hidden"
+                    disabled={resumeUploading}
+                  />
+                </label>
+              </div>
+
+              {/* Direct URL Box */}
+              <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-950/60 flex flex-col justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-bold text-zinc-200 font-mono uppercase flex items-center gap-2 mb-2">
+                    <ExternalLink size={16} className="text-cyan-400" />
+                    Direct Resume Link / Cloud URL
+                  </h3>
+                  <p className="text-xs text-zinc-400 font-mono mb-4">
+                    Or paste a direct URL to your latest hosted PDF file (Supabase, Google Drive, Dropbox, Cloudinary, etc.):
+                  </p>
+                  <input
+                    type="text"
+                    value={resumeUrl}
+                    onChange={(e) => setResumeUrl(e.target.value)}
+                    placeholder="https://.../Vagish_Resume.pdf"
+                    className="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-mono text-zinc-200 focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <button
+                    onClick={() => handleSaveResumeUrl(resumeUrl)}
+                    className="px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs font-mono shadow-md transition-all flex-1 cursor-pointer"
+                  >
+                    SAVE & PUBLISH RESUME
+                  </button>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono text-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>Test Link</span>
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
           {currentList.length === 0 ? (
             <div className="p-12 text-center text-zinc-500 font-mono text-sm">
               {loading ? "Loading entries..." : "No entries found in this section. Click '+ ADD ENTRY' to create one."}
@@ -593,6 +765,7 @@ export default function AdminPage() {
             </div>
           )}
         </div>
+      )}
       </main>
 
       {/* ── Add / Edit Modal ───────────────────────────────── */}
