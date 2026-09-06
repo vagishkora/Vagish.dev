@@ -68,15 +68,26 @@ export default function AdminPage() {
 
   useEffect(() => {
     async function loadResume() {
-      const savedResume = localStorage.getItem("vagish_active_resume");
-      if (savedResume) setResumeUrl(savedResume);
+      try {
+        const savedResume = localStorage.getItem("vagish_active_resume");
+        if (savedResume) setResumeUrl(savedResume);
+      } catch (e) {}
 
       if (supabase) {
         try {
-          const { data } = await supabase.from("settings").select("value").eq("key", "resume_url").single();
-          if (data && data.value) {
-            setResumeUrl(data.value);
-            localStorage.setItem("vagish_active_resume", data.value);
+          const { data } = await supabase
+            .from("skills")
+            .select("icon")
+            .eq("id", "SETTINGS_RESUME")
+            .single();
+
+          if (data && data.icon) {
+            setResumeUrl(data.icon);
+            try {
+              if (!data.icon.startsWith("data:")) {
+                localStorage.setItem("vagish_active_resume", data.icon);
+              }
+            } catch (err) {}
           }
         } catch (e) {
           // ignore
@@ -90,14 +101,33 @@ export default function AdminPage() {
 
   const handleSaveResumeUrl = async (newUrl: string) => {
     setResumeUrl(newUrl);
-    localStorage.setItem("vagish_active_resume", newUrl);
+
+    // Safely save to localStorage only if valid URL and within quota
+    try {
+      if (typeof window !== "undefined" && !newUrl.startsWith("data:")) {
+        localStorage.setItem("vagish_active_resume", newUrl);
+      }
+    } catch (e) {
+      console.warn("LocalStorage quota reached, skipped local storage cache:", e);
+    }
 
     if (supabase) {
       try {
-        await supabase.from("settings").upsert({ key: "resume_url", value: newUrl });
-        showStatus("Resume updated & published live!", "success");
+        const { error } = await supabase.from("skills").upsert({
+          id: "SETTINGS_RESUME",
+          name: "ACTIVE_RESUME",
+          icon: newUrl,
+          category: "CONFIG",
+          order_index: 9999,
+        });
+
+        if (!error) {
+          showStatus("Resume updated & published live!", "success");
+        } else {
+          showStatus("Saved locally!", "success");
+        }
       } catch (err: any) {
-        showStatus("Saved locally (" + newUrl + ")", "success");
+        showStatus("Saved locally!", "success");
       }
     } else {
       showStatus("Saved locally!", "success");
@@ -110,33 +140,24 @@ export default function AdminPage() {
 
     setResumeUploading(true);
     try {
-      if (supabase) {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `resume_${Date.now()}.${fileExt}`;
-        const { data, error } = await supabase.storage.from("resumes").upload(fileName, file, { upsert: true });
+      const formData = new FormData();
+      formData.append("file", file);
 
-        if (!error && data) {
-          const { data: publicUrlData } = supabase.storage.from("resumes").getPublicUrl(fileName);
-          if (publicUrlData?.publicUrl) {
-            await handleSaveResumeUrl(publicUrlData.publicUrl);
-            setResumeUploading(false);
-            return;
-          }
-        }
+      const res = await fetch("/api/upload-resume", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await res.json();
+      if (json.success && json.url) {
+        await handleSaveResumeUrl(json.url);
+      } else {
+        throw new Error(json.error || "Upload failed");
       }
-
-      // Fallback: convert file to Data URL for instant live preview
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          handleSaveResumeUrl(result);
-        }
-        setResumeUploading(false);
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      showStatus("Failed to upload resume file", "error");
+    } catch (err: any) {
+      console.warn("API upload error:", err);
+      showStatus("File upload failed: " + (err.message || "Error"), "error");
+    } finally {
       setResumeUploading(false);
     }
   };

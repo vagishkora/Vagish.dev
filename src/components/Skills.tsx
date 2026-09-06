@@ -46,7 +46,12 @@ export default function Skills() {
           .order("order_index", { ascending: true });
 
         if (data && data.length > 0 && !error) {
-          setSkills(data);
+          const filtered = data.filter(
+            (s: any) => s.id !== "SETTINGS_RESUME" && s.category !== "CONFIG"
+          );
+          if (filtered.length > 0) {
+            setSkills(filtered);
+          }
         }
       } catch (err) {
         console.warn("Supabase fetch fallback to static skills:", err);

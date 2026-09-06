@@ -3,11 +3,47 @@
 import { useRef, useState, useEffect } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import Lanyard from "./Lanyard";
+import { supabase } from "@/lib/supabase";
 
 export default function Hero() {
   const [isMuted, setIsMuted] = useState(true);
   const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [resumeUrl, setResumeUrl] = useState<string>("/Vagish.dev/Vagish_Resume.pdf");
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Fetch live active resume URL from Supabase
+  useEffect(() => {
+    async function fetchResumeUrl() {
+      if (typeof window !== "undefined") {
+        try {
+          const cached = localStorage.getItem("vagish_active_resume");
+          if (cached) setResumeUrl(cached);
+        } catch (e) {}
+      }
+
+      if (supabase) {
+        try {
+          const { data } = await supabase
+            .from("skills")
+            .select("icon")
+            .eq("id", "SETTINGS_RESUME")
+            .single();
+
+          if (data && data.icon) {
+            setResumeUrl(data.icon);
+            try {
+              if (!data.icon.startsWith("data:")) {
+                localStorage.setItem("vagish_active_resume", data.icon);
+              }
+            } catch (err) {}
+          }
+        } catch (err) {
+          // fallback
+        }
+      }
+    }
+    fetchResumeUrl();
+  }, []);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -159,15 +195,21 @@ export default function Hero() {
               EXPLORE WORK &rarr;
             </a>
             <a
-              href="/Vagish.dev/Vagish_Resume.pdf"
+              href={resumeUrl}
               download="Vagish_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => {
-                let targetUrl = "/Vagish.dev/Vagish_Resume.pdf";
+                e.preventDefault();
+                let targetUrl = resumeUrl || "/Vagish.dev/Vagish_Resume.pdf";
                 if (typeof window !== "undefined") {
-                  const saved = localStorage.getItem("vagish_active_resume");
-                  if (saved) targetUrl = saved;
+                  try {
+                    const saved = localStorage.getItem("vagish_active_resume");
+                    if (saved) targetUrl = saved;
+                  } catch (err) {}
+                }
+                if (!targetUrl.includes("?v=") && !targetUrl.startsWith("data:")) {
+                  targetUrl += (targetUrl.includes("?") ? "&v=" : "?v=") + Date.now();
                 }
                 const link = document.createElement("a");
                 link.href = targetUrl;
